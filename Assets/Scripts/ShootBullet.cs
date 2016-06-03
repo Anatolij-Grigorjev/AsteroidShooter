@@ -10,6 +10,7 @@ public class ShootBullet : MonoBehaviour {
 	public GameObject bulletPrefab;
 	public GameObject rombusBulletPrefab;
 
+
 	private SpriteRenderer shipImage;
 
 	private AudioSource shotClip;
@@ -27,8 +28,11 @@ public class ShootBullet : MonoBehaviour {
 	//contain excitement to seconds
 	public float maxFrenzyCharge = 0.0f;
 
+	public SpriteRenderer chargeGraphics;
+	public Animator chargeAnimator;
+
 	//rombus sprite for effect
-	private SpriteRenderer rombusRenderer;
+	public SpriteRenderer rombusRenderer;
 	//how many max rombus can the ship fire
 	public int currRombusCount;
 
@@ -41,8 +45,11 @@ public class ShootBullet : MonoBehaviour {
 		shipImage = GetComponent<SpriteRenderer> ();
 		shotClip = GetComponentInChildren<AudioSource> ();
 		rombusRecovered = true;
-		rombusRenderer = Utils.GetComponentInChild<SpriteRenderer> (this);
+	
 		rombusCornerCount.text = "X " + currRombusCount;
+		chargeAnimator.enabled = false;
+		chargeGraphics.enabled = false;
+
 	}
 	
 	// Update is called once per frame
@@ -111,6 +118,13 @@ public class ShootBullet : MonoBehaviour {
 				frenzyBuildUp = pressTime;
 				pressTime = 0f;
 				inFrenzy = true;
+				chargeAnimator.enabled = false;
+				chargeGraphics.enabled = false;
+				chargeAnimator.SetBool ("isCharged", false);
+				var pos = chargeGraphics.transform.position;
+				pos.y = 0.0f;
+				chargeGraphics.transform.position = pos;
+
 			}
 			//button was held down, just not long enough for frenzy, single shot
 			else
@@ -127,11 +141,16 @@ public class ShootBullet : MonoBehaviour {
 			if (pressTime >= maxFrenzyCharge && !charged) {
 				charged = true;
 				chargedClip.Play ();
+				chargeAnimator.SetBool ("isCharged", true);
+				var pos = chargeGraphics.transform.position;
+				pos.y = 0.92f;
+				chargeGraphics.transform.position = pos;
 			}
 			//pressed long enough
 			if (pressTime >= chargeReqTime && !charging) {
 				charging = true;
 				chargeClip.Play ();
+				chargeAnimator.enabled = true;
 			}
 			if (charging) {
 				//color the ship (initial green is 255)
