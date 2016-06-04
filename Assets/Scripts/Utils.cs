@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
-
+using AssemblyCSharp;
 
 public class Utils
 {
@@ -18,6 +18,13 @@ public class Utils
 			}
 		}
 		return default(T);
+	}
+
+	public static String GetRandomName(bool junior) {
+
+		String name = RandomNames.SENIOR_NAMES[UnityEngine.Random.Range (0, RandomNames.SENIOR_NAMES.Length)];
+
+		return junior ? name + " Jr." : name;
 	}
 
 }

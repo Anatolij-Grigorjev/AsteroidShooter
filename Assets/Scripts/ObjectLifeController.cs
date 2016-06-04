@@ -13,6 +13,8 @@ public class ObjectLifeController : MonoBehaviour {
 	private Vector3 healthScale;				// The local scale of the health bar initially (with full health).
 
 	public Vector3 offset;
+
+	public Transform nameTextTransform;
 	private Quaternion rotation;
 	private float scaleLength;
 
@@ -42,6 +44,7 @@ public class ObjectLifeController : MonoBehaviour {
 		//maintain lifebar position every frame draw
 		transform.localPosition = offset;
 		transform.rotation = rotation;
+		nameTextTransform.rotation = rotation;
 	}
 
 	void OnCollisionEnter2D (Collision2D col)

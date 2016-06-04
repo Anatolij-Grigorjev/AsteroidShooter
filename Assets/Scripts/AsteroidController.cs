@@ -8,9 +8,10 @@ public class AsteroidController : MonoBehaviour {
 	public int spawnBase;
 	[HideInInspector]
 	public bool isDead = false;
-
+	public bool isMini = false;
 	public GameObject miniSteroidPrefab;
 	public GameObject explosionPrefab;
+	public TextMesh nameText;
 	private Rigidbody2D rb2d;
 	private AudioSource deathExplosionSound;
 
@@ -27,6 +28,7 @@ public class AsteroidController : MonoBehaviour {
 		) * (speedRange * Random.value));
 		//add some random torque
 		rb2d.AddTorque(Random.value * (torqueRange * Random.value));
+		nameText.text = Utils.GetRandomName (isMini);
 	}
 	
 	// Update is called once per frame
@@ -51,6 +53,7 @@ public class AsteroidController : MonoBehaviour {
 			deathExplosionSound.Play ();
 			Instantiate (explosionPrefab, transform.position, transform.rotation);
 			isDead = true;
+			nameText.text += " (Desceased)";
 		}
 		yield return new WaitUntil (() => !deathExplosionSound.isPlaying);
 		Destroy (gameObject);
