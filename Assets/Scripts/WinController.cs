@@ -21,12 +21,27 @@ public class WinController : MonoBehaviour {
 		}
 	}
 
+	void DoEndText (string text = null)
+	{
+		if (text != null) {
+			winText.text = text;
+		}
+		winText.enabled = true;
+		Time.timeScale = 0.0f;
+	}
+
 	public IEnumerator CheckAsteroids() {
-		yield return new WaitForSeconds (0.5f);
+		yield return new WaitForSeconds (0.8f);
 		currentAsteroids = GameObject.FindGameObjectsWithTag ("Asteroid").Length;
 		if (currentAsteroids <= 0) {
-			winText.enabled = true;
-			Time.timeScale = 0.0f;
+			DoEndText ();
+		}
+		//check loss condition then
+		if (!winText.enabled) {
+			var ship = GameObject.FindGameObjectWithTag ("Ship");
+			if (!ship.GetComponent<SpriteRenderer> ().enabled) {
+				DoEndText ("GAME OVER!");
+			}
 		}
 	}
 }

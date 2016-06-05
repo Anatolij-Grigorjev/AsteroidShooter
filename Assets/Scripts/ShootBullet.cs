@@ -112,25 +112,19 @@ public class ShootBullet : MonoBehaviour {
 		//stopped hoding button
 		if (!buttonPressed) {
 			//held long enough for frenzy
-			if (charging) {
-				charging = false;
-				charged = false;
+			if (charged) {
 				frenzyBuildUp = pressTime;
-				pressTime = 0f;
 				inFrenzy = true;
-				chargeAnimator.enabled = false;
-				chargeGraphics.enabled = false;
-				chargeAnimator.SetBool ("isCharged", false);
-				var pos = chargeGraphics.transform.position;
-				pos.y = 0.0f;
-				chargeGraphics.transform.position = pos;
+				ResetWeaponChargeState ();
 
 			}
 			//button was held down, just not long enough for frenzy, single shot
 			else
 				if (pressTime > 0) {
-					pressTime = 0;
-
+					ResetWeaponChargeState ();
+					var color = shipImage.color;
+					color.g = 1.0f;
+					shipImage.color = color;
 					PerformShot (bulletRecharge);
 				}
 		}
@@ -159,6 +153,19 @@ public class ShootBullet : MonoBehaviour {
 				shipImage.color = color;
 			}
 		}
+	}
+
+	void ResetWeaponChargeState ()
+	{
+		charging = false;
+		charged = false;
+		pressTime = 0f;
+		chargeAnimator.enabled = false;
+		chargeGraphics.enabled = false;
+		chargeAnimator.SetBool ("isCharged", false);
+		var pos = chargeGraphics.transform.position;
+		pos.y = 0.0f;
+		chargeGraphics.transform.position = pos;
 	}
 
 	void PerformShot (float recharge) {

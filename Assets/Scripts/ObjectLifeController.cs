@@ -32,10 +32,10 @@ public class ObjectLifeController : MonoBehaviour {
 		crashPlayer = GetComponent<AudioSource> ();
 		//		anim = GetComponent<Animator>();
 
-		// Getting the intial scale of the healthbar (whilst the player has full health).
+		// Getting the intial scale of the healthbar (whilst the object).
 		healthScale = healthBar.transform.localScale;
 		scaleLength = 1 / maxHealth;
-		rotation = transform.rotation;
+		rotation = Quaternion.identity;
 		parentController = GetComponentInParent<AsteroidController> ();
 	}
 
