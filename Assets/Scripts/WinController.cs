@@ -1,16 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class WinController : MonoBehaviour {
 
 	private float currentAsteroids;
 	// Use this for initialization
 	private Text winText;
+	public GameObject tryAgainButton;
+
 	void Start () {
 		currentAsteroids = float.MaxValue;
 		winText = GetComponent<Text> ();
 		winText.enabled = false;
+		tryAgainButton.SetActive (false);
 	}
 	
 	// Update is called once per frame
@@ -21,6 +25,11 @@ public class WinController : MonoBehaviour {
 		}
 	}
 
+	public void ReloadStage() {
+		Time.timeScale = 1.0f;
+		SceneManager.LoadScene (0);
+	}
+
 	void DoEndText (string text = null)
 	{
 		if (text != null) {
@@ -28,6 +37,7 @@ public class WinController : MonoBehaviour {
 		}
 		winText.enabled = true;
 		Time.timeScale = 0.0f;
+		tryAgainButton.SetActive (true);
 	}
 
 	public IEnumerator CheckAsteroids() {
