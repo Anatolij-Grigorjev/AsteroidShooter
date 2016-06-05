@@ -14,6 +14,7 @@ public class AsteroidController : MonoBehaviour {
 	public TextMesh nameText;
 	private Rigidbody2D rb2d;
 	private AudioSource deathExplosionSound;
+	private KillLogController killLog;
 
 	// Use this for initialization
 	void Start () {
@@ -26,6 +27,7 @@ public class AsteroidController : MonoBehaviour {
 			(minusX? -1 : 1) * Random.value
 			, (minusY? -1 : 1) * Random.value
 		) * (speedRange * Random.value));
+		killLog = GameObject.FindObjectOfType<KillLogController> ();
 		//add some random torque
 		rb2d.AddTorque(Random.value * (torqueRange * Random.value));
 		nameText.text = Utils.GetRandomName (isMini);
@@ -38,6 +40,7 @@ public class AsteroidController : MonoBehaviour {
 
 	//die, explode and spawn ministeroids
 	public IEnumerator Die() {
+		killLog.AddDeath (nameText.text);
 		if (deathExplosionSound.isPlaying) {
 			yield return new WaitUntil (() => !deathExplosionSound.isPlaying);
 		}
