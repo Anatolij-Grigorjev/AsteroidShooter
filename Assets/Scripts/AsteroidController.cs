@@ -52,6 +52,7 @@ public class AsteroidController : MonoBehaviour {
 			for (int i = 0; i < toSpawn; i++) {
 				Instantiate (miniSteroidPrefab, transform.position, transform.rotation);
 			}
+            GameController.Instance.currentAsteroids += toSpawn;
 			//play sound, spawn boom
 			deathExplosionSound.Play ();
 			Instantiate (explosionPrefab, transform.position, transform.rotation);
@@ -59,6 +60,7 @@ public class AsteroidController : MonoBehaviour {
 			nameText.text += " (Desceased)";
 		}
 		yield return new WaitUntil (() => !deathExplosionSound.isPlaying);
+        GameController.Instance.currentAsteroids--;
 		Destroy (gameObject);
 	}
 

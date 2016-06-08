@@ -21,8 +21,8 @@ public class Utils
 	}
 
 	public static String GetRandomName(bool junior) {
-
-		String name = RandomNames.SENIOR_NAMES[UnityEngine.Random.Range (0, RandomNames.SENIOR_NAMES.Length)];
+		String emotion = RandomNames.SENIOR_FEELINGS [UnityEngine.Random.Range (0, RandomNames.SENIOR_FEELINGS.Length)];
+		String name = emotion + " " + RandomNames.SENIOR_NAMES[UnityEngine.Random.Range (0, RandomNames.SENIOR_NAMES.Length)];
 
 		return junior ? name + " Jr." : name;
 	}

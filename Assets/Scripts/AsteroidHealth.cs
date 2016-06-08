@@ -131,7 +131,7 @@ public class AsteroidHealth : MonoBehaviour {
 		}
 		// ... Trigger the 'Die' animation state
 		//					anim.SetTrigger("Die");
-		Debug.Log ("Aww, asteroid dead.");
+
 		GetComponent<SpriteRenderer> ().enabled = false;
 		foreach (SpriteRenderer s in spr) {
 			s.enabled = false;

@@ -42,13 +42,13 @@ public class WinController : MonoBehaviour {
 
 	public IEnumerator CheckAsteroids() {
 		yield return new WaitForSeconds (0.8f);
-		currentAsteroids = GameObject.FindGameObjectsWithTag ("Asteroid").Length;
+        currentAsteroids = GameController.Instance.currentAsteroids;
 		if (currentAsteroids <= 0) {
 			DoEndText ();
 		}
 		//check loss condition then
 		if (!winText.enabled) {
-			var ship = GameObject.FindGameObjectWithTag ("Ship");
+            var ship = GameController.Instance.playerShip;
 			if (!ship.GetComponent<SpriteRenderer> ().enabled) {
 				DoEndText ("GAME OVER!");
 			}
