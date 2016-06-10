@@ -40,19 +40,23 @@ public class AsteroidController : MonoBehaviour {
 
 	//die, explode and spawn ministeroids
 	public IEnumerator Die() {
-		killLog.AddDeath (nameText.text);
+        if (killLog != null) {
+            killLog.AddDeath (nameText.text);
+        }
 		if (deathExplosionSound.isPlaying) {
 			yield return new WaitUntil (() => !deathExplosionSound.isPlaying);
 		}
 
 		if (!isDead) {
-			//how many more to spawn, up to double the initial amount
-			int surplus = (int)Mathf.Abs (Random.value * spawnBase);
-			int toSpawn = spawnBase + surplus;
-			for (int i = 0; i < toSpawn; i++) {
-				Instantiate (miniSteroidPrefab, transform.position, transform.rotation);
-			}
-            GameController.Instance.currentAsteroids += toSpawn;
+            if (miniSteroidPrefab != null) {
+    			//how many more to spawn, up to double the initial amount
+    			int surplus = (int)Mathf.Abs (Random.value * spawnBase);
+    			int toSpawn = spawnBase + surplus;
+    			for (int i = 0; i < toSpawn; i++) {
+    				Instantiate (miniSteroidPrefab, transform.position, transform.rotation);
+    			}
+                GameController.Instance.currentAsteroids += toSpawn;
+            }
 			//play sound, spawn boom
 			deathExplosionSound.Play ();
 			Instantiate (explosionPrefab, transform.position, transform.rotation);

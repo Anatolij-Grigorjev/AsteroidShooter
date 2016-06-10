@@ -33,7 +33,7 @@ public class AsteroidHealth : MonoBehaviour {
 		//		anim = GetComponent<Animator>();
 
 		// Getting the intial scale of the healthbar (whilst the player has full health).
-		healthScale = healthBar.transform.localScale;
+        healthScale = healthBar.transform.localScale;
 		scaleLength = 1 / maxHealth;
 		rotation = transform.rotation;
 		health = maxHealth;
