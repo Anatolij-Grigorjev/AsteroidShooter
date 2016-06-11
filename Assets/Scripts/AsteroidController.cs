@@ -60,6 +60,7 @@ public class AsteroidController : MonoBehaviour {
 			//play sound, spawn boom
 			deathExplosionSound.Play ();
 			Instantiate (explosionPrefab, transform.position, transform.rotation);
+            GetComponent<SpriteRenderer> ().enabled = false;
 			isDead = true;
 			nameText.text += " (Desceased)";
 		}

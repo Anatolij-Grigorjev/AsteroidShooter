@@ -7,11 +7,11 @@ public class MenuButtonControl : MonoBehaviour {
 
     public GameObject loadingImage;
 
-    public List<GameObject> finalizers;
+    private List<GameObject> finalizers;
 
 	// Use this for initialization
 	void Awake () {
-	
+        finalizers = new List<GameObject> (GameObject.FindGameObjectsWithTag ("Asteroid"));
 	}
 	
     public void LoadLevel() {

@@ -12,9 +12,11 @@ public class GameController : Singleton<GameController> {
     public int scatterAmount;
     [HideInInspector]
     public int currentAsteroids;
+    public bool isReady;
 
 	// Use this for initialization
 	void Awake () {
+        isReady = false;
         if (background != null) {
             var backgroundBounds = background.GetComponent<SpriteRenderer> ();
 
@@ -30,5 +32,6 @@ public class GameController : Singleton<GameController> {
 
             currentAsteroids = scatterAmount;
         }
+        isReady = true;
 	}
 }

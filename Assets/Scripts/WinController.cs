@@ -41,17 +41,21 @@ public class WinController : MonoBehaviour {
 	}
 
 	public IEnumerator CheckAsteroids() {
-		yield return new WaitForSeconds (0.8f);
-        currentAsteroids = GameController.Instance.currentAsteroids;
-		if (currentAsteroids <= 0) {
-			DoEndText ();
-		}
-		//check loss condition then
-		if (!winText.enabled) {
-            var ship = GameController.Instance.playerShip;
-			if (!ship.GetComponent<SpriteRenderer> ().enabled) {
-				DoEndText ("GAME OVER!");
-			}
-		}
+		yield return new WaitForSeconds (0.9f);
+        //the game may have just started and the game controller did not properly awake yet
+        //having this flag should avoid winning before the whole thing took off
+        if (GameController.Instance.isReady) {
+            currentAsteroids = GameController.Instance.currentAsteroids;
+            if (currentAsteroids <= 0) {
+                DoEndText ();
+            }
+            //check loss condition then
+            if (!winText.enabled) {
+                var ship = GameController.Instance.playerShip;
+                if (!ship.GetComponent<SpriteRenderer> ().enabled) {
+                    DoEndText ("GAME OVER!");
+                }
+            }
+        }
 	}
 }
