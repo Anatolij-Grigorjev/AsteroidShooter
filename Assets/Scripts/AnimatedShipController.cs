@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class AnimatedShipController : MonoBehaviour {
 
@@ -8,8 +9,7 @@ public class AnimatedShipController : MonoBehaviour {
 	
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public void LoadMenu() {
+        SceneManager.LoadScene (1, LoadSceneMode.Additive);
+    }
 }

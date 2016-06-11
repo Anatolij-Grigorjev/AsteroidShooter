@@ -34,6 +34,6 @@ public class MenuButtonControl : MonoBehaviour {
         yield return new WaitForSeconds (0.8f);
 
         loadingImage.SetActive (true);
-        SceneManager.LoadSceneAsync (1);
+        SceneManager.LoadScene (2);
     }
 }
