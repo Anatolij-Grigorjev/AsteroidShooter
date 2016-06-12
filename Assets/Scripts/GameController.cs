@@ -6,7 +6,17 @@ public class GameController : Singleton<GameController> {
 	protected GameController() {}
 
     [HideInInspector]
-    public GameObject playerShip;
+    public GameObject PlayerShip {
+        get {
+            if (playerShip == null) {
+                playerShip = GameObject.FindGameObjectWithTag ("Ship");
+            }
+            return playerShip;
+        }
+    }
+
+    private GameObject playerShip;
+
     [HideInInspector]
     public int currentAsteroids;
 

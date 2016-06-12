@@ -51,7 +51,7 @@ public class WinController : MonoBehaviour {
         }
         //check loss condition then
         if (!winText.enabled) {
-            var ship = GameController.Instance.playerShip;
+            var ship = GameController.Instance.PlayerShip;
             if (!ship.GetComponent<SpriteRenderer> ().enabled) {
                 DoEndText ("GAME OVER!");
             }
