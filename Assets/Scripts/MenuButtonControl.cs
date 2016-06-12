@@ -18,7 +18,7 @@ public class MenuButtonControl : MonoBehaviour {
 
         foreach (GameObject asteroid in finalizers) {
             if (asteroid != null) {
-                var astCont = asteroid.GetComponent<AsteroidController> ();
+                var astCont = asteroid.GetComponent<IntroAsteroidController> ();
                 StartCoroutine_Auto (astCont.Die ());
             }
         }
@@ -29,7 +29,7 @@ public class MenuButtonControl : MonoBehaviour {
 
     private IEnumerator MoveOnToLoad() {
         yield return new WaitUntil(
-            () => finalizers.TrueForAll(obj => obj == null || obj.GetComponent<AsteroidController>().isDead)
+            () => finalizers.TrueForAll(obj => obj == null || obj.GetComponent<IntroAsteroidController>().isDead)
         );
         yield return new WaitForSeconds (0.8f);
 

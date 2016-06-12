@@ -16,6 +16,9 @@ public class AsteroidController : MonoBehaviour {
 	private AudioSource deathExplosionSound;
 	private KillLogController killLog;
 
+    //this asteroid is part of the intro sequence, so some logic doesnt apply
+    public bool isIntro = false;
+
 	// Use this for initialization
 	void Start () {
 		rb2d = GetComponent<Rigidbody2D> ();
