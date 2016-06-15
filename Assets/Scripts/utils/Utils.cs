@@ -27,6 +27,10 @@ public class Utils
 		return junior ? name + " Jr." : name;
 	}
 
+    public static Sprite GetDialogueAvatar(String key) {
+        return null;
+    }
+
 }
 
 
