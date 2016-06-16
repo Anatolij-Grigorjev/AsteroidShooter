@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Text;
+using UnityEngine.UI;
 
 public class DialogueFlowController : MonoBehaviour {
 
@@ -16,11 +17,18 @@ public class DialogueFlowController : MonoBehaviour {
 
     private int currentLine = 0;
 
+    private Text lineText;
+    private Text avatarName;
+
 	// Use this for initialization
 	void Awake () {
         scriptLoaded = false;
         lines = new List<DialogueLine> ();
         StartCoroutine_Auto( ReadScript(scriptName));
+        lineText = GetComponent<Text> ();
+        lineText.text = "";
+        avatarName = Utils.GetComponentInChild<Text> (this);
+        avatarName.text = "";
 	}
 
     IEnumerator ReadScript (string scriptName) {
@@ -62,6 +70,8 @@ public class DialogueFlowController : MonoBehaviour {
         if (!scriptLoaded) {
             return;
         }
+
+
 
 	}
 }
