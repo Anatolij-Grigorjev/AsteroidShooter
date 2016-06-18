@@ -11,35 +11,65 @@ public class DialogueFlowController : MonoBehaviour {
     private const int DIALOGUE_LINE_PARTS_COUNT = 3;
 
     public List<DialogueLine> lines;
+    private Dictionary<String, Sprite> avatarsMap;
 
+    //name of dialogue script file
     public String scriptName;
+    //flag if the file has been processed into data yet (only start dialogue after it has been)
     private bool scriptLoaded;
 
+    //index of dialogue element currently being written to box
     private int currentLine = 0;
+    //current symbol to type out in current line
+    private int currentSymbol = 0;
 
-    private Text lineText;
-    private Text avatarName;
+    //access to UI text where line is rendered
+    public Text lineText;
+    //access to UI text where talker name is provided
+    public Text avatarName;
+    //access to UI Image for avatar face
+    public Image avatarFace;
+
+    //is current line fully written
+    private bool lineDone = false;
+
+    private bool dialogueOver = false;
+
+    //typing delay between symbols, in seconds
+    public double typeDelay = 0.1;
+
+    //directory with sprites that are dialogue faces (this directory must contain pngs)
+    public string avatarsDirectory;
+
+    private double delayRecharge;
+
+    public Animator shipAnimatinoController;
 
 	// Use this for initialization
 	void Awake () {
         scriptLoaded = false;
         lines = new List<DialogueLine> ();
-        StartCoroutine_Auto( ReadScript(scriptName));
-        lineText = GetComponent<Text> ();
+        avatarsMap = new Dictionary<string, Sprite> ();
         lineText.text = "";
-        avatarName = Utils.GetComponentInChild<Text> (this);
         avatarName.text = "";
+        delayRecharge = typeDelay;
+        StartCoroutine(
+            ReadScript (scriptName)
+//            ;
+        );
+
 	}
 
     IEnumerator ReadScript (string scriptName) {
+        yield return new WaitUntil(() => CookAvatarsMap (avatarsDirectory));
         try {
             string line;
-            StreamReader reader = new StreamReader(String.Format("Dialogue/{0}.txt", scriptName), Encoding.Unicode);
+            StreamReader reader = new StreamReader(String.Format("Assets/Dialogue/{0}.txt", scriptName), Encoding.UTF8);
 
             using(reader) {
                 do {
                     line = reader.ReadLine();
-
+//                    Debug.Log("Read line: " + line);
                     if (line != null) {
 
                         var parts = line.Split(new char[]{';'}, DIALOGUE_LINE_PARTS_COUNT);
@@ -48,7 +78,7 @@ public class DialogueFlowController : MonoBehaviour {
                             var newLine = new DialogueLine();
                             newLine.lineText = parts[2];
                             newLine.name = parts[1];
-                            newLine.avatar = Utils.GetDialogueAvatar(parts[0]);
+                            newLine.avatar = GetDialogueAvatar(parts[0]);
 
                             lines.Add(newLine);
                         }
@@ -58,10 +88,12 @@ public class DialogueFlowController : MonoBehaviour {
             }
         } catch(Exception e) {
             Debug.LogError (String.Format("Couldnt read file because {0}\n!", e.Message));
-            return null;
+            yield break;
         }
+//        Debug.LogAssertion (String.Format("Salvaged {0} lines from file {1}", lines.Count, scriptName));
         scriptLoaded = true;
-        return null;
+        SetupFace (0);
+        yield return 0;
     }
 	
 	// Update is called once per frame
@@ -71,7 +103,80 @@ public class DialogueFlowController : MonoBehaviour {
             return;
         }
 
+        //some amount of line left to write
+        if (!lineDone) {
+            
+            //if user pressed advance button - finish line, prepare for next one
+            if (Input.GetButtonUp ("Fire1")) {
+                lineDone = true;
+                lineText.text = lines [currentLine].lineText;
+            } else {
 
+                delayRecharge -= Time.deltaTime;
+
+                if (delayRecharge < 0) {
+                    lineText.text += lines [currentLine].lineText [currentSymbol];
+                    currentSymbol++;
+                    delayRecharge = typeDelay;
+                    lineDone = currentSymbol >= lines [currentLine].lineText.Length;
+
+                }
+            }
+
+        } else {
+            //wait for user to press key and move on to next line
+            if (Input.GetButtonUp ("Fire1")) {
+                if (!dialogueOver) {
+                    currentLine++;
+                    dialogueOver = currentLine >= lines.Count;
+                    if (!dialogueOver) {
+                        currentSymbol = 0;
+                        SetupFace (currentLine);
+                        lineDone = false;
+                        lineText.text = "";
+                    }
+                } else {
+                    if (!shipAnimatinoController.GetBool ("dialogueOver")) {
+                        shipAnimatinoController.SetBool ("dialogueOver", true);
+                    }
+                }
+
+            }
+
+        }
 
 	}
+
+    bool CookAvatarsMap (string avatarsDirectory) {
+
+        string[] files = Directory.GetFiles (avatarsDirectory, "*.png");
+
+        foreach (String fileName in files) {
+            int dividerIndex = fileName.LastIndexOf (@"\");
+            string justFileName = fileName.Substring (dividerIndex + 1);
+            string justName = justFileName.Remove(justFileName.LastIndexOf(".png"));
+            Sprite resource = Resources.Load (justName) as Sprite;
+            Debug.Log ("Resource was loaded from " + justName + ": " + (resource != null));
+            avatarsMap.Add (justName, resource);
+        }
+
+        foreach (KeyValuePair<String, Sprite> kvp in avatarsMap) {
+            Debug.Log (String.Format ("Key = {0}, Value = {1}", kvp.Key, kvp.Value));
+        }
+        return true;
+    }
+
+    Sprite GetDialogueAvatar (string avatarKey) {
+        return avatarsMap[avatarKey];
+    }
+
+    void SetupFace (int currentLine) {
+        
+        if (currentLine >= lines.Count) {
+            return;
+        }
+
+        avatarName.text = lines [currentLine].name;
+        avatarFace.sprite = lines [currentLine].avatar;
+    }
 }
