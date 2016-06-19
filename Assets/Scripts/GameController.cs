@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System;
 
 public class GameController : Singleton<GameController> {
 
@@ -15,6 +17,23 @@ public class GameController : Singleton<GameController> {
         }
     }
 
+    public string NextScript {
+        get {
+            var result = scriptsPaths [currentSceneIndex];
+            currentSceneIndex++;
+            if (currentSceneIndex => scriptsPaths.Count) {
+                currentSceneIndex = 0;
+            }
+
+            return result;
+        }
+    }
+
+    private List<String> scriptsPaths = new List<String>() {
+        "intro_scene",
+        "post_game_scene"
+    };
+    private int currentSceneIndex = 0;
     private GameObject playerShip;
 
     [HideInInspector]
@@ -24,6 +43,6 @@ public class GameController : Singleton<GameController> {
 
 	// Use this for initialization
 	void Awake () {
-        playerShip = GameObject.FindGameObjectWithTag ("Ship");
+        
 	}
 }

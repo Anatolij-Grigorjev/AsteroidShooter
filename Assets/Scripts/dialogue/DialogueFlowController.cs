@@ -15,7 +15,7 @@ public class DialogueFlowController : MonoBehaviour {
     private Dictionary<String, Sprite> avatarsMap;
 
     //name of dialogue script file
-    public String scriptName;
+    private String scriptName;
     //flag if the file has been processed into data yet (only start dialogue after it has been)
     private bool scriptLoaded;
 
@@ -54,6 +54,7 @@ public class DialogueFlowController : MonoBehaviour {
         lineText.text = "";
         avatarName.text = "";
         delayRecharge = typeDelay;
+        scriptName = GameController.Instance.NextScript;
         StartCoroutine(
             ReadScript (scriptName)
 //            ;

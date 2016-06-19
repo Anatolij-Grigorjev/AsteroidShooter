@@ -9,8 +9,10 @@ public class WinController : MonoBehaviour {
 	// Use this for initialization
 	private Text winText;
 	public GameObject tryAgainButton;
+    private bool playerWon;
 
 	void Start () {
+        playerWon = false;
         GameController.Instance.nextSceneIndex = 0;
 		currentAsteroids = float.MaxValue;
 		winText = GetComponent<Text> ();
@@ -28,7 +30,7 @@ public class WinController : MonoBehaviour {
 
 	public void ReloadStage() {
 		Time.timeScale = 1.0f;
-        SceneManager.LoadScene (GameController.Instance.nextSceneIndex);
+        SceneManager.LoadScene (SceneManager.GetActiveScene().buildIndex);
 	}
 
 	void DoEndText (string text = null)
@@ -37,8 +39,10 @@ public class WinController : MonoBehaviour {
 			winText.text = text;
 		}
 		winText.enabled = true;
-		Time.timeScale = 0.0f;
-		tryAgainButton.SetActive (true);
+        if (!playerWon) {
+            Time.timeScale = 0.0f;
+            tryAgainButton.SetActive (true);
+        }
 	}
 
 	public IEnumerator CheckAsteroids() {
@@ -48,15 +52,23 @@ public class WinController : MonoBehaviour {
 
         currentAsteroids = GameController.Instance.currentAsteroids;
         if (currentAsteroids <= 0) {
-            DoEndText ();
+            playerWon = true;
+            StartCoroutine (GoNextPhase ());
+            DoEndText ("YAY!");
         }
         //check loss condition then
         if (!winText.enabled) {
             var ship = GameController.Instance.PlayerShip;
             if (ship.GetComponent<ShipHealth>().health <= 0.0f) {
+                playerWon = false;
                 DoEndText ("GAME OVER!");
             }
         }
 
 	}
+
+    IEnumerator GoNextPhase () {
+        yield return new WaitForSeconds (5.5f);
+        SceneManager.LoadScene (2);
+    }
 }
