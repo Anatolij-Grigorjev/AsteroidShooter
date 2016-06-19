@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Text;
 using UnityEngine.UI;
+using UnityEngine.Networking.NetworkSystem;
 
 public class DialogueFlowController : MonoBehaviour {
 
@@ -67,6 +68,17 @@ public class DialogueFlowController : MonoBehaviour {
             StreamReader reader = new StreamReader(String.Format("Assets/Dialogue/{0}.txt", scriptName), Encoding.UTF8);
 
             using(reader) {
+                //first line has next stage index
+
+                try {
+                    string indexLine = reader.ReadLine();
+                    GameController.Instance.nextSceneIndex = int.Parse(indexLine);
+                } catch (Exception e) {
+                    Debug.LogError(e);
+                    GameController.Instance.nextSceneIndex = 0;
+                }
+
+
                 do {
                     line = reader.ReadLine();
 //                    Debug.Log("Read line: " + line);
@@ -155,14 +167,14 @@ public class DialogueFlowController : MonoBehaviour {
             int dividerIndex = fileName.LastIndexOf (@"\");
             string justFileName = fileName.Substring (dividerIndex + 1);
             string justName = justFileName.Remove(justFileName.LastIndexOf(".png"));
-            Sprite resource = Resources.Load (justName) as Sprite;
-            Debug.Log ("Resource was loaded from " + justName + ": " + (resource != null));
+            Sprite resource = (Sprite)Resources.Load ("Images/Dialogue/" + justName, typeof(Sprite));
+//            Debug.Log ("Resource was loaded from Images/Dialogue/" + justName + ": " + (resource != null));
             avatarsMap.Add (justName, resource);
         }
 
-        foreach (KeyValuePair<String, Sprite> kvp in avatarsMap) {
-            Debug.Log (String.Format ("Key = {0}, Value = {1}", kvp.Key, kvp.Value));
-        }
+//        foreach (KeyValuePair<String, Sprite> kvp in avatarsMap) {
+//            Debug.Log (String.Format ("Key = {0}, Value = {1}", kvp.Key, kvp.Value));
+//        }
         return true;
     }
 

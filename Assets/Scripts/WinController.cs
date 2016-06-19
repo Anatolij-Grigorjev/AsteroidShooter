@@ -11,6 +11,7 @@ public class WinController : MonoBehaviour {
 	public GameObject tryAgainButton;
 
 	void Start () {
+        GameController.Instance.nextSceneIndex = 0;
 		currentAsteroids = float.MaxValue;
 		winText = GetComponent<Text> ();
 		winText.enabled = false;
@@ -27,7 +28,7 @@ public class WinController : MonoBehaviour {
 
 	public void ReloadStage() {
 		Time.timeScale = 1.0f;
-		SceneManager.LoadScene (0);
+        SceneManager.LoadScene (GameController.Instance.nextSceneIndex);
 	}
 
 	void DoEndText (string text = null)
@@ -52,7 +53,7 @@ public class WinController : MonoBehaviour {
         //check loss condition then
         if (!winText.enabled) {
             var ship = GameController.Instance.PlayerShip;
-            if (!ship.GetComponent<SpriteRenderer> ().enabled) {
+            if (ship.GetComponent<ShipHealth>().health <= 0.0f) {
                 DoEndText ("GAME OVER!");
             }
         }

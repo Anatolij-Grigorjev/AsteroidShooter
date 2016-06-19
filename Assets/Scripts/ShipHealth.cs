@@ -4,25 +4,32 @@ using System.Collections;
 public class ShipHealth : MonoBehaviour
 {	
 	public float maxHealth = 200f;
-	private float health;					// The player's current health.
+    [HideInInspector]
+    public float health;					// The player's current health.
 	public float repeatDamagePeriod = 2f;		// How frequently the player can be damaged.
+    private float damageCooldown;
 //	public AudioClip[] ouchClips;				// Array of clips to play when the player is damaged.
 	public float hurtForceBase = 10f;				// The base force with which the player is pushed when hurt (actual depends on mass).
 	public float damageAmountBase = 10f;			// The base amount of damage to take when enemies touch the player (actual multiplies by mass).
 
-	private SpriteRenderer healthBar;			// Reference to the sprite renderer of the health bar.
+	public SpriteRenderer healthBar;			// Reference to the sprite renderer of the health bar.
 	private float lastHitTime;					// The time at which the player was last hit.
 	private Vector3 healthScale;				// The local scale of the health bar initially (with full health).
 	private ShipController playerControl;		// Reference to the Ship Controller script.
 //	private Animator anim;						// Reference to the Animator on the player
 	private float playerMass;
 	private float scaleLength;
+    private bool isHurt; 
+    private SpriteRenderer shipSprite;
+
 
 	void Awake ()
 	{
+        isHurt = false;
+        damageCooldown = 0.0f;
 		// Setting up references.
 //		playerControl = GetComponent<PlayerControl>();
-		healthBar = GameObject.Find("ShipLifebar").GetComponent<SpriteRenderer>();
+        shipSprite = GetComponent<SpriteRenderer> ();
 //		anim = GetComponent<Animator>();
 
 		// Getting the intial scale of the healthbar (whilst the player has full health).
@@ -32,6 +39,17 @@ public class ShipHealth : MonoBehaviour
 		scaleLength = 1 / maxHealth;
 	}
 
+    void Update() {
+        if (isHurt) {
+            shipSprite.enabled = !shipSprite.enabled;
+            damageCooldown -= Time.deltaTime;
+            if (damageCooldown <= 0.0f) {
+                isHurt = false;
+                damageCooldown = 0.0f;
+                shipSprite.enabled = true;
+            }
+        }
+    }
 
 	void OnCollisionEnter2D (Collision2D col)
 	{
@@ -47,11 +65,14 @@ public class ShipHealth : MonoBehaviour
 					// ... take damage and reset the lastHitTime.
 					TakeDamage(col.transform); 
 					lastHitTime = Time.time; 
+                    isHurt = true;
+                    damageCooldown = repeatDamagePeriod;
 				}
-				// If the player doesn't have health, do some stuff, let him fall into the river to reload the level.
+				// If the player doesn't have health, do some stuff
 				else
 				{
-					// Find all of the colliders on the gameobject and set them all to be triggers.
+                    // Find all of the colliders on the gameobject and set them all to be triggers 
+                    //(not to bounce off shit)
 					Collider2D[] cols = GetComponents<Collider2D>();
 					foreach(Collider2D c in cols)
 					{
@@ -70,13 +91,13 @@ public class ShipHealth : MonoBehaviour
 					sc.engineSound.enabled = false;
 					sc.engineSmoke.Stop ();
 					sc.enabled = false;
-					// ... disable the Gun script to stop a dead guy shooting a nonexistant bazooka
+					// ... disable the shooting script
 					GetComponentInChildren<ShootBullet>().enabled = false;
 
 					// ... Trigger the 'Die' animation state
 //					anim.SetTrigger("Die");
 					Debug.Log("Aww, he dead.");
-					GetComponent<SpriteRenderer> ().enabled = false;
+                    shipSprite.enabled = false;
 
 				}
 			}
@@ -86,8 +107,6 @@ public class ShipHealth : MonoBehaviour
 
 	void TakeDamage (Transform enemy)
 	{
-//		// Make sure the player can't jump.
-//		playerControl.jump = false;
 
 		// Create a vector that's from the enemy to the player 
 		Vector3 hurtVector = transform.position - enemy.position;

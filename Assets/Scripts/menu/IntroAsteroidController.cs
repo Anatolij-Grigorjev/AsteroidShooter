@@ -16,7 +16,7 @@ public class IntroAsteroidController : MonoBehaviour {
         rb2d = GetComponent<Rigidbody2D> ();
         deathExplosionSound = GetComponent<AudioSource> ();
         //add some random torque
-        rb2d.AddTorque(Random.value * (torqueRange * Random.value));
+        rb2d.AddTorque(25 + (torqueRange * Random.value));
     }
        
 

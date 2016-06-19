@@ -19,6 +19,8 @@ public class GameController : Singleton<GameController> {
 
     [HideInInspector]
     public int currentAsteroids;
+    [HideInInspector]
+    public int nextSceneIndex;
 
 	// Use this for initialization
 	void Awake () {
