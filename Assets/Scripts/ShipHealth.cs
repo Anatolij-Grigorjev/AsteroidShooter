@@ -7,6 +7,8 @@ public class ShipHealth : MonoBehaviour
     [HideInInspector]
     public float health;					// The player's current health.
 	public float repeatDamagePeriod = 2f;		// How frequently the player can be damaged.
+    public float flickerInterval = 0.4f;        //speed of damage flickering
+    private float currentFlicker;
     private float damageCooldown;
 //	public AudioClip[] ouchClips;				// Array of clips to play when the player is damaged.
 	public float hurtForceBase = 10f;				// The base force with which the player is pushed when hurt (actual depends on mass).
@@ -26,7 +28,8 @@ public class ShipHealth : MonoBehaviour
 	void Awake ()
 	{
         isHurt = false;
-        damageCooldown = 0.0f;
+        damageCooldown = repeatDamagePeriod;
+        currentFlicker = flickerInterval;
 		// Setting up references.
 //		playerControl = GetComponent<PlayerControl>();
         shipSprite = GetComponent<SpriteRenderer> ();
@@ -41,12 +44,17 @@ public class ShipHealth : MonoBehaviour
 
     void Update() {
         if (isHurt) {
-            shipSprite.enabled = !shipSprite.enabled;
+            currentFlicker -= Time.deltaTime;
             damageCooldown -= Time.deltaTime;
+            if (currentFlicker <= 0) {
+                shipSprite.enabled = !shipSprite.enabled;
+                currentFlicker = flickerInterval;
+            }
             if (damageCooldown <= 0.0f) {
                 isHurt = false;
-                damageCooldown = 0.0f;
+                damageCooldown = repeatDamagePeriod;
                 shipSprite.enabled = true;
+                currentFlicker = flickerInterval;
             }
         }
     }
@@ -71,6 +79,7 @@ public class ShipHealth : MonoBehaviour
 				// If the player doesn't have health, do some stuff
 				else
 				{
+                    isHurt = false;
                     // Find all of the colliders on the gameobject and set them all to be triggers 
                     //(not to bounce off shit)
 					Collider2D[] cols = GetComponents<Collider2D>();

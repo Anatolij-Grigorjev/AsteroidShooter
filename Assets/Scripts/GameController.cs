@@ -21,7 +21,7 @@ public class GameController : Singleton<GameController> {
         get {
             var result = scriptsPaths [currentSceneIndex];
             currentSceneIndex++;
-            if (currentSceneIndex => scriptsPaths.Count) {
+            if (currentSceneIndex >= scriptsPaths.Count) {
                 currentSceneIndex = 0;
             }
 
@@ -33,6 +33,12 @@ public class GameController : Singleton<GameController> {
         "intro_scene",
         "post_game_scene"
     };
+    [HideInInspector]
+    public List<String> avatarNames = new List<string>() {
+        "daughter",
+        "father"
+    };
+
     private int currentSceneIndex = 0;
     private GameObject playerShip;
 

@@ -39,9 +39,6 @@ public class DialogueFlowController : MonoBehaviour {
     //typing delay between symbols, in seconds
     public double typeDelay = 0.1;
 
-    //directory with sprites that are dialogue faces (this directory must contain pngs)
-    public string avatarsDirectory;
-
     private double delayRecharge;
 
     public Animator shipAnimatinoController;
@@ -63,45 +60,36 @@ public class DialogueFlowController : MonoBehaviour {
 	}
 
     IEnumerator ReadScript (string scriptName) {
-        yield return new WaitUntil(() => CookAvatarsMap (avatarsDirectory));
+        yield return new WaitUntil(() => CookAvatarsMap ());
+
+        string line;
+        var textAsset = Resources.Load(String.Format("Text/Dialogue/{0}", scriptName), typeof(TextAsset)) as TextAsset;
+
+        string[] textLines = textAsset.text.Split(new char[] {'\n'});
+
         try {
-            string line;
-            StreamReader reader = new StreamReader(String.Format("Assets/Dialogue/{0}.txt", scriptName), Encoding.UTF8);
+            string indexLine = textLines[0];
+            GameController.Instance.nextSceneIndex = int.Parse(indexLine);
+        } catch (Exception e) {
+            Debug.LogError(e);
+            GameController.Instance.nextSceneIndex = 0;
+        }
 
-            using(reader) {
-                //first line has next stage index
+        for (int i = 1; i < textLines.Length; i++) {
+            line = textLines[i];
+            //Debug.Log("Read line: " + line);
+            if (line != null) {
+                var parts = line.Split(new char[]{';'}, DIALOGUE_LINE_PARTS_COUNT);
+                if (parts.Length == DIALOGUE_LINE_PARTS_COUNT) {
+                    //can make a dialogue line out of this!
+                    var newLine = new DialogueLine();
+                    newLine.lineText = parts[2];
+                    newLine.name = parts[1];
+                    newLine.avatar = GetDialogueAvatar(parts[0]);
 
-                try {
-                    string indexLine = reader.ReadLine();
-                    GameController.Instance.nextSceneIndex = int.Parse(indexLine);
-                } catch (Exception e) {
-                    Debug.LogError(e);
-                    GameController.Instance.nextSceneIndex = 0;
+                    lines.Add(newLine);
                 }
-
-
-                do {
-                    line = reader.ReadLine();
-//                    Debug.Log("Read line: " + line);
-                    if (line != null) {
-
-                        var parts = line.Split(new char[]{';'}, DIALOGUE_LINE_PARTS_COUNT);
-                        if (parts.Length == DIALOGUE_LINE_PARTS_COUNT) {
-                            //can make a dialogue line out of this!
-                            var newLine = new DialogueLine();
-                            newLine.lineText = parts[2];
-                            newLine.name = parts[1];
-                            newLine.avatar = GetDialogueAvatar(parts[0]);
-
-                            lines.Add(newLine);
-                        }
-
-                    }
-                } while (line != null);
             }
-        } catch(Exception e) {
-            Debug.LogError (String.Format("Couldnt read file because {0}\n!", e.Message));
-            yield break;
         }
 //        Debug.LogAssertion (String.Format("Salvaged {0} lines from file {1}", lines.Count, scriptName));
         scriptLoaded = true;
@@ -160,17 +148,14 @@ public class DialogueFlowController : MonoBehaviour {
 
 	}
 
-    bool CookAvatarsMap (string avatarsDirectory) {
+    bool CookAvatarsMap () {
 
-        string[] files = Directory.GetFiles (avatarsDirectory, "*.png");
+        var avatarNames = GameController.Instance.avatarNames;
 
-        foreach (String fileName in files) {
-            int dividerIndex = fileName.LastIndexOf (@"\");
-            string justFileName = fileName.Substring (dividerIndex + 1);
-            string justName = justFileName.Remove(justFileName.LastIndexOf(".png"));
-            Sprite resource = (Sprite)Resources.Load ("Images/Dialogue/" + justName, typeof(Sprite));
+        foreach (String avatarName in avatarNames) {
+            Sprite resource = (Sprite)Resources.Load ("Images/Dialogue/" + avatarName, typeof(Sprite));
 //            Debug.Log ("Resource was loaded from Images/Dialogue/" + justName + ": " + (resource != null));
-            avatarsMap.Add (justName, resource);
+            avatarsMap.Add (avatarName, resource);
         }
 
 //        foreach (KeyValuePair<String, Sprite> kvp in avatarsMap) {

@@ -3,6 +3,6 @@ father;Father;Finally, a vacation from the dull office with my loving daughter, 
 daughter;Daughter;Yay...
 father;Father;Oh put some spirit into it! Nothing like the refreshing feel of space on your hull, I always say.
 daughter;Daughter;You never say that.
-father;Father;Well I will from now on! Anyway, your brother and Martha can do just fine without us for a minute, can't they?
+father;Father;Well I will from now on! Anyway, your brother and mother can do just fine without us for a minute, can't they?
 daughter;Daughter;I do not believe myself qualified to answer that, dad.
 father;Father;Well ya know what? Just to make it easy on them, let's take a shortcut! C'mon, this will be fun!
