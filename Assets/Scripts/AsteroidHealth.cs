@@ -9,12 +9,16 @@ public class AsteroidHealth : MonoBehaviour {
 	public float damageAmountBase = 10f;	// The base amount of damage to take when damage is done to object (actual multiplies by mass).
 	public float maxHealth = 100;
 
-	private SpriteRenderer healthBar;			// Reference to the sprite renderer of the health bar.
-	private Vector3 healthScale;				// The local scale of the health bar initially (with full health).
+//	private SpriteRenderer healthBar;			// Reference to the sprite renderer of the health bar.
+//	private Vector3 healthScale;				// The local scale of the health bar initially (with full health).
 
-	public Vector3 offset;
-	private Quaternion rotation;
-	private float scaleLength;
+//	public Vector3 offset;
+//	private Quaternion rotation;
+//	private float scaleLength;
+
+    private SpriteRenderer asteroidSprite;
+    public Sprite[] asteroidDamageSprites;
+    private int currentDamageIndex;
 
 	private AudioSource crashPlayer;
 	public AudioClip shipCrashClip;
@@ -27,24 +31,26 @@ public class AsteroidHealth : MonoBehaviour {
 		// Setting up references.
 		//		playerControl = GetComponent<PlayerControl>();
 
-		healthBar = Utils.GetComponentInChild<SpriteRenderer> (this);
+//		healthBar = Utils.GetComponentInChild<SpriteRenderer> (this);
+        crashPlayer = Utils.GetComponentInChild<AudioSource> (this);
+        //      anim = GetComponent<Animator>();
 
-		crashPlayer = Utils.GetComponentInChild<AudioSource> (this);
-		//		anim = GetComponent<Animator>();
-
-		// Getting the intial scale of the healthbar (whilst the player has full health).
-        healthScale = healthBar.transform.localScale;
-		scaleLength = 1 / maxHealth;
-		rotation = transform.rotation;
-		health = maxHealth;
+        // Getting the intial scale of the healthbar (whilst the player has full health).
+//        healthScale = healthBar.transform.localScale;
+//      scaleLength = 1 / maxHealth;
+//      rotation = transform.rotation;
+        health = maxHealth;
+        asteroidSprite = GetComponent<SpriteRenderer>();
 		mainBodyController = GetComponent<AsteroidController> ();
+        currentDamageIndex = 0;
+        asteroidSprite.sprite = asteroidDamageSprites [currentDamageIndex];
 	}
 
 
 	void Update() {
 		//maintain lifebar position every frame draw
-		healthBar.gameObject.transform.localPosition = offset;
-		healthBar.gameObject.transform.rotation = rotation;
+//		healthBar.gameObject.transform.localPosition = offset;
+//		healthBar.gameObject.transform.rotation = rotation;
 	}
 
 	void OnCollisionEnter2D (Collision2D col)
@@ -109,7 +115,7 @@ public class AsteroidHealth : MonoBehaviour {
 		health = Mathf.Clamp (health, 0, maxHealth);
 
 		// Update what the health bar looks like.
-		UpdateHealthBar();
+		UpdateHealthLook();
 	}
 
 	public void LetDie ()
@@ -139,12 +145,24 @@ public class AsteroidHealth : MonoBehaviour {
 		StartCoroutine_Auto(mainBodyController.Die ());
 	}
 
-	public void UpdateHealthBar ()
+	public void UpdateHealthLook ()
 	{
 		// Set the health bar's colour to proportion of the way between green and red based on the health.
-		healthBar.material.color = Color.Lerp(Color.green, Color.red, 1 - (health * (scaleLength)));
+//		healthBar.material.color = Color.Lerp(Color.green, Color.red, 1 - (health * (scaleLength)));
+//
+//		// Set the scale of the health bar to be proportional to the player's health.
+//		healthBar.transform.localScale = new Vector3(healthScale.x * health * (scaleLength), 1, 1);
 
-		// Set the scale of the health bar to be proportional to the player's health.
-		healthBar.transform.localScale = new Vector3(healthScale.x * health * (scaleLength), 1, 1);
+        int newDamageIndex = Mathf.Clamp(
+            asteroidDamageSprites.Length - Mathf.RoundToInt ((health / maxHealth) * 10)
+            , 0
+            , asteroidDamageSprites.Length - 1
+        );
+        if (currentDamageIndex != newDamageIndex) {
+            currentDamageIndex = newDamageIndex;
+            asteroidSprite.sprite = asteroidDamageSprites [currentDamageIndex];
+
+            //TODO: spawn debris
+        }
 	}
 }
