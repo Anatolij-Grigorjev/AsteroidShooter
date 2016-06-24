@@ -5,13 +5,11 @@ public class AsteroidController : MonoBehaviour {
 
 	public float speedRange;
 	public float torqueRange;
-	public int spawnBase;
 	[HideInInspector]
 	public bool isDead = false;
-	public bool isMini = false;
-	public GameObject miniSteroidPrefab;
 	public GameObject explosionPrefab;
 	public TextMesh nameText;
+
 	private Rigidbody2D rb2d;
 	private AudioSource deathExplosionSound;
 	private KillLogController killLog;
@@ -32,8 +30,9 @@ public class AsteroidController : MonoBehaviour {
 		) * (speedRange * Random.value));
 		killLog = GameObject.FindObjectOfType<KillLogController> ();
 		//add some random torque
-		rb2d.AddTorque(Random.value * (torqueRange * Random.value));
-		nameText.text = Utils.GetRandomName (isMini);
+		rb2d.AddTorque(torqueRange * Random.value);
+		nameText.text = Utils.GetRandomName ();
+
 	}
 	
 	// Update is called once per frame
@@ -51,15 +50,6 @@ public class AsteroidController : MonoBehaviour {
 		}
 
 		if (!isDead) {
-            if (miniSteroidPrefab != null) {
-    			//how many more to spawn, up to double the initial amount
-    			int surplus = (int)Mathf.Abs (Random.value * spawnBase);
-    			int toSpawn = spawnBase + surplus;
-    			for (int i = 0; i < toSpawn; i++) {
-    				Instantiate (miniSteroidPrefab, transform.position, transform.rotation);
-    			}
-                GameController.Instance.currentAsteroids += toSpawn;
-            }
 			//play sound, spawn boom
 			deathExplosionSound.Play ();
 			Instantiate (explosionPrefab, transform.position, transform.rotation);

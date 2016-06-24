@@ -26,6 +26,8 @@ public class AsteroidHealth : MonoBehaviour {
 	private bool isDead = false; //prevent multiple death effects
 	private AsteroidController mainBodyController;
 
+    public GameObject debrisPrefab;
+
 	void Awake ()
 	{
 		// Setting up references.
@@ -114,8 +116,8 @@ public class AsteroidHealth : MonoBehaviour {
 
 		health = Mathf.Clamp (health, 0, maxHealth);
 
-		// Update what the health bar looks like.
-		UpdateHealthLook();
+        // Update what the asteorid looks like (also disloge fresh debris if needed)
+        UpdateHealthLook();
 	}
 
 	public void LetDie ()
@@ -145,7 +147,7 @@ public class AsteroidHealth : MonoBehaviour {
 		StartCoroutine_Auto(mainBodyController.Die ());
 	}
 
-	public void UpdateHealthLook ()
+    public void UpdateHealthLook ()
 	{
 		// Set the health bar's colour to proportion of the way between green and red based on the health.
 //		healthBar.material.color = Color.Lerp(Color.green, Color.red, 1 - (health * (scaleLength)));
@@ -163,6 +165,34 @@ public class AsteroidHealth : MonoBehaviour {
             asteroidSprite.sprite = asteroidDamageSprites [currentDamageIndex];
 
             //TODO: spawn debris
+            SpawnDebris ();
         }
 	}
+
+    void SpawnDebris () {
+        /**
+         * Knowing the ship center of mass and the asteroid center of mass we can draw a single line between the two,
+         * get the coefficients of that line.
+         * Those coefficients give a family of curves when integrated.
+         * to those coefficients, we add the third, compensating for current debris position to start the 
+         * y position off correctly
+        **/
+
+        var shipPosition = GameController.Instance.PlayerShip.transform.position;
+        var asteroidPosition = transform.position;
+
+        //coefficients
+        float slope = (shipPosition.y - asteroidPosition.y) / (shipPosition.x - asteroidPosition.x);
+        float yIntercept = shipPosition.y - slope * shipPosition.x;
+        //integrated coefficients would be slope/2 and yIntercept
+
+        GameObject debris = Instantiate (debrisPrefab, asteroidPosition, Quaternion.identity) as GameObject;
+        var debrisController = debris.GetComponent<DebrisController> ();
+
+        //compensation makes sure equation starts the debris at current x and y
+        float compensateC = asteroidPosition.y -
+            (slope / 2 * asteroidPosition.x * asteroidPosition.x + yIntercept * asteroidPosition.x);    
+        debrisController.SetCoef (slope / 2, yIntercept, compensateC);
+
+    }
 }
