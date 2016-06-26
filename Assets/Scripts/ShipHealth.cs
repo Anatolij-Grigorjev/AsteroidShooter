@@ -62,7 +62,7 @@ public class ShipHealth : MonoBehaviour
 	void OnCollisionEnter2D (Collision2D col)
 	{
 		// If the colliding gameobject is an Enemy...
-		if(col.gameObject.tag == "Asteroid" || col.gameObject.tag == "Ministeroid")
+		if(col.gameObject.tag == "Asteroid" || col.gameObject.tag == "Debris")
 		{
 			// ... and if the time exceeds the time of the last hit plus the time between hits...
 			if (Time.time > lastHitTime + repeatDamagePeriod) 

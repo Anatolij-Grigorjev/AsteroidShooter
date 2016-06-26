@@ -178,21 +178,40 @@ public class AsteroidHealth : MonoBehaviour {
          * y position off correctly
         **/
 
-        var shipPosition = GameController.Instance.PlayerShip.transform.position;
-        var asteroidPosition = transform.position;
+//        var shipPosition = GameController.Instance.PlayerShip.transform.position;
+//        var asteroidPosition = transform.position;
+//
+//        //coefficients
+//        float slope = (shipPosition.y - asteroidPosition.y) / (shipPosition.x - asteroidPosition.x);
+//        float yIntercept = shipPosition.y - slope * shipPosition.x;
+//
+//        //compensation makes sure equation starts the debris at current x and y
+//        float compensateC = asteroidPosition.y -
+//            (slope / 2 * asteroidPosition.x * asteroidPosition.x + yIntercept * asteroidPosition.x);    
 
-        //coefficients
-        float slope = (shipPosition.y - asteroidPosition.y) / (shipPosition.x - asteroidPosition.x);
-        float yIntercept = shipPosition.y - slope * shipPosition.x;
-        //integrated coefficients would be slope/2 and yIntercept
+        for (int i = 0; i < 3; i++) {
+            var asteroidPosition = transform.position;
+            var shipPositionOrig = GameController.Instance.PlayerShip.transform.position;
+            var shipPosition = new Vector3 (
+                shipPositionOrig.x + Random.Range(-1.0f, 1.0f) * 10.0f
+                , shipPositionOrig.y + Random.Range(-1.0f, 1.0f) * 10.0f
+                , 0.0f);
+            //coefficients
+            float slope = (shipPosition.y - asteroidPosition.y) / (shipPosition.x - asteroidPosition.x);
+            float yIntercept = shipPosition.y - slope * shipPosition.x;
 
-        GameObject debris = Instantiate (debrisPrefab, asteroidPosition, Quaternion.identity) as GameObject;
-        var debrisController = debris.GetComponent<DebrisController> ();
-
-        //compensation makes sure equation starts the debris at current x and y
-        float compensateC = asteroidPosition.y -
-            (slope / 2 * asteroidPosition.x * asteroidPosition.x + yIntercept * asteroidPosition.x);    
-        debrisController.SetCoef (slope / 2, yIntercept, compensateC);
+            GameObject debris = Instantiate (debrisPrefab, asteroidPosition, Quaternion.identity) as GameObject;
+            var debrisController = debris.GetComponent<DebrisController> ();
+            //integrated coefficients would be slope/2 and yIntercept
+            debrisController.SetCoef (
+//                slope / 2 
+//                , yIntercept
+//                , compensateC
+                0.0f, 
+                slope,
+                yIntercept
+            );
+        }
 
     }
 }

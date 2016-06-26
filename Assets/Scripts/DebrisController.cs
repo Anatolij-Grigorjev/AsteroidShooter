@@ -9,22 +9,25 @@ public class DebrisController : MonoBehaviour {
     public float torqueRange;
     private float speed;
     public GameObject explosionPrefab;
-    private Rigidbody2D rb2d;
+    private Collider2D theCollider;
     private AudioSource deathExplosionSound;
 
     private float coefA;
     private float coefB;
     private float coefC;
 
+    Coroutine deathCoroutine;
+
     // Use this for initialization
     void Start () {
-        rb2d = GetComponent<Rigidbody2D> ();
+        theCollider = GetComponent<Collider2D> ();
         deathExplosionSound = GetComponent<AudioSource> ();
         //add some random torque
-        rb2d.AddTorque(torqueRange * UnityEngine.Random.value);
+//        rb2d.AddTorque(torqueRange * UnityEngine.Random.value);
 
-        speed = speedRange * UnityEngine.Random.value;
-        StartCoroutine (Die (5.0f));
+        speed = speedRange;
+        deathCoroutine = StartCoroutine (Die (1.5f));
+        StartCoroutine (becomeCollider ());
     }
 
     public void SetCoef(float a, float b, float c) {
@@ -34,16 +37,25 @@ public class DebrisController : MonoBehaviour {
         coefC = c;
     }
 
+    IEnumerator becomeCollider() { 
+        yield return new WaitForSeconds (0.3f);
+        theCollider.isTrigger = false;
+
+        yield return 0;
+    }
+
     // Update is called once per frame
     void Update () {
         var x = transform.position.x;
-        transform.position = new Vector3 (x + speed * Time.deltaTime, x*x* coefA + coefB * x + coefC);
-       
+        transform.position = new Vector3 (x + speed * Time.deltaTime, coefB * x + coefC);
+        speed = Mathf.Clamp (speed - 0.01f, 0.0f, speed);
     }
 
     //die, explode and spawn ministeroids
     public IEnumerator Die(float waitTime) {
-        yield return new WaitForSeconds (waitTime);
+        if (waitTime > 0.0f) {
+            yield return new WaitForSeconds (waitTime);
+        }
         //play sound, spawn boom
         deathExplosionSound.Play ();
         Instantiate (explosionPrefab, transform.position, transform.rotation);
