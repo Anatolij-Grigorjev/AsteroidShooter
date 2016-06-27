@@ -61,11 +61,14 @@ public class AsteroidHealth : MonoBehaviour {
 			return;
 		}
 		// If the colliding gameobject is the player or other asteroid...
-		if(col.gameObject.tag == "Ship" || col.gameObject.tag == "Asteroid" || col.gameObject.tag == "Ministeroid")
+		if(col.gameObject.tag == "Ship" || col.gameObject.tag == "Asteroid" || col.gameObject.tag == "Debris")
 		{
 			if (col.gameObject.tag == "Ship") {
 				StartCoroutine_Auto (playCorrectClip (shipCrashClip));
-			} else if (col.gameObject.tag.EndsWith("steroid")) {
+            } else if (
+                col.gameObject.CompareTag("Asteroid")
+                || col.gameObject.CompareTag("Debris")
+            ) {
 				StartCoroutine_Auto (playCorrectClip (rockCrashClip));
 			}
 			// ... and if the object still has health...

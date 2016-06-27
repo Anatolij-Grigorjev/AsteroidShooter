@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class CameraController : MonoBehaviour {
 
@@ -14,6 +15,8 @@ public class CameraController : MonoBehaviour {
 	private float minY;
 	private float maxY;
 
+    private Camera theCamera;
+    private Boolean isViewingMode;
 	private Vector3 offset;         //Private variable to store the offset distance between the player and camera
 
 	// Use this for initialization
@@ -33,7 +36,19 @@ public class CameraController : MonoBehaviour {
 		maxX = (float)(mapX / 2.0 - horzExtent);
 		minY = (float)(vertExtent - mapY / 2.0);
 		maxY = (float)(mapY / 2.0 - vertExtent);
+        isViewingMode = false;
+        theCamera = GetComponent<Camera> ();
 	}
+
+    void Update() {
+        bool pressed = Input.GetKeyUp (KeyCode.Q);
+        if (pressed) {
+            isViewingMode = !isViewingMode;
+            Time.timeScale = isViewingMode ? 0.0f : 1.0f;
+            theCamera.orthographicSize = isViewingMode? 15 : 5;
+            transform.position = new Vector3 ();
+        }
+    }
 
 	// LateUpdate is called after Update each frame
 	void LateUpdate () 
