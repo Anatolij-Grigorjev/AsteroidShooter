@@ -33,9 +33,11 @@ public class RombusController : MonoBehaviour {
 	void Update () {
 		if (!isExploding) {
 			transform.position = position;
-			float delta = rombusVelocity;
+            float delta = rombusVelocity * Time.deltaTime;
 			position.x += (delta * Mathf.Cos(Mathf.Deg2Rad * shipRotation));
 			position.y += (delta * Mathf.Sin(Mathf.Deg2Rad * shipRotation));
+
+            particles.gameObject.transform.position = transform.position;
 		} else {
 		}
 	}
