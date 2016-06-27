@@ -189,17 +189,21 @@ public class AsteroidHealth : MonoBehaviour {
 //        float compensateC = asteroidPosition.y -
 //            (slope / 2 * asteroidPosition.x * asteroidPosition.x + yIntercept * asteroidPosition.x);    
 
+        var asteroidPosition = transform.position;
+        var shipPositionRelative = transform.position - GameController.Instance.PlayerShip.transform.position;
+        Debug.Log ("Actual ateroid: " + asteroidPosition);
+        Debug.Log ("Actual ship: " + GameController.Instance.PlayerShip.transform.position);
+        Debug.Log ("Relative position: " + shipPositionRelative);
         for (int i = 0; i < 3; i++) {
-            var asteroidPosition = transform.position;
-            var shipPositionOrig = GameController.Instance.PlayerShip.transform.position;
             var shipPosition = new Vector3 (
-                shipPositionOrig.x + Random.Range(-1.0f, 1.0f) * 10.0f
-                , shipPositionOrig.y + Random.Range(-1.0f, 1.0f) * 10.0f
+                asteroidPosition.x + Random.Range(-shipPositionRelative.x, shipPositionRelative.x)
+                , asteroidPosition.y + Random.Range(-shipPositionRelative.y, shipPositionRelative.y)
                 , 0.0f);
+            Debug.Log ("Rnd Position: " + shipPosition);
             //coefficients
             float slope = (shipPosition.y - asteroidPosition.y) / (shipPosition.x - asteroidPosition.x);
             float yIntercept = shipPosition.y - slope * shipPosition.x;
-
+            Debug.Log ("Slope: " + slope + "|yIntercept: " + yIntercept);
             GameObject debris = Instantiate (debrisPrefab, asteroidPosition, Quaternion.identity) as GameObject;
             var debrisController = debris.GetComponent<DebrisController> ();
             //integrated coefficients would be slope/2 and yIntercept
@@ -207,7 +211,7 @@ public class AsteroidHealth : MonoBehaviour {
 //                slope / 2 
 //                , yIntercept
 //                , compensateC
-                0.0f, 
+                asteroidPosition.x < shipPosition.x? -1.0f : 1.0f, 
                 slope,
                 yIntercept
             );

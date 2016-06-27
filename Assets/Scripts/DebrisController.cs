@@ -38,7 +38,7 @@ public class DebrisController : MonoBehaviour {
     }
 
     IEnumerator becomeCollider() { 
-        yield return new WaitForSeconds (0.3f);
+        yield return new WaitForSeconds (0.2f);
         theCollider.isTrigger = false;
 
         yield return 0;
@@ -47,7 +47,7 @@ public class DebrisController : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         var x = transform.position.x;
-        transform.position = new Vector3 (x + speed * Time.deltaTime, coefB * x + coefC);
+        transform.position = new Vector3 (x + speed * Time.deltaTime * coefA, coefB * x + coefC);
         speed = Mathf.Clamp (speed - 0.01f, 0.0f, speed);
     }
 
