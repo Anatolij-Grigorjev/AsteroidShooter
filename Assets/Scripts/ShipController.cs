@@ -49,14 +49,17 @@ public class ShipController : MonoBehaviour {
 		animator.SetBool ("isMoving", Mathf.Abs (verticalAxis) > 0);
 
 		//good handling
-		shipBody.drag = horizontalAxis * 3;
-		shipBody.angularDrag = verticalAxis * 3;
+//		shipBody.drag = horizontalAxis * 3;
+//		shipBody.angularDrag = verticalAxis * 3;
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        transform.rotation = Quaternion.LookRotation(Vector3.forward, mousePos - transform.position);
 
-		//up axis seems to represent facing rotation in 2d
-		var flightVector = new Vector2 (transform.up.x, transform.up.y);
-
-		shipBody.AddForce (flightVector * verticalAxis * thrustSpeed);
-		transform.Rotate (new Vector3 (0, 0, -horizontalAxis * turnSpeed));
+        //up axis seems to represent facing rotation in 2d
+        var flightVector = new Vector2 (transform.up.x, transform.up.y);
+        var sideVector = new Vector2 (transform.right.x, transform.right.y);
+        shipBody.AddForce (flightVector * verticalAxis * thrustSpeed);
+        shipBody.AddForce (sideVector * horizontalAxis * thrustSpeed);
+//      transform.Rotate (new Vector3 (0, 0, -horizontalAxis * turnSpeed));
 	}
 		
 	void PlaceSmoke ()

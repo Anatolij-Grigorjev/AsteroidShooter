@@ -21,7 +21,7 @@ public class ShipHealth : MonoBehaviour
 //	private Animator anim;						// Reference to the Animator on the player
 	private float playerMass;
 	private float scaleLength;
-    private bool isHurt; 
+    public bool isHurt; 
     private SpriteRenderer shipSprite;
 
 

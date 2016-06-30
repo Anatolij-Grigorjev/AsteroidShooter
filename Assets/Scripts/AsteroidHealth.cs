@@ -20,7 +20,7 @@ public class AsteroidHealth : MonoBehaviour {
     public Sprite[] asteroidDamageSprites;
     private int currentDamageIndex;
 
-	private AudioSource crashPlayer;
+	public AudioSource crashPlayer;
 	public AudioClip shipCrashClip;
 	public AudioClip rockCrashClip;
 	private bool isDead = false; //prevent multiple death effects
@@ -34,7 +34,7 @@ public class AsteroidHealth : MonoBehaviour {
 		//		playerControl = GetComponent<PlayerControl>();
 
 //		healthBar = Utils.GetComponentInChild<SpriteRenderer> (this);
-        crashPlayer = Utils.GetComponentInChild<AudioSource> (this);
+//        crashPlayer = Utils.GetComponentInChild<AudioSource> (this);
         //      anim = GetComponent<Animator>();
 
         // Getting the intial scale of the healthbar (whilst the player has full health).
@@ -61,9 +61,19 @@ public class AsteroidHealth : MonoBehaviour {
 			return;
 		}
 		// If the colliding gameobject is the player or other asteroid...
-		if(col.gameObject.tag == "Ship" || col.gameObject.tag == "Asteroid" || col.gameObject.tag == "Debris")
-		{
-			if (col.gameObject.tag == "Ship") {
+        bool isShip = col.gameObject.CompareTag ("Ship");
+        if(
+            isShip
+            || col.gameObject.CompareTag("Asteroid")
+            || col.gameObject.CompareTag("Debris")
+        )
+        {
+            
+            if (isShip) {
+                //exit if ship still flashing
+                bool shipFlashing = col.gameObject.GetComponent<ShipHealth> ().isHurt;
+                if (shipFlashing)
+                    return;
 				StartCoroutine_Auto (playCorrectClip (shipCrashClip));
             } else if (
                 col.gameObject.CompareTag("Asteroid")
@@ -194,15 +204,15 @@ public class AsteroidHealth : MonoBehaviour {
 
         var asteroidPosition = transform.position;
         var shipPositionRelative = transform.position - GameController.Instance.PlayerShip.transform.position;
-        Debug.Log ("Actual ateroid: " + asteroidPosition);
-        Debug.Log ("Actual ship: " + GameController.Instance.PlayerShip.transform.position);
-        Debug.Log ("Relative position: " + shipPositionRelative);
+//        Debug.Log ("Actual ateroid: " + asteroidPosition);
+//        Debug.Log ("Actual ship: " + GameController.Instance.PlayerShip.transform.position);
+//        Debug.Log ("Relative position: " + shipPositionRelative);
         for (int i = 0; i < 3; i++) {
             var shipPosition = new Vector3 (
                 asteroidPosition.x + Random.Range(-shipPositionRelative.x, shipPositionRelative.x)
                 , asteroidPosition.y + Random.Range(-shipPositionRelative.y, shipPositionRelative.y)
                 , 0.0f);
-            Debug.Log ("Rnd Position: " + shipPosition);
+//            Debug.Log ("Rnd Position: " + shipPosition);
             //coefficients
             float slope = (shipPosition.y - asteroidPosition.y) / (shipPosition.x - asteroidPosition.x);
             float yIntercept = shipPosition.y - slope * shipPosition.x;
