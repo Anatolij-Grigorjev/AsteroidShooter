@@ -11,15 +11,17 @@ public class ShipController : MonoBehaviour {
 	private SpriteRenderer shipImage;
 	public ParticleSystem engineSmoke;
 
-	public AudioSource engineSound;
-	private Animator animator;
+    public ShipEngineController engineBack;
+    public ShipEngineController engineLeft;
+    public ShipEngineController engineRight;
+	
 
 	// Use this for initialization
 	void Start () {
 		shipBody = GetComponent<Rigidbody2D> ();
 //		engineSmoke = GetComponentInChildren<ParticleSystem> ();
 		shipImage = GetComponent<SpriteRenderer> ();
-		animator = GetComponent<Animator> ();
+		
 
 	}
 	
@@ -28,12 +30,12 @@ public class ShipController : MonoBehaviour {
 		var horizontalAxis = Input.GetAxis ("Horizontal");
 		var verticalAxis = Input.GetAxis ("Vertical");
 
-		if (Mathf.Abs (verticalAxis) > 0 && !engineSound.isPlaying) {
-			engineSound.Play ();
-		}
-		if (Mathf.Abs (verticalAxis) == 0 && engineSound.isPlaying) {
-			engineSound.Stop ();
-		}
+        engineBack.ProcessThrust (verticalAxis);
+        var thrustLeft = horizontalAxis < 0 ? horizontalAxis : 0.0f;
+        var thrustRight = horizontalAxis > 0 ? horizontalAxis : 0.0f;
+        engineLeft.ProcessThrust (thrustLeft);
+        engineRight.ProcessThrust (thrustRight);
+
 		var em = engineSmoke.emission;
 		if (engineSmoke.isPlaying && Mathf.Abs(verticalAxis) < smokeStartThreshold) {
 			engineSmoke.Stop ();
@@ -45,8 +47,6 @@ public class ShipController : MonoBehaviour {
 		}
 
 		PlaceSmoke ();
-
-		animator.SetBool ("isMoving", Mathf.Abs (verticalAxis) > 0);
 
 		//good handling
 //		shipBody.drag = horizontalAxis * 3;
@@ -76,4 +76,10 @@ public class ShipController : MonoBehaviour {
 			engineSmoke.transform.rotation = Quaternion.Euler (new Vector3 (transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z - 90));
 		}
 	}
+
+    public void KillEngines () {
+        foreach (ShipEngineController sec in new ShipEngineController[] {engineBack, engineLeft, engineRight}) {
+            sec.ProcessThrust (0);
+        }
+    }
 }

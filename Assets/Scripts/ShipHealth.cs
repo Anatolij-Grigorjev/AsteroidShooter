@@ -97,7 +97,7 @@ public class ShipHealth : MonoBehaviour
 
 					// ... disable user Player Control script
 					var sc = GetComponent<ShipController>();
-					sc.engineSound.enabled = false;
+                    sc.KillEngines ();
 					sc.engineSmoke.Stop ();
 					sc.enabled = false;
 					// ... disable the shooting script
