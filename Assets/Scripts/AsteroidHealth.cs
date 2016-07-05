@@ -216,7 +216,7 @@ public class AsteroidHealth : MonoBehaviour {
             //coefficients
             float slope = (shipPosition.y - asteroidPosition.y) / (shipPosition.x - asteroidPosition.x);
             float yIntercept = shipPosition.y - slope * shipPosition.x;
-            Debug.Log ("Slope: " + slope + "|yIntercept: " + yIntercept);
+//            Debug.Log ("Slope: " + slope + "|yIntercept: " + yIntercept);
             GameObject debris = Instantiate (debrisPrefab, asteroidPosition, Quaternion.identity) as GameObject;
             var debrisController = debris.GetComponent<DebrisController> ();
             //integrated coefficients would be slope/2 and yIntercept

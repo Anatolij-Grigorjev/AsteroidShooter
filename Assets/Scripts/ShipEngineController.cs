@@ -15,7 +15,11 @@ public class ShipEngineController : MonoBehaviour {
         engineSprite.enabled = false;
 	}
 	
-	
+	/**
+     * Perform ship engine related animation-showing sound-playing 
+     * based on current thrust amplitude
+     *
+     **/
     public void ProcessThrust (float amount) {
 
         if (Mathf.Abs (amount) > 0 && !engineSound.isPlaying) {
