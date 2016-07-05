@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class ShipHealth : MonoBehaviour
 {	
@@ -46,7 +47,7 @@ public class ShipHealth : MonoBehaviour
         if (isHurt) {
             currentFlicker -= Time.deltaTime;
             damageCooldown -= Time.deltaTime;
-            if (currentFlicker <= 0) {
+            if (currentFlicker <= 0) {   
                 shipSprite.enabled = !shipSprite.enabled;
                 currentFlicker = flickerInterval;
             }
