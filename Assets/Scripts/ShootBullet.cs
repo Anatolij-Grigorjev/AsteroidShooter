@@ -4,40 +4,46 @@ using UnityEngine.UI;
 
 public class ShootBullet : MonoBehaviour {
 
-	public float bulletRecharge;
-	public float frenzyBulletRecharge;
-	private float lastShot;
-	public GameObject bulletPrefab;
-	public GameObject rombusBulletPrefab;
+    //PUBLIC BULLET PARAMS
+    public float bulletRecharge;
+    public float frenzyBulletRecharge;
+    public float chargeReqTime;
+    public float maxFrenzyCharge = 0.0f;
+    public int bulletsAmmo;
+    public GameObject bulletPrefab;
+    public GameObject frenzyBulletPrefab;
+    public GameObject rombusBulletPrefab;
+    public AudioSource chargeClip;
+    public AudioSource chargedClip;
+    public SpriteRenderer chargeGraphics;
+    public Animator chargeAnimator;
+//    public Image bulletCornerImage;
+    public Text bulletCornerCount;
+    //------------------------------------
 
 
-	private SpriteRenderer shipImage;
+    //PUBLIC ROMBUS PARAMS
+    public float rombusRefactoryPeriod = 3.0f;
+    //rombus sprite for effect
+    public SpriteRenderer rombusRenderer;
+    //how many max rombus can the ship fire
+    public int currRombusCount;
+    public Image rombusCornerImage;
+    public Text rombusCornerCount;
+    //--------------------------------------
 
-	private AudioSource shotClip;
-	// Use this for initialization
-	public AudioSource chargeClip;
-	public AudioSource chargedClip;
 
-	public float rombusRefactoryPeriod = 3.0f;
-	private bool rombusRecovered;
-	private float frenzyBuildUp, pressTime = 0f;
-	public float chargeReqTime = 2.0f;
-	private bool charging = false;
-	private bool charged = false;
-	private bool inFrenzy = false;
-	//contain excitement to seconds
-	public float maxFrenzyCharge = 0.0f;
 
-	public SpriteRenderer chargeGraphics;
-	public Animator chargeAnimator;
+    //PRIVATE VARS INTERNAL STATE
+    private float lastShot;
+    private SpriteRenderer shipImage;
+    private AudioSource shotClip;
+    private bool rombusRecovered;
+    private float frenzyBuildUp, pressTime = 0f;
+    private bool charging = false;
+    private bool charged = false;
+    private bool inFrenzy = false;
 
-	//rombus sprite for effect
-	public SpriteRenderer rombusRenderer;
-	//how many max rombus can the ship fire
-	public int currRombusCount;
-
-	public Image rombusCornerImage;
-	public Text rombusCornerCount;
 
 
 	void Awake () {
@@ -47,6 +53,7 @@ public class ShootBullet : MonoBehaviour {
 		rombusRecovered = true;
 	
 		rombusCornerCount.text = "X " + currRombusCount;
+        bulletCornerCount.text = "X " + bulletsAmmo;
 		chargeAnimator.enabled = false;
 		chargeGraphics.enabled = false;
 
@@ -170,13 +177,16 @@ public class ShootBullet : MonoBehaviour {
 
 	void PerformShot (float recharge) {
 		if (Time.time > recharge + lastShot) {
-			Vector3 position = new Vector3 (//position is set by rotating nozzle of aircraft
+			Vector3 position = new Vector3 (
+            //position is set by rotating nozzle of aircraft
 			//+90 becuase nozzle 90 degrees misplaced from rotation origin
 			transform.position.x + (shipImage.bounds.extents.x * Mathf.Cos (Mathf.Deg2Rad * (transform.rotation.eulerAngles.z + 90)))
 				, transform.position.y + (shipImage.bounds.extents.y * Mathf.Sin (Mathf.Deg2Rad * (transform.rotation.eulerAngles.z + 90)))
 				, transform.position.z
 			);
-			Instantiate (bulletPrefab, position, Quaternion.identity);
+            Instantiate (inFrenzy? frenzyBulletPrefab : bulletPrefab, position, Quaternion.identity);
+            bulletsAmmo--;
+            bulletCornerCount.text = "X " + bulletsAmmo;
 			shotClip.Play ();
 			lastShot = Time.time;
 		}

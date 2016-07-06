@@ -55,7 +55,7 @@ public class BulletController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
-		if (other.gameObject.tag == "Asteroid" || other.gameObject.tag == "Ministeroid") {
+		if (other.gameObject.tag == "Asteroid") {
 			//got us a ROID! do some damage and dissapear
 			collided = true;
 			var lifeController = other.gameObject.GetComponent<AsteroidHealth>();

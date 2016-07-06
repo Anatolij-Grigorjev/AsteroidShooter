@@ -10,6 +10,7 @@ public class WinController : MonoBehaviour {
 	private Text winText;
 	public GameObject tryAgainButton;
     private bool playerWon;
+    public Text asteroidsCountText;
 
 	void Start () {
         playerWon = false;
@@ -51,6 +52,7 @@ public class WinController : MonoBehaviour {
         //having this flag should avoid winning before the whole thing took off
 
         currentAsteroids = GameController.Instance.currentAsteroids;
+        asteroidsCountText.text = "X " + currentAsteroids;
         if (currentAsteroids <= 0) {
             playerWon = true;
             StartCoroutine (GoNextPhase ());

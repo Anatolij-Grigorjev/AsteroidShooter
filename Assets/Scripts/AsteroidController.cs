@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class AsteroidController : MonoBehaviour {
 
@@ -9,6 +10,7 @@ public class AsteroidController : MonoBehaviour {
 	public bool isDead = false;
 	public GameObject explosionPrefab;
 	public TextMesh nameText;
+
 
 	private Rigidbody2D rb2d;
 	private AudioSource deathExplosionSound;
