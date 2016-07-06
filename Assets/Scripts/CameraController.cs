@@ -6,6 +6,7 @@ public class CameraController : MonoBehaviour {
 
 	public GameObject player;       //Public variable to store a reference to the player game object
 	public SpriteRenderer background; //reference to background to get area bounds
+    public AudioSource transitionSound; //sound made during zooming transition
 
 	private float mapX; //stuff to make the camera bound to the bounds of the background
 	private float mapY;
@@ -43,6 +44,7 @@ public class CameraController : MonoBehaviour {
     void Update() {
         bool pressed = Input.GetKeyUp (KeyCode.Q);
         if (pressed) {
+            transitionSound.Play ();
             isViewingMode = !isViewingMode;
             Time.timeScale = isViewingMode ? 0.0f : 1.0f;
             theCamera.orthographicSize = isViewingMode? 15 : 5;

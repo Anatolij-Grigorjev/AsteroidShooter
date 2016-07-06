@@ -13,8 +13,10 @@ public class ShootBullet : MonoBehaviour {
     public GameObject bulletPrefab;
     public GameObject frenzyBulletPrefab;
     public GameObject rombusBulletPrefab;
+    public AudioSource shotClip;
     public AudioSource chargeClip;
     public AudioSource chargedClip;
+    public AudioSource fireEmptyClip;
     public SpriteRenderer chargeGraphics;
     public Animator chargeAnimator;
 //    public Image bulletCornerImage;
@@ -37,7 +39,6 @@ public class ShootBullet : MonoBehaviour {
     //PRIVATE VARS INTERNAL STATE
     private float lastShot;
     private SpriteRenderer shipImage;
-    private AudioSource shotClip;
     private bool rombusRecovered;
     private float frenzyBuildUp, pressTime = 0f;
     private bool charging = false;
@@ -49,7 +50,6 @@ public class ShootBullet : MonoBehaviour {
 	void Awake () {
 		lastShot = 0;
 		shipImage = GetComponent<SpriteRenderer> ();
-		shotClip = GetComponentInChildren<AudioSource> ();
 		rombusRecovered = true;
 	
 		rombusCornerCount.text = "X " + currRombusCount;
@@ -177,17 +177,21 @@ public class ShootBullet : MonoBehaviour {
 
 	void PerformShot (float recharge) {
 		if (Time.time > recharge + lastShot) {
-			Vector3 position = new Vector3 (
+            if (bulletsAmmo > 0) {
+                Vector3 position = new Vector3 (
             //position is set by rotating nozzle of aircraft
 			//+90 becuase nozzle 90 degrees misplaced from rotation origin
-			transform.position.x + (shipImage.bounds.extents.x * Mathf.Cos (Mathf.Deg2Rad * (transform.rotation.eulerAngles.z + 90)))
+                                       transform.position.x + (shipImage.bounds.extents.x * Mathf.Cos (Mathf.Deg2Rad * (transform.rotation.eulerAngles.z + 90)))
 				, transform.position.y + (shipImage.bounds.extents.y * Mathf.Sin (Mathf.Deg2Rad * (transform.rotation.eulerAngles.z + 90)))
 				, transform.position.z
-			);
-            Instantiate (inFrenzy? frenzyBulletPrefab : bulletPrefab, position, Quaternion.identity);
-            bulletsAmmo--;
-            bulletCornerCount.text = "X " + bulletsAmmo;
-			shotClip.Play ();
+                                   );
+                Instantiate (inFrenzy ? frenzyBulletPrefab : bulletPrefab, position, Quaternion.identity);
+                bulletsAmmo--;
+                bulletCornerCount.text = "X " + bulletsAmmo;
+                shotClip.Play ();
+            } else {
+                fireEmptyClip.Play ();
+            }
 			lastShot = Time.time;
 		}
 	}

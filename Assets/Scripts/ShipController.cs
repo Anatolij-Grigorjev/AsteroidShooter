@@ -10,6 +10,7 @@ public class ShipController : MonoBehaviour {
 	public float smokeStartThreshold;
     public float rotationSpeed;
     public float maxBreakingDelay;
+    public float breakingMultiplier = 2.0f;
     //rotation speed obtained by thrusting
     private float activeRotationSpeed;
 	private Rigidbody2D shipBody;
@@ -54,11 +55,11 @@ public class ShipController : MonoBehaviour {
             engineLeft.ProcessThrust (thrustLeft);
             engineRight.ProcessThrust (thrustRight);
             var em = engineSmoke.emission;
-            if (engineSmoke.isPlaying && Mathf.Abs (verticalAxis) < smokeStartThreshold) {
+            if (isBreaking || engineSmoke.isPlaying && Mathf.Abs (verticalAxis) < smokeStartThreshold) {
                 engineSmoke.Stop ();
                 em.enabled = false;
             }
-            if (engineSmoke.isStopped && Mathf.Abs (verticalAxis) > smokeStartThreshold) {
+            if (engineSmoke.isStopped && Mathf.Abs (verticalAxis) > smokeStartThreshold && !isBreaking) {
                 engineSmoke.Play ();
                 em.enabled = true;
             }
@@ -76,6 +77,11 @@ public class ShipController : MonoBehaviour {
             engineLeft.ProcessThrust (0.5f);
             engineRight.ProcessThrust (0.5f);
             engineBack.ProcessThrust (0.0f);
+            if (engineSmoke.isPlaying) {
+                engineSmoke.Stop ();
+                var em = engineSmoke.emission;
+                em.enabled = false;
+            }
         }
 
 
@@ -101,8 +107,8 @@ public class ShipController : MonoBehaviour {
                 breakingDelay -= Time.deltaTime;
                 if (breakingDelay <= 0.0f) {
                     breakingDelay = maxBreakingDelay;
-                    shipBody.drag *= 2;
-                    shipBody.angularDrag *= 2;
+                    shipBody.drag *= breakingMultiplier;
+                    shipBody.angularDrag *= breakingMultiplier;
                 }
             }
             else {

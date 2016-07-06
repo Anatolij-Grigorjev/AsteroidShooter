@@ -14,7 +14,6 @@ public class AsteroidController : MonoBehaviour {
 
 	private Rigidbody2D rb2d;
 	private AudioSource deathExplosionSound;
-	private KillLogController killLog;
 
     //this asteroid is part of the intro sequence, so some logic doesnt apply
     public bool isIntro = false;
@@ -30,7 +29,7 @@ public class AsteroidController : MonoBehaviour {
 			(minusX? -1 : 1) * Random.value
 			, (minusY? -1 : 1) * Random.value
 		) * (speedRange * Random.value));
-		killLog = GameObject.FindObjectOfType<KillLogController> ();
+		
 		//add some random torque
 		rb2d.AddTorque(torqueRange * Random.value);
 		nameText.text = Utils.GetRandomName ();
@@ -44,9 +43,7 @@ public class AsteroidController : MonoBehaviour {
 
 	//die, explode and spawn ministeroids
 	public IEnumerator Die() {
-        if (killLog != null) {
-            killLog.AddDeath (nameText.text);
-        }
+        
 		if (deathExplosionSound.isPlaying) {
 			yield return new WaitUntil (() => !deathExplosionSound.isPlaying);
 		}
