@@ -1,0 +1,165 @@
+fileFormatVersion: 2
+guid: b9808bfce065ca04f9ea1c185c4bca5b
+timeCreated: 1467918438
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: breaking_comp_0
+    21300002: breaking_comp_1
+    21300004: breaking_comp_2
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: breaking_comp_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 250
+        height: 336
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 53, y: -158}
+        - {x: 123, y: -158}
+        - {x: 123, y: -95}
+        - {x: 102, y: -95}
+        - {x: 53, y: -117}
+      - - {x: -117, y: -93}
+        - {x: -121, y: -107}
+        - {x: -121, y: -150}
+        - {x: -116, y: -156}
+        - {x: -109, y: -157}
+        - {x: -61, y: -157}
+        - {x: -53, y: -145}
+        - {x: -53, y: -136}
+        - {x: -105, y: -93}
+      - - {x: -34, y: 152}
+        - {x: -40, y: 131}
+        - {x: -40, y: 108}
+        - {x: -32, y: 108}
+        - {x: -25, y: 112}
+        - {x: 19, y: 108}
+        - {x: 32, y: 108}
+        - {x: 36, y: 110}
+        - {x: 36, y: 124}
+        - {x: 23, y: 152}
+    - name: breaking_comp_1
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 0
+        width: 250
+        height: 336
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 99, y: -90}
+        - {x: 55, y: -138}
+        - {x: 55, y: -152}
+        - {x: 59, y: -156}
+        - {x: 105, y: -156}
+        - {x: 120, y: -146}
+        - {x: 120, y: -98}
+        - {x: 111, y: -90}
+      - - {x: -105, y: -90}
+        - {x: -112, y: -90}
+        - {x: -121, y: -100}
+        - {x: -121, y: -143}
+        - {x: -97, y: -155}
+        - {x: -73, y: -155}
+        - {x: -57, y: -150}
+        - {x: -55, y: -149}
+        - {x: -55, y: -136}
+        - {x: -101, y: -93}
+      - - {x: 36, y: 108}
+        - {x: 36, y: 130}
+        - {x: 20, y: 152}
+        - {x: -19, y: 152}
+        - {x: -40, y: 139}
+        - {x: -40, y: 108}
+    - name: breaking_comp_2
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 0
+        width: 250
+        height: 336
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 104, y: -90}
+        - {x: 57, y: -130}
+        - {x: 57, y: -148}
+        - {x: 65, y: -156}
+        - {x: 105, y: -156}
+        - {x: 122, y: -146}
+        - {x: 122, y: -100}
+        - {x: 119, y: -90}
+      - - {x: -110, y: -89}
+        - {x: -120, y: -98}
+        - {x: -120, y: -147}
+        - {x: -103, y: -154}
+        - {x: -56, y: -154}
+        - {x: -54, y: -152}
+        - {x: -54, y: -136}
+        - {x: -93, y: -89}
+      - - {x: -14, y: 152}
+        - {x: -37, y: 135}
+        - {x: -40, y: 119}
+        - {x: -40, y: 109}
+        - {x: -39, y: 108}
+        - {x: 36, y: 108}
+        - {x: 36, y: 127}
+        - {x: 20, y: 152}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

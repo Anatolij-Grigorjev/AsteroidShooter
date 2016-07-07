@@ -11,11 +11,15 @@ public class ShipController : MonoBehaviour {
     public float rotationSpeed;
     public float maxBreakingDelay;
     public float breakingMultiplier = 2.0f;
+    //minimum required velocity to activate ship sideburns animation
+    public float minSideburnsVelocity = 0.5f; 
     //rotation speed obtained by thrusting
     private float activeRotationSpeed;
 	private Rigidbody2D shipBody;
 	private SpriteRenderer shipImage;
 	public ParticleSystem engineSmoke;
+    public Animator shipBreakingAnimator;
+    public SpriteRenderer shipBreakingGraphics;
 
     public ShipEngineController engineBack;
     public ShipEngineController engineLeft;
@@ -38,6 +42,8 @@ public class ShipController : MonoBehaviour {
         regularDrag = shipBody.drag;
         regularAngularDrag = shipBody.angularDrag;
         isBreaking = false;
+        shipBreakingAnimator.enabled = false;
+        shipBreakingGraphics.enabled = false;
         breakingDelay = maxBreakingDelay;
 	}
 	
@@ -82,6 +88,13 @@ public class ShipController : MonoBehaviour {
                 var em = engineSmoke.emission;
                 em.enabled = false;
             }
+            if (!shipBreakingAnimator.enabled && shipBody.velocity.magnitude > minSideburnsVelocity) {
+                shipBreakingAnimator.enabled = true;
+                shipBreakingGraphics.enabled = true;
+            } else if (shipBreakingAnimator.enabled && shipBody.velocity.magnitude < minSideburnsVelocity) {
+                shipBreakingAnimator.enabled = false;
+                shipBreakingGraphics.enabled = false;
+            }
         }
 
 
@@ -99,7 +112,6 @@ public class ShipController : MonoBehaviour {
 
     void ProcessBreaking () {
         //BREAKING: break by holding Space
-        //TODO: Need sound/visual for "stabilizers"
         bool isBreakingPressed = Input.GetKey (KeyCode.Space);
         if (isBreakingPressed) {
             //the ship was already breaking - keep increasing drag to break harder
@@ -117,6 +129,10 @@ public class ShipController : MonoBehaviour {
                 regularAngularDrag = shipBody.angularDrag;
                 isBreaking = true;
                 breakingDelay = maxBreakingDelay;
+                if (shipBody.velocity.magnitude > minSideburnsVelocity) {
+                    shipBreakingAnimator.enabled = true;
+                    shipBreakingGraphics.enabled = true;
+                }
             }
         }
         else {
@@ -126,6 +142,8 @@ public class ShipController : MonoBehaviour {
                 shipBody.drag = regularDrag;
                 shipBody.angularDrag = regularAngularDrag;
                 isBreaking = false;
+                shipBreakingAnimator.enabled = false;
+                shipBreakingGraphics.enabled = false;
             }
             else {
                 //breaking wasnt pressed and the ship wasnt even breaking, nothing to do  
