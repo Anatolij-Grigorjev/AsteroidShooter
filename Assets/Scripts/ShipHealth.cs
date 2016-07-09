@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
+using System.CodeDom.Compiler;
 
 public class ShipHealth : MonoBehaviour
 {	
@@ -25,6 +27,7 @@ public class ShipHealth : MonoBehaviour
     public bool isHurt; 
     private SpriteRenderer shipSprite;
 
+    private Collider2D shipCollider;
 
 	void Awake ()
 	{
@@ -34,6 +37,7 @@ public class ShipHealth : MonoBehaviour
 		// Setting up references.
 //		playerControl = GetComponent<PlayerControl>();
         shipSprite = GetComponent<SpriteRenderer> ();
+        shipCollider = GetComponent<PolygonCollider2D> ();
 //		anim = GetComponent<Animator>();
 
 		// Getting the intial scale of the healthbar (whilst the player has full health).
@@ -65,11 +69,21 @@ public class ShipHealth : MonoBehaviour
 		// If the colliding gameobject is an Enemy...
 		if(col.gameObject.tag == "Asteroid" || col.gameObject.tag == "Debris")
 		{
-			// ... and if the time exceeds the time of the last hit plus the time between hits...
-			if (Time.time > lastHitTime + repeatDamagePeriod) 
-			{
+            // ... and if the time exceeds the time of the last hit plus the time between hits...
+            if (Time.time > lastHitTime + repeatDamagePeriod) 
+            {
+                bool isShipHurt = false;
+                foreach (var contact in col.contacts) {
+                    if (contact.collider == shipCollider || contact.otherCollider == shipCollider) {
+                        isShipHurt = true;
+                        break;
+                    }
+                }
+                //if this was a shield collision, no point in processing it
+                if (!isShipHurt)
+                    return;
 				// ... and if the player still has health...
-				if(health > 0f)
+                if(health > 0f)
 				{
 					// ... take damage and reset the lastHitTime.
 					TakeDamage(col.transform); 

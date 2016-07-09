@@ -16,7 +16,8 @@ public class DebrisController : MonoBehaviour {
     private float coefB;
     private float coefC;
 
-    Coroutine deathCoroutine;
+    [HideInInspector]
+    public Coroutine deathCoroutine;
 
     // Use this for initialization
     void Start () {
@@ -38,7 +39,7 @@ public class DebrisController : MonoBehaviour {
     }
 
     IEnumerator becomeCollider() { 
-        yield return new WaitForSeconds (0.2f);
+        yield return new WaitForSeconds (0.25f);
         theCollider.isTrigger = false;
 
         yield return 0;

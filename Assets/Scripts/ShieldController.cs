@@ -12,6 +12,8 @@ public class ShieldController : MonoBehaviour {
     public CircleCollider2D shieldCollider;
     public float shieldConsumptionPerSec = 0.09f;
     public float shieldRegenPerSec = 0.08f;
+    //how much damage does the shield inflict by touching others
+    public float shieldDamage = 1.5f;
 
     private float currentShieldBarValue = 1.0f;
     private bool isUsed = false;
@@ -29,7 +31,7 @@ public class ShieldController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	    
-        bool keyHeld = Input.GetButton ("Shields") && currentShieldBarValue <= 0.95f;
+        bool keyHeld = Input.GetButton ("Shields") && currentShieldBarValue <= 0.90f;
 
         if (keyHeld) {
             //player is holding down the shield key
@@ -80,10 +82,43 @@ public class ShieldController : MonoBehaviour {
         shieldAnimations.enabled = false;
     }
 
+//    void OnTriggerEnter2D(Collider2D collider) {
+//        if (collider.gameObject.CompareTag ("Ship")) {
+//            //dont collide with own ship
+//            return;
+//        }
+//        if (collider.gameObject.CompareTag("Asteroid")) {
+//            //if collision is with asteroid, provide chip damage and make it fly away
+//            var rigidBody = collider.gameObject.GetComponent<Rigidbody2D> ();
+//            rigidBody.AddForce (-1 * rigidBody.velocity * rigidBody.mass);
+//            var asteroidHealthScript = collider.gameObject.GetComponent<AsteroidHealth> ();
+//            asteroidHealthScript.TakeDamage (transform, shieldDamage);
+//        }
+//        if (collider.gameObject.CompareTag ("Debris")) {
+//            //if the collision is debris, just make it explode then and there
+//            var debrisControllerScript = collider.gameObject.GetComponent<DebrisController> ();
+//            StopCoroutine (debrisControllerScript.deathCoroutine);
+//            StartCoroutine (debrisControllerScript.Die (0.0f));
+//        }
+//    }
+
     void OnCollisionEnter2D(Collision2D collision) {
-        //dont collide with own ship
         if (collision.gameObject.CompareTag ("Ship")) {
+            //dont collide with own ship
             return;
+        }
+        if (collision.gameObject.CompareTag("Asteroid")) {
+            //if collision is with asteroid, provide chip damage and make it fly away
+            var rigidBody = collision.gameObject.GetComponent<Rigidbody2D> ();
+            rigidBody.AddForce (-1 * rigidBody.velocity * rigidBody.mass);
+            var asteroidHealthScript = collision.gameObject.GetComponent<AsteroidHealth> ();
+            asteroidHealthScript.TakeDamage (transform, shieldDamage);
+        }
+        if (collision.gameObject.CompareTag ("Debris")) {
+            //if the collision is debris, just make it explode then and there
+            var debrisControllerScript = collision.gameObject.GetComponent<DebrisController> ();
+            StopCoroutine (debrisControllerScript.deathCoroutine);
+            StartCoroutine (debrisControllerScript.Die (0.0f));
         }
     }
 
