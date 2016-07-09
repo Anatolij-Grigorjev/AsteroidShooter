@@ -112,7 +112,7 @@ public class ShipController : MonoBehaviour {
 
     void ProcessBreaking () {
         //BREAKING: break by holding Space
-        bool isBreakingPressed = Input.GetKey (KeyCode.Space);
+        bool isBreakingPressed = Input.GetButton ("Stabilizers");
         if (isBreakingPressed) {
             //the ship was already breaking - keep increasing drag to break harder
             if (isBreaking) {

@@ -108,7 +108,7 @@ public class DialogueFlowController : MonoBehaviour {
         if (!lineDone) {
             
             //if user pressed advance button - finish line, prepare for next one
-            if (Input.GetButtonUp ("Fire1")) {
+            if (Input.GetButtonUp ("Main Cannon")) {
                 lineDone = true;
                 lineText.text = lines [currentLine].lineText;
             } else {
@@ -126,7 +126,7 @@ public class DialogueFlowController : MonoBehaviour {
 
         } else {
             //wait for user to press key and move on to next line
-            if (Input.GetButtonUp ("Fire1")) {
+            if (Input.GetButtonUp ("Main Cannon")) {
                 if (!dialogueOver) {
                     currentLine++;
                     dialogueOver = currentLine >= lines.Count;

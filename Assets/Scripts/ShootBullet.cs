@@ -99,7 +99,7 @@ public class ShootBullet : MonoBehaviour {
 
 	void ShootRombus() {
 		//only the rombus was pressed
-		if (Input.GetButton ("Fire2") && !Input.GetButton("Fire1") && currRombusCount > 0) {
+		if (Input.GetButton ("Rombus Bomb") && !Input.GetButton("Main Cannon") && currRombusCount > 0) {
 			var c = rombusRenderer.color;
 			c.a = 0.0f;
 			rombusRenderer.color = c;
@@ -115,7 +115,7 @@ public class ShootBullet : MonoBehaviour {
 
 	void ChargeFrenzy ()
 	{
-		bool buttonPressed = Input.GetButton ("Fire1");
+		bool buttonPressed = Input.GetButton ("Main Cannon");
 		//stopped hoding button
 		if (!buttonPressed) {
 			//held long enough for frenzy
