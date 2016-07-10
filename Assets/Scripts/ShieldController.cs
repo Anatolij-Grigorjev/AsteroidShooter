@@ -9,6 +9,10 @@ public class ShieldController : MonoBehaviour {
     public Slider shieldChargeBar;
     public Image shieldChargeKnob;
     public Image shieldChargeBg;
+    public AudioSource audioPlayer;
+    public AudioClip shieldChargeClip;
+    public AudioClip shieldHummingClip;
+    public AudioClip shieldDrainedClip;
     public CircleCollider2D shieldCollider;
     public float shieldConsumptionPerSec = 0.09f;
     public float shieldRegenPerSec = 0.08f;
@@ -42,14 +46,28 @@ public class ShieldController : MonoBehaviour {
                     currentShieldBarValue += shieldConsumptionPerSec;
                     secAccumulator = 0.0f;
                 }
+                if (shieldAnimations.GetCurrentAnimatorStateInfo (0).IsName ("Active")) {
+                    //play the humming audio, at lots of different pitches for diversity
+                    if (audioPlayer.clip != shieldHummingClip) {
+                        audioPlayer.clip = shieldHummingClip;
+                    }
+                    if (!audioPlayer.isPlaying) {
+                        audioPlayer.pitch = 1.0f + (Random.Range (-0.05f, 0.05f));
+                        audioPlayer.Play ();
+                    }
+                }
             } else {
                 //shield was not in use
+                audioPlayer.clip = shieldChargeClip;
+                audioPlayer.pitch = 1.0f;
+                audioPlayer.Play ();
                 isUsed = true;
                 secAccumulator = 0.0f;
                 shieldAnimations.enabled = true;
                 shieldGraphics.enabled = true;
                 shieldAnimations.SetBool ("isDrained", false);
                 shieldAnimations.Play ("Charging");
+
             }
         } else {
             //player not holding down the shield key
@@ -58,7 +76,10 @@ public class ShieldController : MonoBehaviour {
                 isUsed = false;
                 secAccumulator = 0.0f;
                 shieldAnimations.SetBool ("isDrained", true);
-//                StartCoroutine (DisableAnimator ());
+                audioPlayer.clip = shieldDrainedClip;
+                audioPlayer.pitch = 1.0f;
+                audioPlayer.Play ();
+
             } else {
                 //button not held and shield not in use - business as usual
                 secAccumulator += Time.deltaTime;
@@ -73,34 +94,6 @@ public class ShieldController : MonoBehaviour {
         currentShieldBarValue = Mathf.Clamp (currentShieldBarValue, 0.0f, 1.0f);
         updateShieldSlider (currentShieldBarValue);
 	}
-
-    IEnumerator DisableAnimator () {
-        var clipLength = shieldAnimations.GetCurrentAnimatorStateInfo (0).length;
-        yield return new WaitForSeconds (clipLength);
-        shieldGraphics.enabled = false;
-        shieldAnimations.SetBool ("isDrained", false);
-        shieldAnimations.enabled = false;
-    }
-
-//    void OnTriggerEnter2D(Collider2D collider) {
-//        if (collider.gameObject.CompareTag ("Ship")) {
-//            //dont collide with own ship
-//            return;
-//        }
-//        if (collider.gameObject.CompareTag("Asteroid")) {
-//            //if collision is with asteroid, provide chip damage and make it fly away
-//            var rigidBody = collider.gameObject.GetComponent<Rigidbody2D> ();
-//            rigidBody.AddForce (-1 * rigidBody.velocity * rigidBody.mass);
-//            var asteroidHealthScript = collider.gameObject.GetComponent<AsteroidHealth> ();
-//            asteroidHealthScript.TakeDamage (transform, shieldDamage);
-//        }
-//        if (collider.gameObject.CompareTag ("Debris")) {
-//            //if the collision is debris, just make it explode then and there
-//            var debrisControllerScript = collider.gameObject.GetComponent<DebrisController> ();
-//            StopCoroutine (debrisControllerScript.deathCoroutine);
-//            StartCoroutine (debrisControllerScript.Die (0.0f));
-//        }
-//    }
 
     void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.CompareTag ("Ship")) {
