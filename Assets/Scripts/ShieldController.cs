@@ -19,7 +19,7 @@ public class ShieldController : MonoBehaviour {
     //how much damage does the shield inflict by touching others
     public float shieldDamage = 1.5f;
 
-    private float currentShieldBarValue = 1.0f;
+    private float currentShieldBarValue = 0.5f;
     private bool isUsed = false;
     //accumulator for seconds to slow down shield animations
     private float secAccumulator = 0.0f;
@@ -52,7 +52,7 @@ public class ShieldController : MonoBehaviour {
                         audioPlayer.clip = shieldHummingClip;
                     }
                     if (!audioPlayer.isPlaying) {
-                        audioPlayer.pitch = 1.0f + (Random.Range (-0.05f, 0.05f));
+//                        audioPlayer.pitch = 1.0f + (Random.Range (-0.05f, 0.05f));
                         audioPlayer.Play ();
                     }
                 }
