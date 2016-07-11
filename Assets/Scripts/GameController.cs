@@ -38,6 +38,8 @@ public class GameController : Singleton<GameController> {
         "daughter",
         "father"
     };
+    [HideInInspector]
+    public Dictionary<String, Sprite> avatarsMap;
 
     private int currentSceneIndex = 0;
     private GameObject playerShip;

@@ -12,7 +12,6 @@ public class DialogueFlowController : MonoBehaviour {
     private const int DIALOGUE_LINE_PARTS_COUNT = 3;
 
     public List<DialogueLine> lines;
-    private Dictionary<String, Sprite> avatarsMap;
 
     //name of dialogue script file
     private String scriptName;
@@ -47,7 +46,7 @@ public class DialogueFlowController : MonoBehaviour {
 	void Awake () {
         scriptLoaded = false;
         lines = new List<DialogueLine> ();
-        avatarsMap = new Dictionary<string, Sprite> ();
+        GameController.Instance.avatarsMap = new Dictionary<string, Sprite> ();
         lineText.text = "";
         avatarName.text = "";
         delayRecharge = typeDelay;
@@ -155,7 +154,7 @@ public class DialogueFlowController : MonoBehaviour {
         foreach (String avatarName in avatarNames) {
             Sprite resource = (Sprite)Resources.Load ("Images/Dialogue/" + avatarName, typeof(Sprite));
 //            Debug.Log ("Resource was loaded from Images/Dialogue/" + justName + ": " + (resource != null));
-            avatarsMap.Add (avatarName, resource);
+            GameController.Instance.avatarsMap.Add (avatarName, resource);
         }
 
 //        foreach (KeyValuePair<String, Sprite> kvp in avatarsMap) {
@@ -165,7 +164,7 @@ public class DialogueFlowController : MonoBehaviour {
     }
 
     Sprite GetDialogueAvatar (string avatarKey) {
-        return avatarsMap[avatarKey];
+        return GameController.Instance.avatarsMap[avatarKey];
     }
 
     void SetupFace (int currentLine) {
