@@ -38,7 +38,7 @@ public class ShipController : MonoBehaviour {
 		shipImage = GetComponent<SpriteRenderer> ();
 		
         //init internal handling vars
-        activeRotationSpeed = rotationSpeed / 3;
+        activeRotationSpeed = 2 * rotationSpeed / 3;
         regularDrag = shipBody.drag;
         regularAngularDrag = shipBody.angularDrag;
         isBreaking = false;

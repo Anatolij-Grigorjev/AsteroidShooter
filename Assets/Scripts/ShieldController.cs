@@ -24,12 +24,18 @@ public class ShieldController : MonoBehaviour {
     //accumulator for seconds to slow down shield animations
     private float secAccumulator = 0.0f;
 
+    bool shieldOverheated;
+
+    private Vector3 originalPosition;
+
 	// Use this for initialization
 	void Awake () {
         updateShieldSlider (currentShieldBarValue);
         shieldAnimations.enabled = false;
         shieldGraphics.enabled = false;
         shieldCollider.enabled = isUsed;
+        originalPosition = transform.localPosition;
+        shieldOverheated = false;
 	}
 	
 	// Update is called once per frame
@@ -58,16 +64,18 @@ public class ShieldController : MonoBehaviour {
                 }
             } else {
                 //shield was not in use
-                audioPlayer.clip = shieldChargeClip;
-                audioPlayer.pitch = 1.0f;
-                audioPlayer.Play ();
-                isUsed = true;
-                secAccumulator = 0.0f;
-                shieldAnimations.enabled = true;
-                shieldGraphics.enabled = true;
-                shieldAnimations.SetBool ("isDrained", false);
-                shieldAnimations.Play ("Charging");
-
+                if (!shieldOverheated) {
+                    audioPlayer.clip = shieldChargeClip;
+                    audioPlayer.pitch = 1.0f;
+                    audioPlayer.Play ();
+                    isUsed = true;
+                    secAccumulator = 0.0f;
+                    shieldAnimations.enabled = true;
+                    shieldGraphics.enabled = true;
+                    shieldAnimations.SetBool ("isDrained", false);
+                    shieldAnimations.Play ("Charging");
+                    transform.localPosition = originalPosition;
+                }
             }
         } else {
             //player not holding down the shield key
@@ -85,7 +93,9 @@ public class ShieldController : MonoBehaviour {
                 secAccumulator += Time.deltaTime;
                 if (secAccumulator >= 1.0f) {
                     secAccumulator = 0.0f;
-                    currentShieldBarValue -= shieldRegenPerSec;
+                    if (!shieldOverheated) {
+                        currentShieldBarValue -= shieldRegenPerSec;
+                    }
                 }
             }
         }
@@ -119,5 +129,10 @@ public class ShieldController : MonoBehaviour {
         shieldChargeBar.value = currentShieldBarValue;
         shieldChargeKnob.enabled = currentShieldBarValue >= 0.05f;
         shieldChargeBg.enabled = currentShieldBarValue < 0.95f;
+        shieldOverheated = !shieldChargeBg.enabled;
+        if (shieldOverheated) {
+            GameController.Instance.ShipQuipper.spoutRandomQuip (AssemblyCSharp.QuipTypes.QUIP_SHIELD_DEPLETED);
+
+        }
     }
 }

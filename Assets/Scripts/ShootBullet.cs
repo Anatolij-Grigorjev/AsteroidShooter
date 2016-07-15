@@ -101,8 +101,7 @@ public class ShootBullet : MonoBehaviour {
 	void ShootRombus() {
 		//only the rombus was pressed
 		if (Input.GetButton ("Rombus Bomb") && !Input.GetButton("Main Cannon") && currRombusCount > 0) {
-            var quipsController = GetComponentInChildren<QuipController> ();
-            quipsController.spoutRandomQuip (QuipTypes.QUIP_FIRED_ROMBUS);
+            GameController.Instance.ShipQuipper.spoutRandomQuip (QuipTypes.QUIP_FIRED_ROMBUS);
 			var c = rombusRenderer.color;
 			c.a = 0.0f;
 			rombusRenderer.color = c;

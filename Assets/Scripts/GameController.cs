@@ -16,6 +16,20 @@ public class GameController : Singleton<GameController> {
             return playerShip;
         }
     }
+    [HideInInspector]
+    public QuipController ShipQuipper {
+        get {
+            if (shipQuipper == null) {
+                var ship = PlayerShip;
+                if (ship == null) {
+                    return null;
+                }
+                shipQuipper = ship.GetComponentInChildren<QuipController> ();
+            }
+
+            return shipQuipper;
+        }
+    }
 
     public string NextScript {
         get {
@@ -43,6 +57,7 @@ public class GameController : Singleton<GameController> {
 
     private int currentSceneIndex = 0;
     private GameObject playerShip;
+    private QuipController shipQuipper;
 
     [HideInInspector]
     public int currentAsteroids;
@@ -51,6 +66,18 @@ public class GameController : Singleton<GameController> {
 
 	// Use this for initialization
 	void Awake () {
-        
+        Debug.Log ("Cooking avatars...");
+        CookAvatarsMap ();
 	}
+
+
+    void CookAvatarsMap () {
+        if (avatarsMap == null) {
+            avatarsMap = new Dictionary<string, Sprite> ();
+        }
+        foreach (String avatarName in avatarNames) {
+            Sprite resource = (Sprite)Resources.Load ("Images/Dialogue/" + avatarName, typeof(Sprite));
+            avatarsMap.Add (avatarName, resource);
+        }
+    }
 }

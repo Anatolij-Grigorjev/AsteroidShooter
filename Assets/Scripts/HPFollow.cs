@@ -6,12 +6,14 @@ public class HPFollow : MonoBehaviour
 	public Vector3 offset;			// The offset at which the Health Bar follows the player.
 	public string thingTag;			//tag of thing to follow
 	public bool keepChecking = false;		//object is volatile, can dissapear any moment (but this shouldnt)
-	private Transform thing;		// Reference to the thing.
+	public Transform thing;		// Reference to the thing.
 
 	void Awake ()
 	{
 		// Setting up the reference.
-		CheckThing ();
+        if (thing == null && thingTag != null) {
+            CheckThing ();
+        }
 	}
 
 	void Update ()
@@ -19,7 +21,7 @@ public class HPFollow : MonoBehaviour
 		if (thing == null && !keepChecking) {
 			return;
 		}
-		if (keepChecking) {
+        if (keepChecking && thingTag != null) {
 			CheckThing ();
 		}
 		// Set the position to the player's position with the offset.

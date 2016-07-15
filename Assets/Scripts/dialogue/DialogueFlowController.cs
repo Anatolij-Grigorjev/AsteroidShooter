@@ -59,8 +59,6 @@ public class DialogueFlowController : MonoBehaviour {
 	}
 
     IEnumerator ReadScript (string scriptName) {
-        yield return new WaitUntil(() => CookAvatarsMap ());
-
         string line;
         var textAsset = Resources.Load(String.Format("Text/Dialogue/{0}", scriptName), typeof(TextAsset)) as TextAsset;
 
@@ -146,22 +144,7 @@ public class DialogueFlowController : MonoBehaviour {
         }
 
 	}
-
-    bool CookAvatarsMap () {
-
-        var avatarNames = GameController.Instance.avatarNames;
-
-        foreach (String avatarName in avatarNames) {
-            Sprite resource = (Sprite)Resources.Load ("Images/Dialogue/" + avatarName, typeof(Sprite));
-//            Debug.Log ("Resource was loaded from Images/Dialogue/" + justName + ": " + (resource != null));
-            GameController.Instance.avatarsMap.Add (avatarName, resource);
-        }
-
-//        foreach (KeyValuePair<String, Sprite> kvp in avatarsMap) {
-//            Debug.Log (String.Format ("Key = {0}, Value = {1}", kvp.Key, kvp.Value));
-//        }
-        return true;
-    }
+        
 
     Sprite GetDialogueAvatar (string avatarKey) {
         return GameController.Instance.avatarsMap[avatarKey];
