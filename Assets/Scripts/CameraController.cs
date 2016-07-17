@@ -42,7 +42,7 @@ public class CameraController : MonoBehaviour {
 	}
 
     void Update() {
-        bool pressed = Input.GetButton ("Map View");
+        bool pressed = Input.GetButtonUp ("Map View");
         if (pressed) {
             transitionSound.Play ();
             isViewingMode = !isViewingMode;

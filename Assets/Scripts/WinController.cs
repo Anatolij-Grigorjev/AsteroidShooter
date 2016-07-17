@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class WinController : MonoBehaviour {
 
-	private float currentAsteroids;
+    private float remainingAsteroids;
 	// Use this for initialization
 	private Text winText;
 	public GameObject tryAgainButton;
@@ -15,7 +15,7 @@ public class WinController : MonoBehaviour {
 	void Start () {
         playerWon = false;
         GameController.Instance.nextSceneIndex = 0;
-		currentAsteroids = float.MaxValue;
+		remainingAsteroids = float.MaxValue;
 		winText = GetComponent<Text> ();
 		winText.enabled = false;
 		tryAgainButton.SetActive (false);
@@ -47,13 +47,13 @@ public class WinController : MonoBehaviour {
 	}
 
 	public IEnumerator CheckAsteroids() {
-		yield return new WaitForSeconds (0.9f);
+		yield return new WaitForSeconds (1.5f);
         //the game may have just started and the game controller did not properly awake yet
         //having this flag should avoid winning before the whole thing took off
-
-        currentAsteroids = GameController.Instance.currentAsteroids;
-        asteroidsCountText.text = "X " + currentAsteroids;
-        if (currentAsteroids <= 0) {
+        var reserves = FindObjectOfType<BouncerController> ().amountReserves;
+        remainingAsteroids = GameController.Instance.currentAsteroids + reserves;
+        asteroidsCountText.text = "X " + remainingAsteroids;
+        if (remainingAsteroids <= 0) {
             playerWon = true;
             StartCoroutine (GoNextPhase ());
             DoEndText ("YAY!");

@@ -31,6 +31,17 @@ public class GameController : Singleton<GameController> {
         }
     }
 
+
+    public Sprite GetAvatar(String key) {
+        var sprite = avatarsMap [key];
+        if (avatarsMap.Count == 0) {
+            CookAvatarsMap ();
+            GetAvatar (key);
+        }
+
+        return sprite;
+    }
+
     public string NextScript {
         get {
             var result = scriptsPaths [currentSceneIndex];
@@ -52,9 +63,9 @@ public class GameController : Singleton<GameController> {
         "daughter",
         "father"
     };
-    [HideInInspector]
-    public Dictionary<String, Sprite> avatarsMap;
 
+
+    private Dictionary<String, Sprite> avatarsMap;
     private int currentSceneIndex = 0;
     private GameObject playerShip;
     private QuipController shipQuipper;
@@ -68,6 +79,7 @@ public class GameController : Singleton<GameController> {
 	void Awake () {
         Debug.Log ("Cooking avatars...");
         CookAvatarsMap ();
+        Debug.Log ("Cooked up " + avatarsMap.Count + " avatars!");
 	}
 
 

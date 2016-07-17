@@ -46,7 +46,7 @@ public class DialogueFlowController : MonoBehaviour {
 	void Awake () {
         scriptLoaded = false;
         lines = new List<DialogueLine> ();
-        GameController.Instance.avatarsMap = new Dictionary<string, Sprite> ();
+
         lineText.text = "";
         avatarName.text = "";
         delayRecharge = typeDelay;
@@ -147,7 +147,7 @@ public class DialogueFlowController : MonoBehaviour {
         
 
     Sprite GetDialogueAvatar (string avatarKey) {
-        return GameController.Instance.avatarsMap[avatarKey];
+        return GameController.Instance.GetAvatar (avatarKey);
     }
 
     void SetupFace (int currentLine) {

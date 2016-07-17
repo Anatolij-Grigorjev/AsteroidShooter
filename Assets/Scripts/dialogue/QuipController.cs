@@ -54,7 +54,7 @@ public class QuipController : MonoBehaviour {
             textMesh.text = chosenQuip.second;
 
             var avatarSprite = Utils.GetComponentInChild<SpriteRenderer> (quipObject.transform);
-            avatarSprite.sprite = GameController.Instance.avatarsMap [chosenQuip.first];
+            avatarSprite.sprite = GameController.Instance.GetAvatar (chosenQuip.first);
 
             var followScript = quipObject.AddComponent<HPFollow> ();
             followScript.offset = offset;
