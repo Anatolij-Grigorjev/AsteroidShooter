@@ -46,12 +46,13 @@ public class WinController : MonoBehaviour {
         }
 	}
 
+
+
 	public IEnumerator CheckAsteroids() {
 		yield return new WaitForSeconds (1.5f);
         //the game may have just started and the game controller did not properly awake yet
         //having this flag should avoid winning before the whole thing took off
-        var reserves = FindObjectOfType<BouncerController> ().amountReserves;
-        remainingAsteroids = GameController.Instance.currentAsteroids + reserves;
+        remainingAsteroids = GameController.Instance.currentAsteroids;
         asteroidsCountText.text = "X " + remainingAsteroids;
         if (remainingAsteroids <= 0) {
             playerWon = true;

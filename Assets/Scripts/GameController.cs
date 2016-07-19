@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using SimpleJSON;
 
 public class GameController : Singleton<GameController> {
 
@@ -54,9 +55,18 @@ public class GameController : Singleton<GameController> {
         }
     }
 
+    public List<JSONNode> LevelWaves {
+        get {
+            return currentLevelWaves;
+        }
+    }
+
     private List<String> scriptsPaths = new List<String>() {
         "intro_scene",
         "post_game_scene"
+    };
+    private List<String> levelNames = new List<string>() {
+        "Level1"
     };
     [HideInInspector]
     public List<String> avatarNames = new List<string>() {
@@ -64,22 +74,27 @@ public class GameController : Singleton<GameController> {
         "father"
     };
 
-
+    private List<JSONNode> currentLevelWaves;
     private Dictionary<String, Sprite> avatarsMap;
     private int currentSceneIndex = 0;
+    private int currentLevelIndex = 0;
     private GameObject playerShip;
     private QuipController shipQuipper;
 
     [HideInInspector]
-    public int currentAsteroids;
+    public int currentAsteroids = 0;
     [HideInInspector]
     public int nextSceneIndex;
 
 	// Use this for initialization
 	void Awake () {
+        
         Debug.Log ("Cooking avatars...");
         CookAvatarsMap ();
         Debug.Log ("Cooked up " + avatarsMap.Count + " avatars!");
+        Debug.Log ("Loading first level...");
+
+        LoadLevel ();
 	}
 
 
@@ -92,4 +107,19 @@ public class GameController : Singleton<GameController> {
             avatarsMap.Add (avatarName, resource);
         }
     }
+
+    void LoadLevel () {
+        var scriptName = levelNames [currentLevelIndex];
+        var textAsset = Resources.Load(String.Format("Text/Dialogue/{0}", scriptName), typeof(TextAsset)) as TextAsset;
+
+        var waves = JSON.Parse (textAsset.text).AsArray;
+
+        if (currentLevelWaves == null) {
+            currentLevelWaves = new List<JSONNode> ();
+        } else {
+            currentLevelWaves.Clear ();
+        }
+        currentLevelWaves.AddRange (waves.DeepChilds);
+    }
+        
 }
