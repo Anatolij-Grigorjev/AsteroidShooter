@@ -88,11 +88,7 @@ public class GameController : Singleton<GameController> {
 
 	// Use this for initialization
 	void Awake () {
-        
-        Debug.Log ("Cooking avatars...");
         CookAvatarsMap ();
-        Debug.Log ("Cooked up " + avatarsMap.Count + " avatars!");
-        Debug.Log ("Loading first level...");
 
         LoadLevel ();
 	}
@@ -106,20 +102,22 @@ public class GameController : Singleton<GameController> {
             Sprite resource = (Sprite)Resources.Load ("Images/Dialogue/" + avatarName, typeof(Sprite));
             avatarsMap.Add (avatarName, resource);
         }
+        Debug.Log ("Cooked up " + avatarsMap.Count + " avatars!");
     }
 
     void LoadLevel () {
         var scriptName = levelNames [currentLevelIndex];
-        var textAsset = Resources.Load(String.Format("Text/Dialogue/{0}", scriptName), typeof(TextAsset)) as TextAsset;
+        var textAsset = Resources.Load(String.Format("Text/EnemyPlacement/{0}", scriptName), typeof(TextAsset)) as TextAsset;
 
         var waves = JSON.Parse (textAsset.text).AsArray;
-
+        Debug.Log ("Got " + waves.Count + " waves for level " + scriptName);
         if (currentLevelWaves == null) {
             currentLevelWaves = new List<JSONNode> ();
         } else {
             currentLevelWaves.Clear ();
         }
-        currentLevelWaves.AddRange (waves.DeepChilds);
+        currentLevelWaves.AddRange (waves.Childs);
+        Debug.Log ("Ready with " + currentLevelWaves.Count + " valid waves!");
     }
         
 }

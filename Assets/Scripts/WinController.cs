@@ -12,21 +12,15 @@ public class WinController : MonoBehaviour {
     private bool playerWon;
     public Text asteroidsCountText;
 
-	void Start () {
+	void Awake () {
         playerWon = false;
         GameController.Instance.nextSceneIndex = 0;
 		remainingAsteroids = float.MaxValue;
 		winText = GetComponent<Text> ();
-		winText.enabled = false;
+//		winText.enabled = false;
 		tryAgainButton.SetActive (false);
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
-		if (!winText.enabled) {
-			//once every few seconds
-			StartCoroutine (CheckAsteroids ());
-		}
+
+        StartCoroutine (CheckAsteroids ());
 	}
 
 	public void ReloadStage() {
@@ -46,6 +40,11 @@ public class WinController : MonoBehaviour {
         }
 	}
 
+    public void DoWin () {
+        playerWon = true;
+        StartCoroutine (GoNextPhase ());
+        DoEndText ("YAY!");
+    }
 
 
 	public IEnumerator CheckAsteroids() {
@@ -54,11 +53,6 @@ public class WinController : MonoBehaviour {
         //having this flag should avoid winning before the whole thing took off
         remainingAsteroids = GameController.Instance.currentAsteroids;
         asteroidsCountText.text = "X " + remainingAsteroids;
-        if (remainingAsteroids <= 0) {
-            playerWon = true;
-            StartCoroutine (GoNextPhase ());
-            DoEndText ("YAY!");
-        }
         //check loss condition then
         if (!winText.enabled) {
             var ship = GameController.Instance.PlayerShip;
@@ -66,8 +60,11 @@ public class WinController : MonoBehaviour {
                 playerWon = false;
                 DoEndText ("GAME OVER!");
             }
+            //no check hit its mark, we can keep checking asteroids
+            if (!winText.enabled) {
+                StartCoroutine (CheckAsteroids ());
+            }
         }
-
 	}
 
     IEnumerator GoNextPhase () {
