@@ -42,32 +42,43 @@ public class QuipController : MonoBehaviour {
             }
         }
     }
+
+    public void spoutSpecificQuip(String text, String avatarKey) {
+        if (avatarKey == null) {
+            avatarKey = "father";
+        }
+        doQuip (new Tuple<string, string> (avatarKey, text));
+    }
 	
     public void spoutRandomQuip(QuipTypes type) {
         if (quipReady && !quipUsedMap [type]) {
             var selection = quipsMap [type];
-            //first tuple item is key to avatar, second is the quip text itself
-            var chosenQuip = selection [UnityEngine.Random.Range (0, selection.Count)];
-            var offset = new Vector3 (-1.0f, -2.5f, 0.0f);
-            var quipObject = Instantiate (quipPrefab, offset + transform.position, Quaternion.identity) as GameObject;
-            var textMesh = quipObject.GetComponentInChildren<TextMesh> ();
-            textMesh.text = chosenQuip.second;
-
-            var avatarSprite = Utils.GetComponentInChild<SpriteRenderer> (quipObject.transform);
-            avatarSprite.sprite = GameController.Instance.GetAvatar (chosenQuip.first);
-
-            var followScript = quipObject.AddComponent<HPFollow> ();
-            followScript.offset = offset;
-            followScript.keepChecking = false;
-            followScript.thing = gameObject.transform;
-
-            StartCoroutine (QuipDissapear (quipObject));
             //taking damage is always quippable
             if (type != QuipTypes.QUIP_TAKEN_DAMAGE) {
                 quipUsedMap [type] = true;
             }
-            quipReady = false;
+            //first tuple item is key to avatar, second is the quip text itself
+            var avatarTextTuple = selection [UnityEngine.Random.Range (0, selection.Count)];
+            doQuip (avatarTextTuple);
         } 
+    }
+
+    private void doQuip(Tuple<String, String> avatarTextTuple) {
+        var offset = new Vector3 (-1.0f, -2.5f, 0.0f);
+        var quipObject = Instantiate (quipPrefab, offset + transform.position, Quaternion.identity) as GameObject;
+        var textMesh = quipObject.GetComponentInChildren<TextMesh> ();
+        textMesh.text = avatarTextTuple.second;
+
+        var avatarSprite = Utils.GetComponentInChild<SpriteRenderer> (quipObject.transform);
+        avatarSprite.sprite = GameController.Instance.GetAvatar (avatarTextTuple.first);
+
+        var followScript = quipObject.AddComponent<HPFollow> ();
+        followScript.offset = offset;
+        followScript.keepChecking = false;
+        followScript.thing = gameObject.transform;
+
+        StartCoroutine (QuipDissapear (quipObject));
+        quipReady = false;
     }
 
     IEnumerator QuipDissapear (GameObject quipObject) {

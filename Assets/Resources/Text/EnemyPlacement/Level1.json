@@ -1,6 +1,10 @@
 [
     {
         "name": "Wave 1",
+        "quip": {
+        	"text" : "AAahhh!.. ROCKS!..",
+        	"avatar" : "daughter"
+        },
         "placements": [
             {
                 "x": -5.3,
@@ -8,24 +12,37 @@
                 "typeIndex": 0
             },
             {
-                "x": -5.3,
-                "y": 4.5,
+                "x": 15.3,
+                "y": -9.5,
+                "typeIndex": 0
+            }
+        ]
+    },
+    {
+    	"name": "Trial run",
+        "placements": [
+            {
+                "x": -10.0,
+                "y": 0.5,
                 "typeIndex": 0
             }
         ]
     },
     {
         "name": "Wave 2",
-        "final" : true,
+        "final": true,
+        "quip" : {
+        	"text" : "Here we go again..."
+        },
         "placements": [
             {
                 "x": -1.3,
-                "y": 4.5,
+                "y": 14.5,
                 "typeIndex": 0
             },
             {
-                "x": -8.3,
-                "y": 4.5,
+                "x": 8.3,
+                "y": 9.5,
                 "typeIndex": 0
             }
         ]

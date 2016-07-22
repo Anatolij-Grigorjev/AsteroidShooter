@@ -34,7 +34,7 @@ public class EnemyWavesController : MonoBehaviour {
     }
 
     IEnumerator WaveMaker() {
-        yield return new WaitForSeconds (1.5f);
+        yield return new WaitForSeconds (1.4f);
         asteroidsCountText.text = "X " + GameController.Instance.currentAsteroids;
         if (GameController.Instance.currentAsteroids <= 0) {
             if (!finalWave) {
@@ -44,6 +44,10 @@ public class EnemyWavesController : MonoBehaviour {
                 waveIndex++;
                 GameController.Instance.currentAsteroids = wave ["placements"].Count;
                 asteroidsCountText.text = "X " + GameController.Instance.currentAsteroids;
+                if (wave["quip"] != null) {
+                    var quip = wave ["quip"];
+                    GameController.Instance.ShipQuipper.spoutSpecificQuip (quip ["text"], quip ["avatar"]);
+                }
                 for (int i = 0; i < GameController.Instance.currentAsteroids; i++) {
                     var placement = wave ["placements"] [i];
                     Instantiate (
@@ -55,8 +59,6 @@ public class EnemyWavesController : MonoBehaviour {
                 if (wave ["final"] != null) {
                     finalWave = wave ["final"].AsBool;
                 }
-
-                StartCoroutine (WaveMaker ());
             } else {
                 Debug.Log ("Player won, doing win");
                 winControl.DoWin ();
