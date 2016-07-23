@@ -50,9 +50,15 @@ public class EnemyWavesController : MonoBehaviour {
                 }
                 for (int i = 0; i < GameController.Instance.currentAsteroids; i++) {
                     var placement = wave ["placements"] [i];
+                    var origX = placement ["x"].AsFloat;
+                    var origY = placement ["y"].AsFloat;
                     Instantiate (
                         enemiesList [placement ["typeIndex"].AsInt], 
-                        new Vector3 (placement ["x"].AsFloat, placement ["y"].AsFloat),
+                        //somewhat random position
+                        new Vector3 (
+                            origX + Random.Range (-0.1f * origX, 0.1f * origX),
+                            origY + Random.Range (-0.1f * origY, 0.1f * origY)
+                        ),
                         Quaternion.identity
                     );
                 }

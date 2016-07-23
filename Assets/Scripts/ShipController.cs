@@ -108,6 +108,7 @@ public class ShipController : MonoBehaviour {
         var wantedRotation = Quaternion.Euler (0, 0, angle - 90);
         transform.rotation = Quaternion.Lerp (transform.rotation, wantedRotation, 
             Time.deltaTime * (shipIsThrusting?activeRotationSpeed : rotationSpeed));
+        
 	}
 
     void ProcessBreaking () {
