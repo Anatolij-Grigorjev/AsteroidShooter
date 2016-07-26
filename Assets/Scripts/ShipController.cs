@@ -19,6 +19,7 @@ public class ShipController : MonoBehaviour {
 	private SpriteRenderer shipImage;
 	public ParticleSystem engineSmoke;
     public Animator shipBreakingAnimator;
+    public Animator shipThrustingAnimator;
     public SpriteRenderer shipBreakingGraphics;
 
     public ShipEngineController engineBack;
@@ -69,6 +70,7 @@ public class ShipController : MonoBehaviour {
                 engineSmoke.Play ();
                 em.enabled = true;
             }
+            shipThrustingAnimator.SetBool("isThrusting", em.enabled);
             PlaceSmoke ();
 
             //MOVEMENT: fly forward back using rigid body force and sideways via transform translation
