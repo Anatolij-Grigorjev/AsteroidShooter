@@ -21,6 +21,9 @@ public class ShipController : MonoBehaviour {
     public Animator shipBreakingAnimator;
     public Animator shipThrustingAnimator;
     public SpriteRenderer shipBreakingGraphics;
+    public AudioSource shipEngineSource;
+    public AudioClip shipEngineEngage;
+    public AudioClip shipEngineDisengage;
 
     public ShipEngineController engineBack;
     public ShipEngineController engineLeft;
@@ -71,6 +74,12 @@ public class ShipController : MonoBehaviour {
                 em.enabled = true;
             }
             shipThrustingAnimator.SetBool("isThrusting", em.enabled);
+            var nextState = shipThrustingAnimator.GetCurrentAnimatorStateInfo(0);
+            bool animationInTransition = nextState.IsName ("EngagingThrusters") || nextState.IsName ("HidingThrusters");
+            if (!shipEngineSource.isPlaying && animationInTransition) { 
+                shipEngineSource.clip = em.enabled ? shipEngineEngage : shipEngineDisengage;
+                shipEngineSource.Play ();
+            }
             PlaceSmoke ();
 
             //MOVEMENT: fly forward back using rigid body force and sideways via transform translation
