@@ -22,8 +22,6 @@ public class ShipController : MonoBehaviour {
     public Animator shipThrustingAnimator;
     public SpriteRenderer shipBreakingGraphics;
     public AudioSource shipEngineSource;
-    public AudioClip shipEngineEngage;
-    public AudioClip shipEngineDisengage;
 
     public ShipEngineController engineBack;
     public ShipEngineController engineLeft;
@@ -55,6 +53,7 @@ public class ShipController : MonoBehaviour {
 
         float horizontalAxis = Input.GetAxis ("Horizontal");
         float verticalAxis = Input.GetAxis ("Vertical");
+        bool pressedTurbo = Input.GetButtonUp ("Booster");
         ProcessBreaking ();
         if (!isBreaking) {
 
@@ -73,18 +72,16 @@ public class ShipController : MonoBehaviour {
                 engineSmoke.Play ();
                 em.enabled = true;
             }
-            shipThrustingAnimator.SetBool("isThrusting", em.enabled);
-            var nextState = shipThrustingAnimator.GetCurrentAnimatorStateInfo(0);
-            bool animationInTransition = nextState.IsName ("EngagingThrusters") || nextState.IsName ("HidingThrusters");
-            if (!shipEngineSource.isPlaying && animationInTransition) { 
-                shipEngineSource.clip = em.enabled ? shipEngineEngage : shipEngineDisengage;
-                shipEngineSource.Play ();
+            var state = shipThrustingAnimator.GetCurrentAnimatorStateInfo (0);
+            if (pressedTurbo && (state.IsName("Idling") || state.IsName("Thrusting"))) {
+                shipThrustingAnimator.SetTrigger ("Thruster");
             }
             PlaceSmoke ();
 
             //MOVEMENT: fly forward back using rigid body force and sideways via transform translation
             var flightVector = new Vector2 (transform.up.x, transform.up.y);
             var sideVector = new Vector2 (transform.right.x, transform.right.y);
+
             shipBody.AddForce (flightVector * verticalAxis * thrustSpeed);
         
             Vector2 mult = -sideVector * horizontalAxis * sideThrustSpeed * Time.deltaTime;
@@ -121,6 +118,11 @@ public class ShipController : MonoBehaviour {
             Time.deltaTime * (shipIsThrusting?activeRotationSpeed : rotationSpeed));
         
 	}
+
+    void PlayThrustSound(AudioClip clip) {
+        shipEngineSource.clip = clip;
+        shipEngineSource.Play ();
+    }
 
     void ProcessBreaking () {
         //BREAKING: break by holding Space
@@ -182,5 +184,9 @@ public class ShipController : MonoBehaviour {
         foreach (ShipEngineController sec in new ShipEngineController[] {engineBack, engineLeft, engineRight}) {
             sec.ProcessThrust (0);
         }
+    }
+
+    void LateUpdate() {
+        Debug.Log ("Ship Position: " + transform.position);
     }
 }

@@ -50,6 +50,7 @@ public class WinController : MonoBehaviour {
         if (!winText.enabled) {
             var ship = GameController.Instance.PlayerShip;
             if (ship.GetComponent<ShipHealth>().health <= 0.0f) {
+                yield return new WaitUntil (() => ship.GetComponent<ShipHealth> ().isDead);
                 playerWon = false;
                 DoEndText ("GAME OVER!");
             }

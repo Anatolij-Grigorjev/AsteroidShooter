@@ -16,7 +16,7 @@ public class HPFollow : MonoBehaviour
         }
 	}
 
-	void Update ()
+	void LateUpdate ()
 	{
 		if (thing == null && !keepChecking) {
 			return;

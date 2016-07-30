@@ -21,10 +21,13 @@ public class ShipHealth : MonoBehaviour
 	private float lastHitTime;					// The time at which the player was last hit.
 	private Vector3 healthScale;				// The local scale of the health bar initially (with full health).
 	private ShipController playerControl;		// Reference to the Ship Controller script.
-//	private Animator anim;						// Reference to the Animator on the player
+	public Animator anim;						// Reference to the Animator on the player
 	private float playerMass;
 	private float scaleLength;
+    [HideInInspector]
     public bool isHurt; 
+    [HideInInspector]
+    public bool isDead = false;
     private SpriteRenderer shipSprite;
 
     private Collider2D shipCollider;
@@ -38,7 +41,6 @@ public class ShipHealth : MonoBehaviour
 //		playerControl = GetComponent<PlayerControl>();
         shipSprite = GetComponent<SpriteRenderer> ();
         shipCollider = GetComponent<PolygonCollider2D> ();
-//		anim = GetComponent<Animator>();
 
 		// Getting the intial scale of the healthbar (whilst the player has full health).
 		healthScale = healthBar.transform.localScale;
@@ -119,14 +121,19 @@ public class ShipHealth : MonoBehaviour
 					GetComponentInChildren<ShootBullet>().enabled = false;
 
 					// ... Trigger the 'Die' animation state
-//					anim.SetTrigger("Die");
+					anim.SetTrigger("Die");
 					Debug.Log("Aww, he dead.");
-                    shipSprite.enabled = false;
+
+//                    shipSprite.enabled = false;
 
 				}
 			}
 		}
 	}
+
+    void FinishDeath() {
+        isDead = true;
+    }
 
 
 	void TakeDamage (Transform enemy)
