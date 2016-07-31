@@ -72,7 +72,7 @@ public class QuipController : MonoBehaviour {
         var avatarSprite = Utils.GetComponentInChild<SpriteRenderer> (quipObject.transform);
         avatarSprite.sprite = GameController.Instance.GetAvatar (avatarTextTuple.first);
 
-        var followScript = quipObject.AddComponent<HPFollow> ();
+        var followScript = quipObject.AddComponent<ObjectFollow> ();
         followScript.offset = offset;
         followScript.keepChecking = false;
         followScript.thing = gameObject.transform;

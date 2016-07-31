@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RombusBoomController : MonoBehaviour {
+public class ShipRombusBoomController : MonoBehaviour {
 
 	public AnimationClip boomClip;
 	private AudioSource boomSound;

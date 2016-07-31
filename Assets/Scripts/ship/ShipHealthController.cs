@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using System;
 using System.CodeDom.Compiler;
 
-public class ShipHealth : MonoBehaviour
+public class ShipHealthController : MonoBehaviour
 {	
 	public float maxHealth = 200f;
     [HideInInspector]
@@ -118,7 +118,7 @@ public class ShipHealth : MonoBehaviour
 					sc.engineSmoke.Stop ();
 					sc.enabled = false;
 					// ... disable the shooting script
-					GetComponentInChildren<ShootBullet>().enabled = false;
+					GetComponentInChildren<ShipShootingController>().enabled = false;
 
 					// ... Trigger the 'Die' animation state
 					anim.SetTrigger("Die");

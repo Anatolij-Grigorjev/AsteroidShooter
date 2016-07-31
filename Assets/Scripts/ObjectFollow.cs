@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HPFollow : MonoBehaviour
+public class ObjectFollow : MonoBehaviour
 {
 	public Vector3 offset;			// The offset at which the Health Bar follows the player.
 	public string thingTag;			//tag of thing to follow
@@ -24,7 +24,7 @@ public class HPFollow : MonoBehaviour
         if (keepChecking && thingTag != null) {
 			CheckThing ();
 		}
-		// Set the position to the player's position with the offset.
+		// Set the position to the things position with the offset.
 		if (thing != null) {
 			transform.position = thing.position + offset;
 		}

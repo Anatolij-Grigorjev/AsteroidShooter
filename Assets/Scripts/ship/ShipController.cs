@@ -86,6 +86,8 @@ public class ShipController : MonoBehaviour {
         
             Vector2 mult = -sideVector * horizontalAxis * sideThrustSpeed * Time.deltaTime;
             transform.position = transform.position + new Vector3 (mult.x, mult.y, 0);
+
+            Debug.Log ("[FIXED1]Ship Position: " + transform.position);
         } else {
             //during breaking just play the side engines continuously
             engineLeft.ProcessThrust (0.5f);
@@ -116,7 +118,8 @@ public class ShipController : MonoBehaviour {
         var wantedRotation = Quaternion.Euler (0, 0, angle - 90);
         transform.rotation = Quaternion.Lerp (transform.rotation, wantedRotation, 
             Time.deltaTime * (shipIsThrusting?activeRotationSpeed : rotationSpeed));
-        
+
+        Debug.Log ("[FIXED2]Ship Position: " + transform.position);
 	}
 
     void PlayThrustSound(AudioClip clip) {
@@ -187,6 +190,6 @@ public class ShipController : MonoBehaviour {
     }
 
     void LateUpdate() {
-        Debug.Log ("Ship Position: " + transform.position);
+        Debug.Log ("[LATE]Ship Position: " + transform.position);
     }
 }

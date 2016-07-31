@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class ShieldController : MonoBehaviour {
+public class ShipShieldController : MonoBehaviour {
 
     public Animator shieldAnimations;
     public SpriteRenderer shieldGraphics;

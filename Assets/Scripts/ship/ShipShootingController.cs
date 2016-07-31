@@ -3,14 +3,14 @@ using System.Collections;
 using UnityEngine.UI;
 using AssemblyCSharp;
 
-public class ShootBullet : MonoBehaviour {
+public class ShipShootingController : MonoBehaviour {
 
     //PUBLIC BULLET PARAMS
-    public float bulletRecharge;
-    public float frenzyBulletRecharge;
-    public float chargeReqTime;
-    public float maxFrenzyCharge = 0.0f;
-    public int bulletsAmmo;
+    public float bulletRecharge = 0.25f;        //cooldown length between regular shots
+    public float frenzyBulletRecharge = 0.04f;  //cooldown length between frenzy shots
+    public float chargeReqTime = 2.5f;          //required amount of charge for frenzy
+    public float maxFrenzyCharge = 2.5f;        //Max amount of time frenzy is charged for
+    public int bulletsAmmo = 300;               //initial bullets count
     public GameObject bulletPrefab;
     public GameObject frenzyBulletPrefab;
     public GameObject rombusBulletPrefab;
@@ -26,11 +26,11 @@ public class ShootBullet : MonoBehaviour {
 
 
     //PUBLIC ROMBUS PARAMS
-    public float rombusRefactoryPeriod = 3.0f;
+    public float rombusRefactoryPeriod = 8.0f;
     //rombus sprite for effect
     public SpriteRenderer rombusRenderer;
     //how many max rombus can the ship fire
-    public int currRombusCount;
+    public int currRombusCount = 5;
     public Image rombusCornerImage;
     public Text rombusCornerCount;
     //--------------------------------------

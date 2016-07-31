@@ -49,8 +49,8 @@ public class WinController : MonoBehaviour {
         //check loss condition then
         if (!winText.enabled) {
             var ship = GameController.Instance.PlayerShip;
-            if (ship.GetComponent<ShipHealth>().health <= 0.0f) {
-                yield return new WaitUntil (() => ship.GetComponent<ShipHealth> ().isDead);
+            if (ship.GetComponent<ShipHealthController>().health <= 0.0f) {
+                yield return new WaitUntil (() => ship.GetComponent<ShipHealthController> ().isDead);
                 playerWon = false;
                 DoEndText ("GAME OVER!");
             }

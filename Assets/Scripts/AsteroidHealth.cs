@@ -71,7 +71,7 @@ public class AsteroidHealth : MonoBehaviour {
             
             if (isShip) {
                 //exit if ship still flashing
-                bool shipFlashing = col.gameObject.GetComponent<ShipHealth> ().isHurt;
+                bool shipFlashing = col.gameObject.GetComponent<ShipHealthController> ().isHurt;
                 if (shipFlashing)
                     return;
 				StartCoroutine_Auto (playCorrectClip (shipCrashClip));

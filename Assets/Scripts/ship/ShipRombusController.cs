@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RombusController : MonoBehaviour {
+public class ShipRombusController : MonoBehaviour {
 
 	public float rombusVelocity;
 	public AnimationClip flightClip;
