@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class ShipController : MonoBehaviour {
 
@@ -10,9 +11,9 @@ public class ShipController : MonoBehaviour {
 	public float smokeStartThreshold;
     public float rotationSpeed;
     public float maxBreakingDelay;
-    public float breakingMultiplier = 2.0f;
+    public float breakingMultiplier = 2.5f;
     //minimum required velocity to activate ship sideburns animation
-    public float minSideburnsVelocity = 0.5f; 
+    public float minSideburnsVelocity = 0.666f; 
     //rotation speed obtained by thrusting
     private float activeRotationSpeed;
 	private Rigidbody2D shipBody;
@@ -27,9 +28,18 @@ public class ShipController : MonoBehaviour {
     public ShipEngineController engineLeft;
     public ShipEngineController engineRight;
 	
+    //multipliers for movement given movement modes
+    // 0 - multiplier for regular movement
+    // 1 - multiplier for turbo mode movement
+    public List<float> modeMultipliers;
+
     private bool isBreaking;
+    private bool isTurboMode;
     private float regularDrag;
     private float regularAngularDrag;
+
+    //currently active multiplier
+    private float activeMultiplier;
 
     private float breakingDelay; //how gradually does breaking happen overtime
 
@@ -47,6 +57,7 @@ public class ShipController : MonoBehaviour {
         shipBreakingAnimator.enabled = false;
         shipBreakingGraphics.enabled = false;
         breakingDelay = maxBreakingDelay;
+        activeMultiplier = modeMultipliers [0];
 	}
 	
     void FixedUpdate() {
@@ -73,8 +84,15 @@ public class ShipController : MonoBehaviour {
                 em.enabled = true;
             }
             var state = shipThrustingAnimator.GetCurrentAnimatorStateInfo (0);
+            //only process stuff if animation is in a calm state
             if (pressedTurbo && (state.IsName("Idling") || state.IsName("Thrusting"))) {
                 shipThrustingAnimator.SetTrigger ("Thruster");
+                isTurboMode = !isTurboMode;
+                if (isTurboMode) {
+                    activeMultiplier = modeMultipliers [1];
+                } else {
+                    activeMultiplier = modeMultipliers [0];
+                }
             }
             PlaceSmoke ();
 
@@ -82,12 +100,11 @@ public class ShipController : MonoBehaviour {
             var flightVector = new Vector2 (transform.up.x, transform.up.y);
             var sideVector = new Vector2 (transform.right.x, transform.right.y);
 
-            shipBody.AddForce (flightVector * verticalAxis * thrustSpeed);
+            shipBody.AddForce (flightVector * verticalAxis * thrustSpeed * activeMultiplier);
         
-            Vector2 mult = -sideVector * horizontalAxis * sideThrustSpeed * Time.deltaTime;
+            Vector2 mult = -sideVector * horizontalAxis * sideThrustSpeed * Time.deltaTime * activeMultiplier;
             transform.position = transform.position + new Vector3 (mult.x, mult.y, 0);
 
-            Debug.Log ("[FIXED1]Ship Position: " + transform.position);
         } else {
             //during breaking just play the side engines continuously
             engineLeft.ProcessThrust (0.5f);
@@ -117,9 +134,8 @@ public class ShipController : MonoBehaviour {
 
         var wantedRotation = Quaternion.Euler (0, 0, angle - 90);
         transform.rotation = Quaternion.Lerp (transform.rotation, wantedRotation, 
-            Time.deltaTime * (shipIsThrusting?activeRotationSpeed : rotationSpeed));
+            Time.deltaTime * (shipIsThrusting? (activeRotationSpeed * activeMultiplier): (rotationSpeed * activeMultiplier)));
 
-        Debug.Log ("[FIXED2]Ship Position: " + transform.position);
 	}
 
     void PlayThrustSound(AudioClip clip) {
@@ -187,9 +203,5 @@ public class ShipController : MonoBehaviour {
         foreach (ShipEngineController sec in new ShipEngineController[] {engineBack, engineLeft, engineRight}) {
             sec.ProcessThrust (0);
         }
-    }
-
-    void LateUpdate() {
-        Debug.Log ("[LATE]Ship Position: " + transform.position);
     }
 }

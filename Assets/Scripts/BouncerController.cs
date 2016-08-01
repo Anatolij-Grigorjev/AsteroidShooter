@@ -16,7 +16,6 @@ public class BouncerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-        GameController.Instance.currentAsteroids = 0;
 		backgroundBounds = GetComponent<SpriteRenderer> ();
 		teleportSound = GetComponentInChildren<AudioSource> ();
 		//how far into the stage is the object bounced (offset from borders not to catch an infinite teleport loop)

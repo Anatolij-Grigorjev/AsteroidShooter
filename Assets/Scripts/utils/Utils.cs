@@ -27,6 +27,10 @@ public class Utils
 		return junior ? name + " Jr." : name;
 	}
 
+    public static float DistanceFromTo(Vector3 from, Vector3 to) {
+        return Vector3.Distance (from, to);
+    }
+
 }
 
 

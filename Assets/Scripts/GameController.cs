@@ -82,14 +82,14 @@ public class GameController : Singleton<GameController> {
     private QuipController shipQuipper;
 
     [HideInInspector]
-    public int currentAsteroids = 0;
+    public List<GameObject> currentEnemies;
     [HideInInspector]
     public int nextSceneIndex;
 
 	// Use this for initialization
 	void Awake () {
         CookAvatarsMap ();
-
+        currentEnemies = new List<GameObject> ();
         LoadLevel ();
 	}
 
@@ -119,5 +119,6 @@ public class GameController : Singleton<GameController> {
         currentLevelWaves.AddRange (waves.Childs);
         Debug.Log ("Ready with " + currentLevelWaves.Count + " valid waves!");
     }
+        
         
 }

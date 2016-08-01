@@ -57,7 +57,7 @@ public class AsteroidController : MonoBehaviour {
 			nameText.text += " (Desceased)";
 		}
 		yield return new WaitUntil (() => !deathExplosionSound.isPlaying);
-        GameController.Instance.currentAsteroids--;
+        GameController.Instance.currentEnemies.Remove (gameObject);
 		Destroy (gameObject);
 	}
 
