@@ -1,0 +1,173 @@
+fileFormatVersion: 2
+guid: 8e41ed6acecac334b8a6e0fe6438d484
+timeCreated: 1470430297
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: asteroid_indicators_1
+    21300002: asteroid_indicators_3
+    21300004: asteroid_indicators_5
+    21300006: asteroid_indicators_6
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 4096
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: asteroid_indicators_1
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 11
+        width: 286
+        height: 232
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 102, y: 82}
+        - {x: 48, y: 103}
+        - {x: -55, y: 72}
+        - {x: -64, y: 58}
+        - {x: -76, y: 113}
+        - {x: -77, y: 115}
+        - {x: -79, y: 116}
+        - {x: -85, y: 116}
+        - {x: -143, y: 10}
+        - {x: -143, y: -7}
+        - {x: -126, y: -39}
+        - {x: -133, y: -116}
+        - {x: 105, y: -116}
+        - {x: 127, y: -73}
+        - {x: 143, y: 17}
+        - {x: 143, y: 26}
+      - - {x: 135, y: -96}
+        - {x: 136, y: -99}
+        - {x: 140, y: -99}
+        - {x: 142, y: -97}
+        - {x: 141, y: -94}
+        - {x: 137, y: -94}
+    - name: asteroid_indicators_3
+      rect:
+        serializedVersion: 2
+        x: 531
+        y: 10
+        width: 283
+        height: 230
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -80.5, y: 115}
+        - {x: -141.5, y: 66}
+        - {x: -141.5, y: -20}
+        - {x: -39.5, y: -115}
+        - {x: 12.5, y: -115}
+        - {x: 54.5, y: -70}
+        - {x: 59.5, y: -57}
+        - {x: 74.5, y: 4}
+        - {x: 74.5, y: 7}
+        - {x: 75.5, y: -88}
+        - {x: 73.5, y: -88}
+        - {x: 74.5, y: -115}
+        - {x: 89.5, y: -115}
+        - {x: 141.5, y: -9}
+        - {x: 141.5, y: 15}
+        - {x: 82.5, y: 115}
+    - name: asteroid_indicators_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 231
+        height: 250
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 106.5, y: 51}
+        - {x: 63.5, y: 107}
+        - {x: 35.5, y: 125}
+        - {x: -22.5, y: 125}
+        - {x: -89.5, y: 111}
+        - {x: -115.5, y: 77}
+        - {x: -115.5, y: 46}
+        - {x: -71.5, y: 3}
+        - {x: -115.5, y: -49}
+        - {x: -115.5, y: -74}
+        - {x: -13.5, y: -125}
+        - {x: 16.5, y: -125}
+        - {x: 111.5, y: -68}
+        - {x: 115.5, y: -64}
+        - {x: 114.5, y: -61}
+    - name: asteroid_indicators_6
+      rect:
+        serializedVersion: 2
+        x: 822
+        y: 2
+        width: 228
+        height: 248
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 2, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 72, y: 45}
+        - {x: 114, y: 60}
+        - {x: 114, y: 71}
+        - {x: 11, y: 124}
+        - {x: -14, y: 124}
+        - {x: -114, y: 66}
+        - {x: -114, y: 23}
+        - {x: -112, y: -14}
+        - {x: -68, y: -30}
+        - {x: -52, y: -106}
+        - {x: -6, y: -124}
+        - {x: 54, y: -124}
+        - {x: 108, y: -96}
+        - {x: 114, y: -27}
+        - {x: 114, y: -3}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
