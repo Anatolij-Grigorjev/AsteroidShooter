@@ -32,7 +32,6 @@ public class EnemyIndicatorController : MonoBehaviour {
         }
         HideSurplusIndicators ();
 
-
         if (enemies.Count != 0) {
             //TODO: hit borders with rays to enemies, group by border type, show needed count of indicators
             var cameraPosition = transform.position;
@@ -41,22 +40,26 @@ public class EnemyIndicatorController : MonoBehaviour {
                 var cast = Physics2D.Linecast (cameraPosition, enemyPosition);
                 Debug.DrawLine (cameraPosition, enemyPosition);
                 //fetch indicators for that border
-                var indicators = currentIndicators [cast.collider.gameObject];
-                currentColliderTally [cast.collider.gameObject]++;
-                var closestFree = closestFreeIndicator (indicators);
-                //no free indicators available
-                if (closestFree == null) {
-                    closestFree = Instantiate (
-                        indicatorPrefabs [borderColliders.IndexOf (cast.collider.gameObject)], 
-                        Vector3.zero,
-                        Quaternion.identity
-                    ) as GameObject;
+
+                if (cast.collider != null && cast.collider.gameObject.CompareTag("Borders")) {
+                    var indicators = currentIndicators [cast.collider.gameObject];
+                    currentColliderTally [cast.collider.gameObject]++;
+                    var closestFree = closestFreeIndicator (indicators);
+                    //no free indicators available
+                    if (closestFree == null) {
+                        closestFree = Instantiate (
+                            indicatorPrefabs [borderColliders.IndexOf (cast.collider.gameObject)], 
+                            Vector3.zero,
+                            Quaternion.identity
+                        ) as GameObject;
+                        indicators.Add (closestFree);
+                    }
+                    closestFree.GetComponent<SpriteRenderer> ().enabled = true;
+                    closestFree.transform.position = new Vector3 (cast.point.x, cast.point.y);
                 }
-                closestFree.GetComponent<SpriteRenderer> ().enabled = true;
-                closestFree.transform.position = new Vector3(cast.point.x, cast.point.y);
             }
-            HideSurplusIndicators ();
         }
+//        HideSurplusIndicators ();
 	}
 
     void HideSurplusIndicators () {
