@@ -62,24 +62,26 @@ public class ShipController : MonoBehaviour {
 	
     void FixedUpdate() {
 
-        float horizontalAxis = Input.GetAxis ("Horizontal");
+//        float horizontalAxis = Input.GetAxis ("Horizontal");
         float verticalAxis = Input.GetAxis ("Vertical");
         bool pressedTurbo = Input.GetButtonUp ("Booster");
         ProcessBreaking ();
         if (!isBreaking) {
 
             //FASHION: PROCESS THRUST ANIMATIONS AND SOUND
-            engineBack.ProcessThrust (verticalAxis);
-            var thrustLeft = horizontalAxis < 0 ? horizontalAxis : 0.0f;
-            var thrustRight = horizontalAxis > 0 ? horizontalAxis : 0.0f;
-            engineLeft.ProcessThrust (thrustLeft);
-            engineRight.ProcessThrust (thrustRight);
+            var verticalFwd = verticalAxis > 0 ? verticalAxis : 0.0f;
+            var verticalBack = verticalAxis < 0 ? verticalAxis : 0.0f;
+            engineBack.ProcessThrust (verticalFwd);
+//            var thrustLeft = horizontalAxis < 0 ? horizontalAxis : 0.0f;
+//            var thrustRight = horizontalAxis > 0 ? horizontalAxis : 0.0f;
+            engineLeft.ProcessThrust (verticalBack);
+            engineRight.ProcessThrust (verticalBack);
             var em = engineSmoke.emission;
-            if (isBreaking || engineSmoke.isPlaying && Mathf.Abs (verticalAxis) < smokeStartThreshold) {
+            if (isBreaking || engineSmoke.isPlaying && verticalFwd < smokeStartThreshold) {
                 engineSmoke.Stop ();
                 em.enabled = false;
             }
-            if (engineSmoke.isStopped && Mathf.Abs (verticalAxis) > smokeStartThreshold && !isBreaking) {
+            if (engineSmoke.isStopped && verticalFwd > smokeStartThreshold && !isBreaking) {
                 engineSmoke.Play ();
                 em.enabled = true;
             }
@@ -99,12 +101,12 @@ public class ShipController : MonoBehaviour {
 
             //MOVEMENT: fly forward back using rigid body force and sideways via transform translation
             var flightVector = new Vector2 (transform.up.x, transform.up.y);
-            var sideVector = new Vector2 (transform.right.x, transform.right.y);
+//            var sideVector = new Vector2 (transform.right.x, transform.right.y);
 
             shipBody.AddForce (flightVector * verticalAxis * thrustSpeed * activeMultiplier);
         
-            Vector2 mult = -sideVector * horizontalAxis * sideThrustSpeed * Time.deltaTime * activeMultiplier;
-            transform.position = transform.position + new Vector3 (mult.x, mult.y, 0);
+//            Vector2 mult = -sideVector * horizontalAxis * sideThrustSpeed * Time.deltaTime * activeMultiplier;
+//            transform.position = transform.position + new Vector3 (mult.x, mult.y, 0);
 
         } else {
             //during breaking just play the side engines continuously
@@ -131,7 +133,7 @@ public class ShipController : MonoBehaviour {
         var screenPoint = Camera.main.WorldToScreenPoint(transform.localPosition);
         var offset = new Vector2(mousePos.x - screenPoint.x, mousePos.y - screenPoint.y);
         var angle = Mathf.Atan2(offset.y, offset.x) * Mathf.Rad2Deg;
-        bool shipIsThrusting = Mathf.Abs (verticalAxis) > 0.0f || Mathf.Abs (horizontalAxis) > 0.0f;
+        bool shipIsThrusting = Mathf.Abs (verticalAxis) > 0.0f;
 
         var wantedRotation = Quaternion.Euler (0, 0, angle - 90);
         transform.rotation = Quaternion.Lerp (transform.rotation, wantedRotation, 
