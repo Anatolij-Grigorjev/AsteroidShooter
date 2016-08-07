@@ -87,7 +87,8 @@ public class ShipController : MonoBehaviour {
             //only process stuff if animation is in a calm state
             if (pressedTurbo && (state.IsName("Idling") || state.IsName("Thrusting"))) {
                 shipThrustingAnimator.SetTrigger ("Thruster");
-                isTurboMode = !isTurboMode;
+                //turbo mode starts if the current state was that of not thrusting
+                isTurboMode = state.IsName("Idling");
                 if (isTurboMode) {
                     activeMultiplier = modeMultipliers [1];
                 } else {
