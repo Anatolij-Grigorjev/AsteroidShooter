@@ -17,7 +17,7 @@ public class QuipController : MonoBehaviour {
         quipsMap = new Dictionary<QuipTypes, List<Tuple<String, String>>> ();
         quipsMap.Add (QuipTypes.QUIP_FIRED_ROMBUS,
             new List<Tuple<String,String>> {
-                new Tuple<String, String>("daughter", "What's this button?"),
+                new Tuple<String, String>("father", "Keep the change!"),
                 new Tuple<String, String>("father", "Eat rombus, rocks!"),
                 new Tuple<String, String>("father", "Try this hot potato!"),
             });

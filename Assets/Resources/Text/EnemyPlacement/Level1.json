@@ -1,9 +1,8 @@
 [
     {
-        "name": "Wave 1",
+        "name": "After 5min. of waiting...",
         "quip": {
-        	"text" : "AAahhh!.. ROCKS!..",
-        	"avatar" : "daughter"
+        	"text" : "Asteroids! Give me\nback my daughter!",
         },
         "placements": [
             {
@@ -19,7 +18,10 @@
         ]
     },
     {
-    	"name": "Trial run",
+    	"name": "20min. later...",
+    	"quip": {
+        	"text" : "There's another one!",
+        },
         "placements": [
             {
                 "x": -10.0,
@@ -29,10 +31,10 @@
         ]
     },
     {
-        "name": "Wave 2",
+        "name": "15min. later...",
         "final": true,
         "quip" : {
-        	"text" : "Here we go again..."
+        	"text" : "They can't all be duds..."
         },
         "placements": [
             {
