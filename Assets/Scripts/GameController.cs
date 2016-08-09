@@ -61,6 +61,23 @@ public class GameController : Singleton<GameController> {
         }
     }
 
+    public Dictionary<int, Animator> produceAnimationsForScript(String script) {
+        var result = new Dictionary<int, Animator> ();
+
+        switch (script) {
+            case "intro_scene":
+                result.Add (2, GameObject.Find ("ScreenImagePast").GetComponent<Animator> ());
+                //result.Add (5, GameObject.Find ("ScreenImagePresent").GetComponent<Animator> ());
+                break;
+            case "post_game_scene": 
+                break;
+            default: 
+                break;
+        }
+
+        return result;
+    }
+
     private List<String> scriptsPaths = new List<String>() {
         "intro_scene",
         "post_game_scene"

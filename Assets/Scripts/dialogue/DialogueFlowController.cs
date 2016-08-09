@@ -12,17 +12,6 @@ public class DialogueFlowController : MonoBehaviour {
     private const int DIALOGUE_LINE_PARTS_COUNT = 3;
 
     public List<DialogueLine> lines;
-
-    //name of dialogue script file
-    private String scriptName;
-    //flag if the file has been processed into data yet (only start dialogue after it has been)
-    private bool scriptLoaded;
-
-    //index of dialogue element currently being written to box
-    private int currentLine = 0;
-    //current symbol to type out in current line
-    private int currentSymbol = 0;
-
     //access to UI text where line is rendered
     public Text lineText;
     //access to UI text where talker name is provided
@@ -30,6 +19,17 @@ public class DialogueFlowController : MonoBehaviour {
     //access to UI Image for avatar face
     public Image avatarFace;
 
+    public Dictionary<int, Animator> lineAnimations;
+
+    //name of dialogue script file
+    private String scriptName;
+    //flag if the file has been processed into data yet (only start dialogue after it has been)
+    private bool scriptLoaded;
+    
+    //index of dialogue element currently being written to box
+    private int currentLine = 0;
+    //current symbol to type out in current line
+    private int currentSymbol = 0;
     //is current line fully written
     private bool lineDone = false;
 
@@ -46,11 +46,11 @@ public class DialogueFlowController : MonoBehaviour {
 	void Awake () {
         scriptLoaded = false;
         lines = new List<DialogueLine> ();
-
         lineText.text = "";
         avatarName.text = "";
         delayRecharge = typeDelay;
         scriptName = GameController.Instance.NextScript;
+        lineAnimations = GameController.Instance.produceAnimationsForScript (scriptName);
         StartCoroutine(
             ReadScript (scriptName)
 //            ;
@@ -103,7 +103,7 @@ public class DialogueFlowController : MonoBehaviour {
 
         //some amount of line left to write
         if (!lineDone) {
-            
+            CheckLineAnimation ();
             //if user pressed advance button - finish line, prepare for next one
             if (Input.GetButtonUp ("Main Cannon")) {
                 lineDone = true;
@@ -144,7 +144,19 @@ public class DialogueFlowController : MonoBehaviour {
         }
 
 	}
-        
+
+    void CheckLineAnimation () {
+        Animator animator = null;
+        try {
+            animator = lineAnimations [currentLine];
+            if (!animator.enabled) {
+                animator.enabled = true;
+            }
+        }
+        catch (KeyNotFoundException e) {
+            //keep this quiet
+        }
+    }        
 
     Sprite GetDialogueAvatar (string avatarKey) {
         return GameController.Instance.GetAvatar (avatarKey);

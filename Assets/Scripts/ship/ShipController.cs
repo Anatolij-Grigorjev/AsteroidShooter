@@ -35,6 +35,7 @@ public class ShipController : MonoBehaviour {
 
     private bool isBreaking;
     private bool isTurboMode;
+    private bool prevTurboPressed;
     private float regularDrag;
     private float regularAngularDrag;
 
@@ -56,6 +57,7 @@ public class ShipController : MonoBehaviour {
         isBreaking = false;
         shipBreakingAnimator.enabled = false;
         shipBreakingGraphics.enabled = false;
+        prevTurboPressed = false;
         breakingDelay = maxBreakingDelay;
         activeMultiplier = modeMultipliers [0];
 	}
@@ -64,7 +66,8 @@ public class ShipController : MonoBehaviour {
 
 //        float horizontalAxis = Input.GetAxis ("Horizontal");
         float verticalAxis = Input.GetAxis ("Vertical");
-        bool pressedTurbo = Input.GetButtonUp ("Booster");
+        bool pressedTurbo = Input.GetButton ("Booster");
+
         ProcessBreaking ();
         if (!isBreaking) {
 
@@ -85,18 +88,9 @@ public class ShipController : MonoBehaviour {
                 engineSmoke.Play ();
                 em.enabled = true;
             }
-            var state = shipThrustingAnimator.GetCurrentAnimatorStateInfo (0);
-            //only process stuff if animation is in a calm state
-            if (pressedTurbo && (state.IsName("Idling") || state.IsName("Thrusting"))) {
-                shipThrustingAnimator.SetTrigger ("Thruster");
-                //turbo mode starts if the current state was that of not thrusting
-                isTurboMode = state.IsName("Idling");
-                if (isTurboMode) {
-                    activeMultiplier = modeMultipliers [1];
-                } else {
-                    activeMultiplier = modeMultipliers [0];
-                }
-            }
+
+            ProcessTurbo (pressedTurbo);
+
             PlaceSmoke ();
 
             //MOVEMENT: fly forward back using rigid body force and sideways via transform translation
@@ -140,6 +134,21 @@ public class ShipController : MonoBehaviour {
             Time.deltaTime * (shipIsThrusting? (activeRotationSpeed * activeMultiplier): (rotationSpeed * activeMultiplier)));
 
 	}
+
+    void ProcessTurbo (bool pressedTurbo) {
+        //only process stuff if animation is in a calm state
+        if (pressedTurbo != prevTurboPressed) {
+            shipThrustingAnimator.SetTrigger ("Thruster");
+        }
+        isTurboMode = pressedTurbo;
+        if (isTurboMode) {
+            activeMultiplier = modeMultipliers [1];
+        }
+        else {
+            activeMultiplier = modeMultipliers [0];
+        }
+        prevTurboPressed = pressedTurbo;
+    }
 
     void PlayThrustSound(AudioClip clip) {
         shipEngineSource.clip = clip;
