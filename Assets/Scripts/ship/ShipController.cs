@@ -67,6 +67,7 @@ public class ShipController : MonoBehaviour {
 //        float horizontalAxis = Input.GetAxis ("Horizontal");
         float verticalAxis = Input.GetAxis ("Vertical");
         bool pressedTurbo = Input.GetButton ("Booster");
+        ProcessTurbo (pressedTurbo);
 
         ProcessBreaking ();
         if (!isBreaking) {
@@ -88,9 +89,6 @@ public class ShipController : MonoBehaviour {
                 engineSmoke.Play ();
                 em.enabled = true;
             }
-
-            ProcessTurbo (pressedTurbo);
-
             PlaceSmoke ();
 
             //MOVEMENT: fly forward back using rigid body force and sideways via transform translation

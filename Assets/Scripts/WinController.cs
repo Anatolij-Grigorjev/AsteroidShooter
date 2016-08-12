@@ -40,7 +40,7 @@ public class WinController : MonoBehaviour {
     public void DoWin () {
         playerWon = true;
         StartCoroutine (GoNextPhase ());
-        DoEndText ("Area clear.");
+        DoEndText ("Area clear");
     }
 
 

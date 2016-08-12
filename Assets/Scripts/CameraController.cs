@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.UI;
 
 public class CameraController : MonoBehaviour {
 
 	public GameObject player;       //Public variable to store a reference to the player game object
 	public SpriteRenderer background; //reference to background to get area bounds
     public AudioSource transitionSound; //sound made during zooming transition
+    public Text areaUIText; //text in the upper portion of screen, showing this to be overview
 
 	private float mapX; //stuff to make the camera bound to the bounds of the background
 	private float mapY;
@@ -19,6 +21,9 @@ public class CameraController : MonoBehaviour {
     private Camera theCamera;
     private Boolean isViewingMode;
 	private Vector3 offset;         //Private variable to store the offset distance between the player and camera
+
+    //state of pressing on previous frame
+    private bool wasPressed = false;
 
 	// Use this for initialization
 	void Start () 
@@ -42,14 +47,16 @@ public class CameraController : MonoBehaviour {
 	}
 
     void Update() {
-        bool pressed = Input.GetButtonUp ("Map View");
-        if (pressed) {
+        bool pressed = Input.GetButton ("Map View");
+        if (pressed != wasPressed) {
             transitionSound.Play ();
             isViewingMode = !isViewingMode;
             Time.timeScale = isViewingMode ? 0.0f : 1.0f;
+            areaUIText.enabled = isViewingMode;
             theCamera.orthographicSize = isViewingMode? 15 : 5;
             transform.position = new Vector3 ();
         }
+        wasPressed = pressed;
     }
 
 	// LateUpdate is called after Update each frame
