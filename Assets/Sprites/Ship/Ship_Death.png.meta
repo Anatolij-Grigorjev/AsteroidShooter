@@ -1,0 +1,259 @@
+fileFormatVersion: 2
+guid: 66db6c5f1f42f344095aed54625b4cdc
+timeCreated: 1471096259
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Ship_Death_0
+    21300002: Ship_Death_1
+    21300004: Ship_Death_2
+    21300006: Ship_Death_3
+    21300008: Ship_Death_4
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 4096
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Ship_Death_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 166
+        width: 196
+        height: 265
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -9, y: 132.5}
+        - {x: -98, y: -122.5}
+        - {x: -98, y: -132.5}
+        - {x: 98, y: -132.5}
+        - {x: 98, y: -91.5}
+        - {x: 24, y: 132.5}
+    - name: Ship_Death_1
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 165
+        width: 196
+        height: 265
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -9, y: 132.5}
+        - {x: -98, y: -122.5}
+        - {x: -98, y: -132.5}
+        - {x: 98, y: -132.5}
+        - {x: 98, y: -91.5}
+        - {x: 24, y: 132.5}
+    - name: Ship_Death_2
+      rect:
+        serializedVersion: 2
+        x: 423
+        y: 163
+        width: 196
+        height: 265
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -9, y: 132.5}
+        - {x: -98, y: -120.5}
+        - {x: -98, y: -132.5}
+        - {x: 98, y: -132.5}
+        - {x: 98, y: -107.5}
+        - {x: 9, y: 132.5}
+    - name: Ship_Death_3
+      rect:
+        serializedVersion: 2
+        x: 631
+        y: 129
+        width: 201
+        height: 312
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -10.5, y: 145}
+        - {x: -16.5, y: 109}
+        - {x: -7.5, y: 7}
+        - {x: -2.5, y: 2}
+        - {x: -6.5, y: 6}
+        - {x: -16.5, y: 17}
+        - {x: -29.5, y: 16}
+        - {x: -34.5, y: 14}
+        - {x: -70.5, y: -30}
+        - {x: -100.5, y: -114}
+        - {x: -100.5, y: -120}
+        - {x: -99.5, y: -123}
+        - {x: -95.5, y: -123}
+        - {x: -85.5, y: -108}
+        - {x: -92.5, y: -119}
+        - {x: -93.5, y: -122}
+        - {x: -96.5, y: -156}
+        - {x: 99.5, y: -156}
+        - {x: 99.5, y: -85}
+        - {x: 8.5, y: 145}
+      - - {x: -18.5, y: 26}
+        - {x: -15.5, y: 27}
+        - {x: -15.5, y: 30}
+        - {x: -18.5, y: 31}
+        - {x: -20.5, y: 29}
+      - - {x: -16.5, y: 44}
+        - {x: -13.5, y: 45}
+        - {x: -13.5, y: 48}
+        - {x: -16.5, y: 49}
+        - {x: -18.5, y: 47}
+    - name: Ship_Death_4
+      rect:
+        serializedVersion: 2
+        x: 898
+        y: 64
+        width: 223
+        height: 338
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 58.5, y: -17}
+        - {x: 49.5, y: -18}
+        - {x: 1.5, y: 18}
+        - {x: -4.5, y: 21}
+        - {x: -1.5, y: 21}
+        - {x: 3.5, y: 17}
+        - {x: 49.5, y: -15}
+        - {x: 72.5, y: -10}
+        - {x: 80.5, y: 11}
+        - {x: 1.5, y: 158}
+        - {x: -1.5, y: 159}
+        - {x: -3.5, y: 159}
+        - {x: -5.5, y: 156}
+        - {x: -7.5, y: 159}
+        - {x: -12.5, y: 159}
+        - {x: -19.5, y: 154}
+        - {x: -16.5, y: 138}
+        - {x: -14.5, y: 136}
+        - {x: -11.5, y: 137}
+        - {x: 5.5, y: 94}
+        - {x: 9.5, y: 80}
+        - {x: 6.5, y: 83}
+        - {x: -7.5, y: 129}
+        - {x: -11.5, y: 136}
+        - {x: -13.5, y: 135}
+        - {x: -16.5, y: 131}
+        - {x: -18.5, y: 122}
+        - {x: -39.5, y: 148}
+        - {x: -54.5, y: 144}
+        - {x: -49.5, y: 126}
+        - {x: -12.5, y: 22}
+        - {x: -10.5, y: 18}
+        - {x: -8.5, y: 16}
+        - {x: 2.5, y: 1}
+        - {x: 10.5, y: -7}
+        - {x: 13.5, y: -14}
+        - {x: 17.5, y: -18}
+        - {x: 11.5, y: -16}
+        - {x: 11.5, y: -11}
+        - {x: 7.5, y: -6}
+        - {x: 4.5, y: -3}
+        - {x: -2.5, y: -16}
+        - {x: 1.5, y: -30}
+        - {x: -19.5, y: -48}
+        - {x: -25.5, y: -46}
+        - {x: -29.5, y: -49}
+        - {x: -59.5, y: -58}
+        - {x: -38.5, y: -39}
+        - {x: -36.5, y: -37}
+        - {x: -37.5, y: -34}
+        - {x: -36.5, y: -30}
+        - {x: -33.5, y: -46}
+        - {x: -30.5, y: -49}
+        - {x: -27.5, y: -48}
+        - {x: -23.5, y: -44}
+        - {x: -15.5, y: -44}
+        - {x: -10.5, y: -35}
+        - {x: -9.5, y: -17}
+        - {x: -2.5, y: -5}
+        - {x: -8.5, y: 15}
+        - {x: -10.5, y: 18}
+        - {x: -19.5, y: 39}
+        - {x: -91.5, y: 20}
+        - {x: -107.5, y: -45}
+        - {x: -107.5, y: -104}
+        - {x: -106.5, y: -111}
+        - {x: -101.5, y: -108}
+        - {x: -98.5, y: -104}
+        - {x: -98.5, y: -105}
+        - {x: -107.5, y: -113}
+        - {x: -107.5, y: -114}
+        - {x: -95.5, y: -147}
+        - {x: -55.5, y: -165}
+        - {x: 56.5, y: -165}
+        - {x: 90.5, y: -151}
+        - {x: 106.5, y: -100}
+        - {x: 106.5, y: -61}
+        - {x: 91.5, y: -41}
+      - - {x: 51.5, y: -15}
+        - {x: 54.5, y: -19}
+        - {x: 57.5, y: -18}
+        - {x: 57.5, y: -15}
+        - {x: 54.5, y: -12}
+        - {x: 52.5, y: -12}
+      - - {x: -24.5, y: 40}
+        - {x: -21.5, y: 41}
+        - {x: -21.5, y: 44}
+        - {x: -24.5, y: 45}
+        - {x: -26.5, y: 43}
+      - - {x: -22.5, y: 58}
+        - {x: -19.5, y: 59}
+        - {x: -19.5, y: 62}
+        - {x: -22.5, y: 63}
+        - {x: -24.5, y: 61}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

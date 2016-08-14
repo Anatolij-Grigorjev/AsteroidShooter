@@ -21,7 +21,10 @@ public class ShipHealthController : MonoBehaviour
 	private float lastHitTime;					// The time at which the player was last hit.
 	private Vector3 healthScale;				// The local scale of the health bar initially (with full health).
 	private ShipController playerControl;		// Reference to the Ship Controller script.
-	public Animator anim;						// Reference to the Animator on the player
+	public Animator shipAnimator;						// Reference to the Animator on the player
+    public GameObject explosionPrefab;
+    public GameObject lastExplosionPrefab;
+
 	private float playerMass;
 	private float scaleLength;
     [HideInInspector]
@@ -74,6 +77,7 @@ public class ShipHealthController : MonoBehaviour
             // ... and if the time exceeds the time of the last hit plus the time between hits...
             if (Time.time > lastHitTime + repeatDamagePeriod) 
             {
+                //check that collision was with ship, not shield, etc
                 bool isShipHurt = false;
                 foreach (var contact in col.contacts) {
                     if (contact.collider == shipCollider || contact.otherCollider == shipCollider) {
@@ -85,10 +89,10 @@ public class ShipHealthController : MonoBehaviour
                 if (!isShipHurt)
                     return;
 				// ... and if the player still has health...
+                TakeDamage(col.transform); 
                 if(health > 0f)
-				{
-					// ... take damage and reset the lastHitTime.
-					TakeDamage(col.transform); 
+                {
+                    // ... take damage and reset the lastHitTime.
 					lastHitTime = Time.time; 
                     isHurt = true;
                     damageCooldown = repeatDamagePeriod;
@@ -121,15 +125,55 @@ public class ShipHealthController : MonoBehaviour
 					GetComponentInChildren<ShipShootingController>().enabled = false;
 
 					// ... Trigger the 'Die' animation state
-					anim.SetTrigger("Die");
+					shipAnimator.SetTrigger("Die");
 					Debug.Log("Aww, he dead.");
 
-//                    shipSprite.enabled = false;
-
+                    //TODO: make death shake
+                    //death sounds
+                    //death xplosionso
+                    StartCoroutine(PreDeathShakes());
+                    StartCoroutine (PreDeathExplosions ());
 				}
 			}
 		}
 	}
+
+    private IEnumerator PreDeathShakes() {
+        //disable camera follow for proper shake effects
+        var camera = GameObject.Find ("Main Camera");
+        camera.GetComponent<CameraController> ().enabled = false;
+
+        for (int i = 0; i < 50; i++) {
+            var pos = transform.position;
+            transform.position = new Vector3 (
+                pos.x + UnityEngine.Random.Range(pos.x * -0.1f, pos.x * 0.1f),
+                pos.y + UnityEngine.Random.Range(pos.y * -0.1f, pos.y * 0.1f),
+                pos.z + UnityEngine.Random.Range(pos.z * -0.1f, pos.z * 0.1f)
+            );
+            yield return new WaitForSeconds (Time.fixedDeltaTime);
+        }
+    }
+
+    private IEnumerator PreDeathExplosions() {
+        for (int i = 0; i < 20; i++) {
+            var pos = transform.position;
+            var randomPos = new Vector3 (
+                pos.x + UnityEngine.Random.Range(pos.x * -0.1f, pos.x * 0.1f),
+                pos.y + UnityEngine.Random.Range(pos.y * -0.1f, pos.y * 0.1f),
+                pos.z + UnityEngine.Random.Range(pos.z * -0.1f, pos.z * 0.1f)
+            );
+            var xplosion = Instantiate (explosionPrefab, randomPos, Quaternion.identity) as GameObject;
+
+            xplosion.transform.localScale *= 0.25f;
+
+
+            yield return new WaitForSeconds (Time.fixedDeltaTime * 2);
+        }
+      
+
+        //finish off with big last boom
+        Instantiate (lastExplosionPrefab, transform.position, Quaternion.identity);
+    }
 
     void FinishDeath() {
         isDead = true;
