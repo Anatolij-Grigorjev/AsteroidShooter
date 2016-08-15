@@ -143,12 +143,12 @@ public class ShipHealthController : MonoBehaviour
         var camera = GameObject.Find ("Main Camera");
         camera.GetComponent<CameraController> ().enabled = false;
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 25; i++) {
             var pos = transform.position;
             transform.position = new Vector3 (
-                pos.x + UnityEngine.Random.Range(pos.x * -0.1f, pos.x * 0.1f),
-                pos.y + UnityEngine.Random.Range(pos.y * -0.1f, pos.y * 0.1f),
-                pos.z + UnityEngine.Random.Range(pos.z * -0.1f, pos.z * 0.1f)
+                pos.x + UnityEngine.Random.Range(pos.x * -0.05f, pos.x * 0.05f),
+                pos.y + UnityEngine.Random.Range(pos.y * -0.05f, pos.y * 0.05f),
+                pos.z + UnityEngine.Random.Range(pos.z * -0.05f, pos.z * 0.05f)
             );
             yield return new WaitForSeconds (Time.fixedDeltaTime);
         }

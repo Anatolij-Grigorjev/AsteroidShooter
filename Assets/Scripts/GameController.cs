@@ -83,7 +83,8 @@ public class GameController : Singleton<GameController> {
         "post_game_scene"
     };
     private List<String> levelNames = new List<string>() {
-        "Level1"
+        "Level1",
+        "Level2"
     };
     [HideInInspector]
     public List<String> avatarNames = new List<string>() {

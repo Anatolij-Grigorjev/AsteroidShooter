@@ -1,13 +1,18 @@
 [
     {
-        "name": "Sector 1",
+        "name": "Sector 2",
         "quip": {
-        	"text" : "Asteroids! Give me\nback my daughter!",
+        	"text" : "There's more of them!",
         },
         "placements": [
             {
                 "x": -5.3,
                 "y": 4.5,
+                "typeIndex": 0
+            },
+            {
+                "x": -10.0,
+                "y": 0.5,
                 "typeIndex": 0
             },
             {
@@ -18,23 +23,10 @@
         ]
     },
     {
-    	"name": "20min. later...",
-    	"quip": {
-        	"text" : "There's another one!",
-        },
-        "placements": [
-            {
-                "x": -10.0,
-                "y": 0.5,
-                "typeIndex": 0
-            }
-        ]
-    },
-    {
-        "name": "15min. later...",
+        "name": "Suddently...",
         "final": true,
         "quip" : {
-        	"text" : "They can't all be duds..."
+        	"text" : "These must be the ones..."
         },
         "placements": [
             {
@@ -45,6 +37,21 @@
             {
                 "x": 8.3,
                 "y": 9.5,
+                "typeIndex": 0
+            },
+            {
+                "x": -5.3,
+                "y": 4.5,
+                "typeIndex": 0
+            },
+            {
+                "x": -10.0,
+                "y": 0.5,
+                "typeIndex": 0
+            },
+            {
+                "x": 15.3,
+                "y": -9.5,
                 "typeIndex": 0
             }
         ]
