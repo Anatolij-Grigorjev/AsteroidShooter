@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
+using SimpleJSON;
 
 public class BouncerController : MonoBehaviour {
 
@@ -22,7 +24,23 @@ public class BouncerController : MonoBehaviour {
 		float hitBounce = hitNBounceDiff + hitMargin;
 		paddedExtends = new Vector3 (backgroundBounds.bounds.extents.x - hitBounce, backgroundBounds.bounds.extents.y - hitBounce, 0.0f);
 		hitBounds = new Vector3 (backgroundBounds.bounds.extents.x - hitMargin, backgroundBounds.bounds.extents.y - hitMargin, 0.0f);
+        LoadLevel ();
 	}
+
+    void LoadLevel () {
+        var scriptName = GameController.Instance.NextLevel;
+        var textAsset = Resources.Load(String.Format("Text/EnemyPlacement/{0}", scriptName), typeof(TextAsset)) as TextAsset;
+
+        var waves = JSON.Parse (textAsset.text).AsArray;
+        Debug.Log ("Got " + waves.Count + " waves for level " + scriptName);
+        if (GameController.Instance.currentLevelWaves == null) {
+            GameController.Instance.currentLevelWaves = new List<JSONNode> ();
+        } else {
+            GameController.Instance.currentLevelWaves.Clear ();
+        }
+        GameController.Instance.currentLevelWaves.AddRange (waves.Childs);
+        Debug.Log ("Ready with " + GameController.Instance.currentLevelWaves.Count + " valid waves!");
+    }
 
 
 	void OnTriggerEnter2D(Collider2D other) {

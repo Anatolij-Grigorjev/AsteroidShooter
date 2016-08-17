@@ -55,6 +55,18 @@ public class GameController : Singleton<GameController> {
         }
     }
 
+    public String NextLevel {
+        get {
+            var result = levelNames [currentLevelIndex];
+            currentLevelIndex++;
+            if (currentLevelIndex >= levelNames.Count) {
+                currentLevelIndex = 0;
+            }
+
+            return result;
+        }
+    }
+
     public List<JSONNode> LevelWaves {
         get {
             return currentLevelWaves;
@@ -69,7 +81,7 @@ public class GameController : Singleton<GameController> {
                 result.Add (2, GameObject.Find ("ScreenImagePast").GetComponent<Animator> ());
                 //result.Add (5, GameObject.Find ("ScreenImagePresent").GetComponent<Animator> ());
                 break;
-            case "post_game_scene": 
+            case "post_level_1": 
                 break;
             default: 
                 break;
@@ -80,7 +92,8 @@ public class GameController : Singleton<GameController> {
 
     private List<String> scriptsPaths = new List<String>() {
         "intro_scene",
-        "post_game_scene"
+        "post_level_1",
+        "post_level_2"
     };
     private List<String> levelNames = new List<string>() {
         "Level1",
@@ -92,7 +105,7 @@ public class GameController : Singleton<GameController> {
         "father"
     };
 
-    private List<JSONNode> currentLevelWaves;
+   
     private Dictionary<String, Sprite> avatarsMap;
     private int currentSceneIndex = 0;
     private int currentLevelIndex = 0;
@@ -103,12 +116,13 @@ public class GameController : Singleton<GameController> {
     public List<GameObject> currentEnemies;
     [HideInInspector]
     public int nextSceneIndex;
+    [HideInInspector]
+    public List<JSONNode> currentLevelWaves;
 
 	// Use this for initialization
 	void Awake () {
         CookAvatarsMap ();
         currentEnemies = new List<GameObject> ();
-        LoadLevel ();
 	}
 
 
@@ -122,21 +136,7 @@ public class GameController : Singleton<GameController> {
         }
         Debug.Log ("Cooked up " + avatarsMap.Count + " avatars!");
     }
-
-    void LoadLevel () {
-        var scriptName = levelNames [currentLevelIndex];
-        var textAsset = Resources.Load(String.Format("Text/EnemyPlacement/{0}", scriptName), typeof(TextAsset)) as TextAsset;
-
-        var waves = JSON.Parse (textAsset.text).AsArray;
-        Debug.Log ("Got " + waves.Count + " waves for level " + scriptName);
-        if (currentLevelWaves == null) {
-            currentLevelWaves = new List<JSONNode> ();
-        } else {
-            currentLevelWaves.Clear ();
-        }
-        currentLevelWaves.AddRange (waves.Childs);
-        Debug.Log ("Ready with " + currentLevelWaves.Count + " valid waves!");
-    }
+        
         
         
 }
