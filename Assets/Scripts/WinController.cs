@@ -2,27 +2,21 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using AssemblyCSharp;
 
 public class WinController : MonoBehaviour {
+    public const int DIALOGUE_SCENE = 2;
 
 	// Use this for initialization
 	private Text winText;
-	public GameObject tryAgainButton;
     private bool playerWon;
 
 	void Awake () {
         playerWon = false;
         GameController.Instance.nextSceneIndex = 0;
 		winText = GetComponent<Text> ();
-//		winText.enabled = false;
-		tryAgainButton.SetActive (false);
 
         StartCoroutine (CheckAsteroids ());
-	}
-
-	public void ReloadStage() {
-		Time.timeScale = 1.0f;
-        SceneManager.LoadScene (SceneManager.GetActiveScene().buildIndex);
 	}
 
 	void DoEndText (string text = null)
@@ -32,14 +26,13 @@ public class WinController : MonoBehaviour {
 		}
 		winText.enabled = true;
         if (!playerWon) {
-            Time.timeScale = 0.0f;
-            tryAgainButton.SetActive (true);
+            StartCoroutine (GoNextPhase (GameSceneIndexes.GAME_OVER_SCENE));
         }
 	}
 
     public void DoWin () {
         playerWon = true;
-        StartCoroutine (GoNextPhase ());
+        StartCoroutine (GoNextPhase (GameSceneIndexes.DIALOGUE_SCENE));
         DoEndText ("Area clear");
     }
 
@@ -52,7 +45,9 @@ public class WinController : MonoBehaviour {
             if (ship.GetComponent<ShipHealthController>().health <= 0.0f) {
                 yield return new WaitUntil (() => ship.GetComponent<ShipHealthController> ().isDead);
                 playerWon = false;
-                DoEndText ("GAME OVER!");
+                DoEndText (
+                    RandomDissapointments.GAME_OVER_DARNS[Random.Range(0, RandomDissapointments.GAME_OVER_DARNS.Length)]
+                );
             }
             //no check hit its mark, we can keep checking asteroids
             if (!winText.enabled) {
@@ -61,8 +56,8 @@ public class WinController : MonoBehaviour {
         }
 	}
 
-    IEnumerator GoNextPhase () {
+    IEnumerator GoNextPhase (int nextPhase) {
         yield return new WaitForSeconds (5.5f);
-        SceneManager.LoadScene (2);
+        SceneManager.LoadScene (nextPhase);
     }
 }

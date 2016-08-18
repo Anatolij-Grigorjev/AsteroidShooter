@@ -7,7 +7,7 @@ using System.CodeDom.Compiler;
 public class ShipHealthController : MonoBehaviour
 {	
 	public float maxHealth = 200f;
-    [HideInInspector]
+//    [HideInInspector]
     public float health;					// The player's current health.
 	public float repeatDamagePeriod = 2f;		// How frequently the player can be damaged.
     public float flickerInterval = 0.4f;        //speed of damage flickering
@@ -128,11 +128,9 @@ public class ShipHealthController : MonoBehaviour
 					shipAnimator.SetTrigger("Die");
 					Debug.Log("Aww, he dead.");
 
-                    //TODO: make death shake
-                    //death sounds
-                    //death xplosionso
+
                     StartCoroutine(PreDeathShakes());
-                    StartCoroutine (PreDeathExplosions ());
+                    StartCoroutine (PreDeathExplosions());
 				}
 			}
 		}
@@ -176,6 +174,7 @@ public class ShipHealthController : MonoBehaviour
     }
 
     void FinishDeath() {
+        Debug.Log ("Setting isDead...");
         isDead = true;
     }
 
