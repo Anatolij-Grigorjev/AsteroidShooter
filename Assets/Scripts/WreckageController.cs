@@ -23,6 +23,10 @@ public class WreckageController : MonoBehaviour {
         }
 	}
 
+    public void SetupRestartLevel() {
+        GameController.Instance.Restart = true;
+    }
+
     IEnumerator GoNextPhase () {
         yield return new WaitForSeconds (0.2f);
         LoadingScreen.SetActive (true);

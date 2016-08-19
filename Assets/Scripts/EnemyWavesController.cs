@@ -36,7 +36,7 @@ public class EnemyWavesController : MonoBehaviour {
     IEnumerator WaveMaker() {
         yield return new WaitForSeconds (1.4f);
         asteroidsCountText.text = "X " + GameController.Instance.currentEnemies.Count;
-        if (GameController.Instance.currentEnemies.Count <= 0) {
+        if (GameController.Instance.currentEnemies.Count <= 0 && !winControl.RoundOver) {
             if (!finalWave) {
                 Debug.Log ("Not final wave ended, time for wave " + waveIndex);
                 var wave = GameController.Instance.LevelWaves [waveIndex];
@@ -71,7 +71,8 @@ public class EnemyWavesController : MonoBehaviour {
                 winControl.DoWin ();
             }
         }
-
-        StartCoroutine (WaveMaker ());
+        if (!winControl.RoundOver) {
+            StartCoroutine (WaveMaker ());
+        }
     }
 }

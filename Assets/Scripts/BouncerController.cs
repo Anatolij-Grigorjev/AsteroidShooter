@@ -28,7 +28,9 @@ public class BouncerController : MonoBehaviour {
 	}
 
     void LoadLevel () {
-        var scriptName = GameController.Instance.NextLevel;
+        var scriptName = GameController.Instance.Restart? 
+		GameController.Instance.CurrentLevel 
+		: GameController.Instance.NextLevel;
         var textAsset = Resources.Load(String.Format("Text/EnemyPlacement/{0}", scriptName), typeof(TextAsset)) as TextAsset;
 
         var waves = JSON.Parse (textAsset.text).AsArray;

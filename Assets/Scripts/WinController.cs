@@ -10,12 +10,14 @@ public class WinController : MonoBehaviour {
 	// Use this for initialization
 	private Text winText;
     private bool playerWon;
+    [HideInInspector]
+    public bool RoundOver;
 
 	void Awake () {
         playerWon = false;
         GameController.Instance.nextSceneIndex = 0;
 		winText = GetComponent<Text> ();
-
+        RoundOver = false;
         StartCoroutine (CheckAsteroids ());
 	}
 
@@ -43,8 +45,11 @@ public class WinController : MonoBehaviour {
         if (!winText.enabled) {
             var ship = GameController.Instance.PlayerShip;
             if (ship.GetComponent<ShipHealthController>().health <= 0.0f) {
+                RoundOver = true;
                 yield return new WaitUntil (() => ship.GetComponent<ShipHealthController> ().isDead);
                 playerWon = false;
+                //no more enemies, need to reset level state
+                GameController.Instance.currentEnemies.Clear();
                 DoEndText (
                     RandomDissapointments.GAME_OVER_DARNS[Random.Range(0, RandomDissapointments.GAME_OVER_DARNS.Length)]
                 );

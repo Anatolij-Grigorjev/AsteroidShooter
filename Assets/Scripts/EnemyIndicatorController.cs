@@ -35,7 +35,7 @@ public class EnemyIndicatorController : MonoBehaviour {
         if (enemies.Count != 0) {
             //TODO: hit borders with rays to enemies, group by border type, show needed count of indicators
             var cameraPosition = transform.position;
-            foreach (GameObject enemy in GameController.Instance.currentEnemies) {
+            foreach (GameObject enemy in enemies) {
                 var enemyPosition = enemy.transform.position;
                 var cast = Physics2D.Linecast (cameraPosition, enemyPosition);
                 Debug.DrawLine (cameraPosition, enemyPosition);

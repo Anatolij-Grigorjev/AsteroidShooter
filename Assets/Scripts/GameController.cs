@@ -57,13 +57,18 @@ public class GameController : Singleton<GameController> {
 
     public String NextLevel {
         get {
-            var result = levelNames [currentLevelIndex];
             currentLevelIndex++;
             if (currentLevelIndex >= levelNames.Count) {
                 currentLevelIndex = 0;
             }
 
-            return result;
+            return levelNames [currentLevelIndex];
+        }
+    }
+
+    public String CurrentLevel {
+        get {
+            return levelNames[currentLevelIndex];
         }
     }
 
@@ -88,6 +93,22 @@ public class GameController : Singleton<GameController> {
         }
 
         return result;
+    }
+
+    /**
+        Check if the level was loaded as part of a restart. Resets the restart flag after getting it once
+    **/
+    public bool Restart {
+        get {
+            var result = restartState;
+            if (result) {
+                restartState = false;
+            }
+            return result;
+        }
+        set {
+            restartState = value;
+        }
     }
 
     private List<String> scriptsPaths = new List<String>() {
@@ -118,6 +139,7 @@ public class GameController : Singleton<GameController> {
     public int nextSceneIndex;
     [HideInInspector]
     public List<JSONNode> currentLevelWaves;
+    private bool restartState = true;
 
 	// Use this for initialization
 	void Awake () {
