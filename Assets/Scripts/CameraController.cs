@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System;
 using UnityEngine.UI;
 
 public class CameraController : MonoBehaviour {
 
 	public GameObject player;       //Public variable to store a reference to the player game object
+	//The position the camera wants to maintain to the player (defaults to player position)
+	public Vector3 requiredPosition;
+	//set if the required position has to be set independantly of ship
+	public bool useRequiredPosition;
 	public SpriteRenderer background; //reference to background to get area bounds
     public AudioSource transitionSound; //sound made during zooming transition
     public Text areaUIText; //text in the upper portion of screen, showing this to be overview
@@ -28,8 +31,11 @@ public class CameraController : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		if (!useRequiredPosition) {
+			requiredPosition = player.transform.position;
+		}
 		//Calculate and store the offset value by getting the distance between the player's position and camera's position.
-		offset = transform.position - player.transform.position;
+		offset = transform.position - requiredPosition;
 
 		mapX = background.bounds.extents.x * 2;
 		mapY = background.bounds.extents.y * 2;

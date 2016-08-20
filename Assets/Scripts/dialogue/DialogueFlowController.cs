@@ -2,10 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
-using System.IO;
-using System.Text;
 using UnityEngine.UI;
-using UnityEngine.Networking.NetworkSystem;
 
 public class DialogueFlowController : MonoBehaviour {
 
@@ -49,7 +46,9 @@ public class DialogueFlowController : MonoBehaviour {
         lineText.text = "";
         avatarName.text = "";
         delayRecharge = typeDelay;
-        scriptName = GameController.Instance.NextScript;
+        if (scriptName == null) {
+            scriptName = GameController.Instance.NextScript;
+        }
         lineAnimations = GameController.Instance.produceAnimationsForScript (scriptName);
         StartCoroutine(
             ReadScript (scriptName)
