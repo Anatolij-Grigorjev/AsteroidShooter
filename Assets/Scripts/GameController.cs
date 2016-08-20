@@ -114,7 +114,8 @@ public class GameController : Singleton<GameController> {
     private List<String> scriptsPaths = new List<String>() {
         "intro_scene",
         "post_level_1",
-        "post_level_2"
+        "post_level_2",
+        "dogfight_intro"
     };
     private List<String> levelNames = new List<string>() {
         "Level1",
@@ -123,7 +124,8 @@ public class GameController : Singleton<GameController> {
     [HideInInspector]
     public List<String> avatarNames = new List<string>() {
         "daughter",
-        "father"
+        "father",
+        "police"
     };
 
    

@@ -19,7 +19,7 @@ public class DialogueFlowController : MonoBehaviour {
     public Dictionary<int, Animator> lineAnimations;
 
     //name of dialogue script file
-    private String scriptName;
+    public String scriptName;
     //flag if the file has been processed into data yet (only start dialogue after it has been)
     private bool scriptLoaded;
     
@@ -46,7 +46,7 @@ public class DialogueFlowController : MonoBehaviour {
         lineText.text = "";
         avatarName.text = "";
         delayRecharge = typeDelay;
-        if (scriptName == null) {
+        if (String.IsNullOrEmpty(scriptName)) {
             scriptName = GameController.Instance.NextScript;
         }
         lineAnimations = GameController.Instance.produceAnimationsForScript (scriptName);
@@ -92,6 +92,14 @@ public class DialogueFlowController : MonoBehaviour {
         SetupFace (0);
         yield return 0;
     }
+
+    void EnableShipScripts() {
+        var ship = GameController.Instance.PlayerShip;
+        ship.GetComponent<ShipController>().enabled = true;
+        ship.GetComponent<ShipShootingController>().enabled = true;
+        Camera.main.GetComponent<CameraController>().enabled = true;
+    }
+
 	
 	// Update is called once per frame
 	void Update () {
@@ -133,8 +141,14 @@ public class DialogueFlowController : MonoBehaviour {
                         lineText.text = "";
                     }
                 } else {
-                    if (!shipAnimatinoController.GetBool ("dialogueOver")) {
-                        shipAnimatinoController.SetBool ("dialogueOver", true);
+                    var animator = GetComponent<Animator>();
+                    if (animator != null) {
+                        animator.SetTrigger("FadeOut");
+                    }
+                    if (shipAnimatinoController != null) {
+                        if (!shipAnimatinoController.GetBool ("dialogueOver")) {
+                            shipAnimatinoController.SetBool ("dialogueOver", true);
+                        }
                     }
                 }
 
