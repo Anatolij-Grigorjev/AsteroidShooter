@@ -35,6 +35,8 @@ public class ShipShootingController : MonoBehaviour {
     public Text rombusCornerCount;
     //--------------------------------------
 
+	[HideInInspector]
+	public bool isAttacking;
 
 
     //PRIVATE VARS INTERNAL STATE
