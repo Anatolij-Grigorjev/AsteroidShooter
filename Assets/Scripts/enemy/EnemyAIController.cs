@@ -31,6 +31,7 @@ public float chaseSpeed;
 //lowest helath to still act in a stable manner
 public float healthStableMin;
 public Transform playerTransform;
+public GameObject engine;
 private int currentState; 
 private int prevState;
 //2 stages to the state machine here:
@@ -47,7 +48,15 @@ private ShootingController shooting;
 private ShotgunController shotgun;
 private Rigidbody2D rigidBody;
 private Collider2D collider;
-
+//angle changes recorded to check if enemy still turning 
+private Vector3 currFwd;
+private Vector3 prevFwd;
+//random rotation for idle frames
+private Quaternion nextRotation;
+private bool isRotating;
+private int playerLayersMask;
+private SpriteRenderer engineSprite;
+private Animator engineAnimator;
 public void Awake() {
 
 	rigidBody = GetComponent<Rigidbody2D>();
@@ -57,6 +66,16 @@ public void Awake() {
 
 	prevState = STATE_IDLE;
 	currentState = STATE_IDLE;
+	currFwd = Vector3.zero;
+	prevFwd = Vector3.zero;
+
+	nextRotation = Quaternion.identity;
+	isRotating = false;
+	playerLayersMask = LayerMask.GetMask(new string[]{"Player"});
+
+	engineSprite = engine.GetComponent<SpriteRenderer>();
+	engineAnimator = engine.GetComponent<Animator>();
+	engineAnimator.SetTrigger("isEngaged");
 }
 
 	public void Update() {
@@ -127,59 +146,85 @@ public void Awake() {
 	}
 
 	private void TakeAction() {
-		//enemy idle, keep faffing around
-		if (currentState == STATE_IDLE) {
-			int roll = Mathf.RoundToInt(Random.value * 3);
-			//3 choices:
-			//1. do nothing
-			//2. turn randomly
-			//3. add juice
+		//init current forward
+		currFwd = transform.up;
 
-			if (roll > 2) {
-				rigidBody.AddForce(Vector3.up * Time.deltaTime * cruiseSpeed);
-			} else if (roll > 1) {
-				//start smooth rotation around Z for osme amount
-				transform.rotation = Quaternion.Slerp(
-					transform.rotation,
-					Quaternion.Euler(new Vector3(0.0f, 0.0f, Random.value * 90.0f)), 
-					Time.deltaTime
-				);
-			} else {
-				//do nothing
+		//have to check looking a player
+		var rayHit = Physics2D.Raycast(transform.position, currFwd, playerChaseDistance, playerLayersMask);
+		Debug.DrawRay(transform.position, currFwd * playerChaseDistance, Color.cyan, 1.0f);
+		bool playerInRay = rayHit.collider != null? rayHit.collider.CompareTag("Ship") : false;
+		Debug.Log("Got player in ray: " + playerInRay);
+
+		//bit of rotation is ok, try actions
+		isRotating = (currFwd - prevFwd).magnitude > 0.5f;
+
+		//enable engine at large velocity
+		engineSprite.enabled = rigidBody.velocity.magnitude > 0.25f;
+		
+		if (!isRotating || !playerInRay) {	
+			isRotating = false;
+			//enemy idle, keep faffing around
+			nextRotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, Random.value * 90.0f));
+			if (currentState == STATE_IDLE) {
+				int roll = Mathf.RoundToInt(Random.value * 3);
+				//3 choices:
+				//1. do nothing
+				//2. turn randomly
+				//3. add juice
+				Debug.Log("Decided idle action: " + roll);
+				if (roll > 2) {
+					rigidBody.AddForce(transform.up * cruiseSpeed);
+				} else if (roll > 1) {
+					isRotating = true;
+					//start smooth rotation around Z for some amount
+				} else {
+					//do nothing
+				}
+				return;
 			}
-			return;
-		}
 
-		//have to turn to player
-		// bool playerInRay = Physics2D.Raycast(tranform.position, {direction is quaternion Z rotation imagined as Vector3})
-		var rayHit = Physics2D.Raycast(transform.position, Vector2.up);
-		bool playerInRay = rayHit.collider.CompareTag("Ship");
-		if (!playerInRay) {
-			//player not in ray, have to turn to face player
-			transform.rotation = Quaternion.Slerp(transform.rotation,
-			 Quaternion.Euler(new Vector3(0, 0, Vector3.Angle(transform.position, playerTransform.position))),
-			 Time.deltaTime
-			);
-		}
+			
+			if (!playerInRay) {
+				//player not in ray, have to turn to face player
+				isRotating = true;
+				Debug.DrawLine(transform.up, playerTransform.position, Color.green);
+				//relative position vector between target and current position
+				var offset = playerTransform.position - transform.position;
+				//Atan2 returns the angle in radians whose Tan is y/x. 
+				//return value is the angle between the x-axis and a 2D vector starting at zero and terminating at (x,y).
+				var neededRot = (Mathf.Atan2(offset.y, offset.x) * Mathf.Rad2Deg) - 90;
+				nextRotation = Quaternion.Euler(0, 0, neededRot);				
+			}
 
-		//decided to chase player
-		if (currentState == STATE_CHASING) {
-			if (playerInRay) {
-				//player was noticed, chase after them
-				if (rigidBody.velocity.magnitude < chaseSpeed && playerDistance > playerAttackDistance) {
-					rigidBody.AddForce(Vector2.up * Time.deltaTime * chaseSpeed);
+			//decided to chase player
+			if (currentState == STATE_CHASING) {
+				if (playerInRay) {
+					Debug.Log("Player in Ray! chase them!");
+					//player was noticed, chase after them
+					if (rigidBody.velocity.magnitude < chaseSpeed && playerDistance > playerAttackDistance) {
+						rigidBody.AddForce(transform.up * chaseSpeed);
+					}
 				}
 			}
-		}
 
-		if (currentState == STATE_ATTACKING) {
-			if (playerInRay) {
-				TryShoot();
+			if (currentState == STATE_ATTACKING) {
+				if (playerInRay) {
+					Debug.Log("Player in attack ray! Bang bang!");
+					TryShoot();
+				}
+			}
+
+			if (currentState == STATE_ATTACKING_SPECIAL) {
+				Debug.Log("Time for the shotgun deluxe!");
+				TryShootSpecial();
 			}
 		}
-
-		if (currentState == STATE_ATTACKING_SPECIAL) {
-			TryShootSpecial();
+		//always check new forward and continue random rotation
+		prevFwd = currFwd;
+		if (isRotating) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, 
+			nextRotation, 
+			Time.deltaTime * 8);
 		}
 	}
 
