@@ -182,14 +182,9 @@ public class ShipShootingController : MonoBehaviour {
 	void PerformShot (float recharge) {
 		if (Time.time > recharge + lastShot) {
             if (bulletsAmmo > 0) {
-                Vector3 position = new Vector3 (
-            //position is set by rotating nozzle of aircraft
-			//+90 becuase nozzle 90 degrees misplaced from rotation origin
-                                       transform.position.x + (shipImage.bounds.extents.x * Mathf.Cos (Mathf.Deg2Rad * (transform.rotation.eulerAngles.z + 90)))
-				, transform.position.y + (shipImage.bounds.extents.y * Mathf.Sin (Mathf.Deg2Rad * (transform.rotation.eulerAngles.z + 90)))
-				, transform.position.z
-                                   );
-                Instantiate (inFrenzy ? frenzyBulletPrefab : bulletPrefab, position, Quaternion.identity);
+				var position = transform.up + transform.localPosition;
+                var bullet = Instantiate (inFrenzy ? frenzyBulletPrefab : bulletPrefab, position, Quaternion.identity) as GameObject;
+				bullet.GetComponent<BulletController>().setShooter(gameObject);
                 bulletsAmmo--;
                 bulletCornerCount.text = "X " + bulletsAmmo;
                 shotClip.Play ();

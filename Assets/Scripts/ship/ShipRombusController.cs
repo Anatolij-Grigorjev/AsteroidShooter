@@ -12,21 +12,27 @@ public class ShipRombusController : MonoBehaviour {
 	private bool isExploding;
 	private Vector3 position;
 
-	private Transform ship;
-	private float shipRotation;
+	[HideInInspector]
+	public GameObject shooter;
 
+	private string shooterTag;
+	private float shooterRotation;
 
-
-	void Start () {
+	void Awake () {
 		isExploding = false;
-		ship = GameObject.FindGameObjectWithTag ("Ship").transform;
-		transform.rotation = Quaternion.Euler(new Vector3(ship.rotation.eulerAngles.x, ship.rotation.eulerAngles.y, ship.rotation.eulerAngles.z + 90));
-		shipRotation = ship.rotation.eulerAngles.z + 90; //nose leads by 90
 		position = gameObject.transform.position;
-
 		particles = Instantiate (particlesPrefab, transform.position, transform.rotation) as GameObject;
-
 		StartCoroutine (Explode());
+	}
+
+	public void setShooter(GameObject shooter) {
+		this.shooter = shooter;
+		shooterTag = shooter.tag;
+		var shooterTransform = this.shooter.transform;
+		var shooterRotationEuler = shooterTransform.rotation.eulerAngles;
+		shooterRotationEuler.z += 90;
+		transform.rotation = Quaternion.Euler(shooterRotationEuler);
+		shooterRotation = shooterRotationEuler.z; //nose leads by 90
 	}
 	
 	// Update is called once per frame
@@ -34,8 +40,8 @@ public class ShipRombusController : MonoBehaviour {
 		if (!isExploding) {
 			transform.position = position;
             float delta = rombusVelocity * Time.deltaTime;
-			position.x += (delta * Mathf.Cos(Mathf.Deg2Rad * shipRotation));
-			position.y += (delta * Mathf.Sin(Mathf.Deg2Rad * shipRotation));
+			position.x += (delta * Mathf.Cos(Mathf.Deg2Rad * shooterRotation));
+			position.y += (delta * Mathf.Sin(Mathf.Deg2Rad * shooterRotation));
 
             particles.gameObject.transform.position = transform.position;
 		} else {
@@ -47,7 +53,8 @@ public class ShipRombusController : MonoBehaviour {
 		isExploding = true;
 
 		//spawn EXPLOSION
-		Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+		var boom = Instantiate(explosionPrefab, transform.position, Quaternion.identity) as GameObject;
+		boom.GetComponent<ShipRombusBoomController>().ShooterTag = shooterTag;
 		Destroy (particles, 1.0f);
 		Destroy (gameObject);
 	}

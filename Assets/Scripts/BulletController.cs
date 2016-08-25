@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class BulletController : MonoBehaviour {
 
@@ -9,23 +8,32 @@ public class BulletController : MonoBehaviour {
 
 	private Vector3 position;
 
-	private Transform ship;
-	private float shipRotation;
+	[HideInInspector]
+	public GameObject shooter;
+	private float shooterRotation;
 	private float creationTime;
 	private SpriteRenderer sprite;
 	public Sprite fadeOut;
 	public Sprite hitObject;
 	private bool collided;
+	private string shooterTag;
 
 	// Use this for initialization
-	void Start () {
-		ship = GameObject.FindGameObjectWithTag ("Ship").transform;
-		transform.rotation = Quaternion.Euler(new Vector3(ship.rotation.eulerAngles.x, ship.rotation.eulerAngles.y, ship.rotation.eulerAngles.z + 90));
-		shipRotation = ship.rotation.eulerAngles.z + 90; //nose leads by 90
+	void Awake () {
 		position = gameObject.transform.position;
 		creationTime = Time.time;
 		sprite = GetComponent<SpriteRenderer> ();
 		collided = false;
+	}
+
+	public void setShooter(GameObject shooter) {
+		this.shooter = shooter;
+		shooterTag = shooter.tag;
+		var shooterTransform = this.shooter.transform;
+		var shooterRotationEuler = shooterTransform.rotation.eulerAngles;
+		shooterRotationEuler.z += 90;
+		transform.rotation = Quaternion.Euler(shooterRotationEuler);
+		shooterRotation = shooterRotationEuler.z; //nose leads by 90
 	}
 	
 	// Update is called once per frame
@@ -35,8 +43,8 @@ public class BulletController : MonoBehaviour {
 //			Debug.Log ("Creating bullet position: " + position);
 				transform.position = position;
 				float delta = bulletSpeed;
-				position.x += (delta * Mathf.Cos (Mathf.Deg2Rad * shipRotation));
-				position.y += (delta * Mathf.Sin (Mathf.Deg2Rad * shipRotation));
+				position.x += (delta * Mathf.Cos (Mathf.Deg2Rad * shooterRotation));
+				position.y += (delta * Mathf.Sin (Mathf.Deg2Rad * shooterRotation));
 			} else {
 				Dissaper (fadeOut);
 			}
@@ -55,14 +63,20 @@ public class BulletController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
-		if (other.gameObject.tag == "Asteroid") {
-			//got us a ROID! do some damage and dissapear
+		if (!other.gameObject.CompareTag(shooterTag)) {
+			//got us a foreign entity! do some damage and dissapear
 			collided = true;
-			var lifeController = other.gameObject.GetComponent<AsteroidHealth>();
-			lifeController.TakeDamage (gameObject.transform, bulletDamage);
-			if (lifeController.health <= 0) {
-				lifeController.LetDie ();
-
+			switch (other.gameObject.tag) {
+				//ROID has life controller
+				case "Asteroid":
+					var lifeController = other.gameObject.GetComponent<AsteroidHealth>();
+					lifeController.TakeDamage (gameObject.transform, bulletDamage);
+					if (lifeController.health <= 0) {
+						lifeController.LetDie ();
+					}
+					break;
+				default:
+					break;
 			}
 			//damage done, bullet out!
 			Dissaper(hitObject);

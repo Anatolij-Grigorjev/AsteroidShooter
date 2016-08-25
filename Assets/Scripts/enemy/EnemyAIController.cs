@@ -32,6 +32,9 @@ public float chaseSpeed;
 public float healthStableMin;
 public Transform playerTransform;
 public GameObject engine;
+public float recharge;
+public GameObject bulletPrefab;
+public AudioSource shotClip;
 private int currentState; 
 private int prevState;
 //2 stages to the state machine here:
@@ -44,7 +47,6 @@ private float playerDistance;
 private bool playerAttacking;
 private float playerHealth;
 private bool specialReady;
-private ShootingController shooting;
 private ShotgunController shotgun;
 private Rigidbody2D rigidBody;
 private Collider2D collider;
@@ -57,11 +59,12 @@ private bool isRotating;
 private int playerLayersMask;
 private SpriteRenderer engineSprite;
 private Animator engineAnimator;
+private float lastShot;
+
 public void Awake() {
 
 	rigidBody = GetComponent<Rigidbody2D>();
 	collider = GetComponent<Collider2D>();
-	shooting = GetComponent<ShootingController>();
 	stateMachineStage = 1;
 
 	prevState = STATE_IDLE;
@@ -76,6 +79,9 @@ public void Awake() {
 	engineSprite = engine.GetComponent<SpriteRenderer>();
 	engineAnimator = engine.GetComponent<Animator>();
 	engineAnimator.SetTrigger("isEngaged");
+
+	lastShot = Time.time;
+
 }
 
 	public void Update() {
@@ -229,8 +235,16 @@ public void Awake() {
 	}
 
 	private void TryShoot() {
-		//internally handles recharge timers n shit, visible trigger to it all
-		shooting.Shoot();
+		//bugger seems to really shoot up the place
+		if (Random.value > 0.9f) {
+			if (Time.time > recharge + lastShot) {
+				var position = ((transform.up * transform.localScale.magnitude) + transform.localPosition);
+				var bullet = Instantiate (bulletPrefab, position, Quaternion.identity) as GameObject;
+				bullet.GetComponent<BulletController>().setShooter(gameObject);
+				shotClip.Play ();
+				lastShot = Time.time;
+			}
+		}
 	}
 
 	private void TryShootSpecial() {

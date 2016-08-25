@@ -6,8 +6,9 @@ public class ShipRombusBoomController : MonoBehaviour {
 	public AnimationClip boomClip;
 	private AudioSource boomSound;
 	public float explosionDamage = 90.0f;
-	// Use this for initialization
-	void Start () {
+	[HideInInspector]
+	public string ShooterTag;
+	void Awake () {
 		boomSound = GetComponent<AudioSource> ();
 		StartCoroutine_Auto (LetDie ());
 	}
@@ -29,13 +30,19 @@ public class ShipRombusBoomController : MonoBehaviour {
 
 		var go = other.gameObject;
 
-		if (go.CompareTag ("Asteroid")) {
+		if (!go.CompareTag (ShooterTag)) {
 			//tis the enemy, apply damage n stuff
-			var enemyHealth = go.GetComponent<AsteroidHealth>();
-			if (enemyHealth.health > explosionDamage) {
-				enemyHealth.TakeDamage (gameObject.transform, explosionDamage);
-			} else {
-				enemyHealth.LetDie ();
+			switch (go.tag) {
+				case "Asteroid":
+					var enemyHealth = go.GetComponent<AsteroidHealth>();
+					if (enemyHealth.health > explosionDamage) {
+						enemyHealth.TakeDamage (gameObject.transform, explosionDamage);
+					} else {
+						enemyHealth.LetDie ();
+					}
+					break;
+				default:
+					break;
 			}
 		}
 		
