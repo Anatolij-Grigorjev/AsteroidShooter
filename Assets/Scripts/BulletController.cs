@@ -66,13 +66,30 @@ public class BulletController : MonoBehaviour {
 		if (!other.gameObject.CompareTag(shooterTag)) {
 			//got us a foreign entity! do some damage and dissapear
 			collided = true;
+			
 			switch (other.gameObject.tag) {
 				//ROID has life controller
 				case "Asteroid":
-					var lifeController = other.gameObject.GetComponent<AsteroidHealth>();
-					lifeController.TakeDamage (gameObject.transform, bulletDamage);
-					if (lifeController.health <= 0) {
-						lifeController.LetDie ();
+					var asteroidLifeController = other.gameObject.GetComponent<AsteroidHealth>();
+					asteroidLifeController.TakeDamage (gameObject.transform, bulletDamage);
+					if (asteroidLifeController.health <= 0) {
+						asteroidLifeController.LetDie ();
+					}
+					break;
+				case "Ship" : 
+					var shipLifeController = other.gameObject.GetComponent<ShipHealthController>();
+					if (shipLifeController.health > 0.0f) {
+						shipLifeController.TakeBulletDamage(bulletDamage);
+					} else {
+						shipLifeController.PerformShipDeath();
+					}
+					break;
+				case "Police" :
+					var policeLifeController = other.gameObject.GetComponent<EnemyAIController>();
+					if (policeLifeController.health > 0.0f) {
+						policeLifeController.TakeBulletDamage(bulletDamage);
+					} else {
+						policeLifeController.PerformShipDeath();
 					}
 					break;
 				default:

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class EnemyAIController : MonoBehaviour {
 
@@ -23,7 +24,9 @@ public float playerChaseDistance;
 public float playerAttackDistance;
 public float playerSpecialDistance;
 public float allowedPlayerHealth;
-public float health;
+public float maxHealth;					//max enemy health
+public float health;					//actual enemy health
+public float piercingArmorCoef;				//bullet armor
 //patroll speed while idle
 public float cruiseSpeed;
 //speed used while chasing
@@ -35,6 +38,8 @@ public GameObject engine;
 public float recharge;
 public GameObject bulletPrefab;
 public AudioSource shotClip;
+public GameObject explosionPrefab;  		//death explosions
+public GameObject lastExplosionPrefab;		//death explosions
 private int currentState; 
 private int prevState;
 //2 stages to the state machine here:
@@ -60,11 +65,13 @@ private int playerLayersMask;
 private SpriteRenderer engineSprite;
 private Animator engineAnimator;
 private float lastShot;
-
+private float dampenedHitCoef; 			//how badly is the bullet damage dampened from the hit
+private bool isDead;					//if dead then wont fight
 public void Awake() {
 
 	rigidBody = GetComponent<Rigidbody2D>();
 	collider = GetComponent<Collider2D>();
+	shotgun = GetComponent<ShotgunController>();
 	stateMachineStage = 1;
 
 	prevState = STATE_IDLE;
@@ -81,10 +88,16 @@ public void Awake() {
 	engineAnimator.SetTrigger("isEngaged");
 
 	lastShot = Time.time;
+	dampenedHitCoef = 1 - piercingArmorCoef;
+
+	isDead = false;
 
 }
 
 	public void Update() {
+		if (isDead) {
+			return;
+		}
 
 		//a state machine is a system that can use the knowledge of its external
 		//inputs and previous state to formulate its next state
@@ -160,6 +173,7 @@ public void Awake() {
 		Debug.DrawRay(transform.position, currFwd * playerChaseDistance, Color.cyan, 1.0f);
 		bool playerInRay = rayHit.collider != null? rayHit.collider.CompareTag("Ship") : false;
 		Debug.Log("Got player in ray: " + playerInRay);
+		Debug.Log("Hit: " + rayHit.collider);
 
 		//bit of rotation is ok, try actions
 		isRotating = (currFwd - prevFwd).magnitude > 0.5f;
@@ -251,4 +265,58 @@ public void Awake() {
 		//internally handles recharge n stuff, this is the visible trigger
 		shotgun.ShootSpecial();
 	}
+
+	public void TakeBulletDamage(float rawDamage) {
+        // Reduce the player's health by amount.
+		health -= (rawDamage * dampenedHitCoef);
+
+		health = Mathf.Clamp (health, 0, maxHealth);
+
+		// Update what the health bar looks like.
+		// UpdateHealthBar();
+    }
+
+	public void PerformShipDeath() {
+		isDead = true;
+        Debug.Log("Aww, he dead.");
+
+        StartCoroutine(PreDeathShakes());
+        StartCoroutine (PreDeathExplosions());
+    }
+
+	private IEnumerator PreDeathShakes() {
+		//get proper shake effect going
+        for (int i = 0; i < 25; i++) {
+            var pos = transform.position;
+            transform.position = new Vector3 (
+                pos.x + UnityEngine.Random.Range(pos.x * -0.05f, pos.x * 0.05f),
+                pos.y + UnityEngine.Random.Range(pos.y * -0.05f, pos.y * 0.05f),
+                pos.z + UnityEngine.Random.Range(pos.z * -0.05f, pos.z * 0.05f)
+            );
+            yield return new WaitForSeconds (Time.fixedDeltaTime);
+        }
+    }
+
+    private IEnumerator PreDeathExplosions() {
+        for (int i = 0; i < 20; i++) {
+            var pos = transform.position;
+            var randomPos = new Vector3 (
+                pos.x + UnityEngine.Random.Range(pos.x * -0.1f, pos.x * 0.1f),
+                pos.y + UnityEngine.Random.Range(pos.y * -0.1f, pos.y * 0.1f),
+                pos.z + UnityEngine.Random.Range(pos.z * -0.1f, pos.z * 0.1f)
+            );
+            var xplosion = Instantiate (explosionPrefab, randomPos, Quaternion.identity) as GameObject;
+
+            xplosion.transform.localScale *= 0.25f;
+
+
+            yield return new WaitForSeconds (Time.fixedDeltaTime * 2);
+        }
+      
+
+        //finish off with big last boom
+        var lastBoom = Instantiate (lastExplosionPrefab, transform.position, Quaternion.identity) as GameObject;
+		lastBoom.GetComponent<ShipRombusBoomController>().ShooterTag = gameObject.tag;
+		Destroy(gameObject, 0.5f);
+    }
 }

@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
-using System;
-using System.CodeDom.Compiler;
+
 
 public class ShipHealthController : MonoBehaviour
 {	
 	public float maxHealth = 200f;
 //    [HideInInspector]
     public float health;					// The player's current health.
+    public float piercingArmor;             //percentile dampening of bullet damage
 	public float repeatDamagePeriod = 2f;		// How frequently the player can be damaged.
     public float flickerInterval = 0.4f;        //speed of damage flickering
     private float currentFlicker;
@@ -34,7 +33,7 @@ public class ShipHealthController : MonoBehaviour
     private SpriteRenderer shipSprite;
 
     private Collider2D shipCollider;
-
+    private float dampenedHitCoef;
 	void Awake ()
 	{
         isHurt = false;
@@ -42,7 +41,7 @@ public class ShipHealthController : MonoBehaviour
         currentFlicker = flickerInterval;
 		// Setting up references.
 //		playerControl = GetComponent<PlayerControl>();
-        shipSprite = GetComponent<SpriteRenderer> ();
+        shipSprite = GetComponent<SpriteRenderer>();
         shipCollider = GetComponent<PolygonCollider2D> ();
 
 		// Getting the intial scale of the healthbar (whilst the player has full health).
@@ -50,6 +49,9 @@ public class ShipHealthController : MonoBehaviour
 		playerMass = GetComponent<Rigidbody2D> ().mass;
 		health = maxHealth;
 		scaleLength = 1 / maxHealth;
+
+        dampenedHitCoef = 1 - piercingArmor;
+
 	}
 
     void Update() {
@@ -72,7 +74,8 @@ public class ShipHealthController : MonoBehaviour
 	void OnCollisionEnter2D (Collision2D col)
 	{
 		// If the colliding gameobject is an Enemy...
-		if(col.gameObject.tag == "Asteroid" || col.gameObject.tag == "Debris")
+		if(col.gameObject.tag == "Asteroid" 
+        || col.gameObject.tag == "Debris")
 		{
             // ... and if the time exceeds the time of the last hit plus the time between hits...
             if (Time.time > lastHitTime + repeatDamagePeriod) 
@@ -89,7 +92,9 @@ public class ShipHealthController : MonoBehaviour
                 if (!isShipHurt)
                     return;
 				// ... and if the player still has health...
-                TakeDamage(col.transform); 
+               
+                    TakeDamage(col.transform); 
+                
                 if(health > 0f)
                 {
                     // ... take damage and reset the lastHitTime.
@@ -100,41 +105,45 @@ public class ShipHealthController : MonoBehaviour
 				// If the player doesn't have health, do some stuff
 				else
 				{
-                    isHurt = false;
-                    // Find all of the colliders on the gameobject and set them all to be triggers 
-                    //(not to bounce off shit)
-					Collider2D[] cols = GetComponents<Collider2D>();
-					foreach(Collider2D c in cols)
-					{
-						c.isTrigger = true;
-					}
-
-					// Move all sprite parts of the player to the front
-					SpriteRenderer[] spr = GetComponentsInChildren<SpriteRenderer>();
-					foreach(SpriteRenderer s in spr)
-					{
-						s.sortingLayerName = "UI";
-					}
-
-					// ... disable user Player Control script
-					var sc = GetComponent<ShipController>();
-                    sc.KillEngines ();
-					sc.engineSmoke.Stop ();
-					sc.enabled = false;
-					// ... disable the shooting script
-					GetComponentInChildren<ShipShootingController>().enabled = false;
-
-					// ... Trigger the 'Die' animation state
-					shipAnimator.SetTrigger("Die");
-					Debug.Log("Aww, he dead.");
-
-
-                    StartCoroutine(PreDeathShakes());
-                    StartCoroutine (PreDeathExplosions());
+                   PerformShipDeath();
 				}
 			}
 		}
 	}
+
+    public void PerformShipDeath() {
+        isHurt = false;
+        // Find all of the colliders on the gameobject and set them all to be triggers 
+        //(not to bounce off shit)
+        Collider2D[] cols = GetComponents<Collider2D>();
+        foreach(Collider2D c in cols)
+        {
+            c.isTrigger = true;
+        }
+
+        // Move all sprite parts of the player to the front
+        SpriteRenderer[] spr = GetComponentsInChildren<SpriteRenderer>();
+        foreach(SpriteRenderer s in spr)
+        {
+            s.sortingLayerName = "UI";
+        }
+
+        // ... disable user Player Control script
+        var sc = GetComponent<ShipController>();
+        sc.KillEngines ();
+        sc.engineSmoke.Stop ();
+        sc.enabled = false;
+        // ... disable the shooting script
+        GetComponentInChildren<ShipShootingController>().enabled = false;
+
+        // ... Trigger the 'Die' animation state
+        shipAnimator.SetTrigger("Die");
+        Debug.Log("Aww, he dead.");
+
+
+        StartCoroutine(PreDeathShakes());
+        StartCoroutine (PreDeathExplosions());
+    }
 
     private IEnumerator PreDeathShakes() {
         //disable camera follow for proper shake effects
@@ -170,7 +179,8 @@ public class ShipHealthController : MonoBehaviour
       
 
         //finish off with big last boom
-        Instantiate (lastExplosionPrefab, transform.position, Quaternion.identity);
+        var lastBoom = Instantiate (lastExplosionPrefab, transform.position, Quaternion.identity) as GameObject;
+        lastBoom.GetComponent<ShipRombusBoomController>().ShooterTag = gameObject.tag;
     }
 
     void FinishDeath() {
@@ -178,6 +188,15 @@ public class ShipHealthController : MonoBehaviour
         isDead = true;
     }
 
+    public void TakeBulletDamage(float rawDamage) {
+        // Reduce the player's health by amount.
+		health -= (rawDamage * dampenedHitCoef);
+
+		health = Mathf.Clamp (health, 0, maxHealth);
+
+		// Update what the health bar looks like.
+		UpdateHealthBar();
+    }
 
 	void TakeDamage (Transform enemy)
 	{
