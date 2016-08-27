@@ -189,6 +189,7 @@ public class ShipHealthController : MonoBehaviour
     }
 
     public void TakeBulletDamage(float rawDamage) {
+        Debug.Log("Taking damage: " + (rawDamage * dampenedHitCoef));
         // Reduce the player's health by amount.
 		health -= (rawDamage * dampenedHitCoef);
 
@@ -196,6 +197,10 @@ public class ShipHealthController : MonoBehaviour
 
 		// Update what the health bar looks like.
 		UpdateHealthBar();
+
+        if (health <= 0.0) {
+            PerformShipDeath();
+        }
     }
 
 	void TakeDamage (Transform enemy)
@@ -219,6 +224,9 @@ public class ShipHealthController : MonoBehaviour
 		// Update what the health bar looks like.
 		UpdateHealthBar();
 
+        if (health <= 0.0) {
+            PerformShipDeath();
+        }
 		// Play a random clip of the player getting hurt.
 //		int i = Random.Range (0, ouchClips.Length);
 //		AudioSource.PlayClipAtPoint(ouchClips[i], transform.position);

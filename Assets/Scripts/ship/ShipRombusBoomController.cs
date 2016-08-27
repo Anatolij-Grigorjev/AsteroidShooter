@@ -43,19 +43,11 @@ public class ShipRombusBoomController : MonoBehaviour {
 					break;
 				case "Ship" : 
 					var shipLifeController = go.GetComponent<ShipHealthController>();
-					if (shipLifeController.health > explosionDamage) {
-						shipLifeController.TakeBulletDamage(explosionDamage);
-					} else {
-						shipLifeController.PerformShipDeath();
-					}
+					shipLifeController.TakeBulletDamage(explosionDamage);
 					break;
 				case "Police" :
 					var policeLifeController = go.GetComponent<EnemyAIController>();
-					if (policeLifeController.health > explosionDamage) {
-						policeLifeController.TakeBulletDamage(explosionDamage);
-					} else {
-						policeLifeController.PerformShipDeath();
-					}
+					policeLifeController.TakeBulletDamage(explosionDamage);
 					break;
 				default:
 					break;

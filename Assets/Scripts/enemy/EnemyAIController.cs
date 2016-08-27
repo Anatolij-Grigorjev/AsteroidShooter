@@ -16,8 +16,10 @@ private const int STATE_ATTACKING = 2;
 private const int STATE_ATTACKING_SPECIAL = 3;
 //Defending aginst player attacks and trying to get closer
 private const int STATE_DEFENSIVE = 4;
+//Attempting player capture using the crime net
+private const int STATE_CAPTURING = 5;
 //largest continuous state number to ensure smooth random state
-private const int STATE_RND = 5;
+private const int STATE_RND = 6;
 //------------------------------------------
 
 public float playerChaseDistance;
@@ -35,7 +37,8 @@ public float chaseSpeed;
 public float healthStableMin;
 public Transform playerTransform;
 public GameObject engine;
-public float recharge;
+public float bulletRecharge;
+public float cageRecharge;
 public GameObject bulletPrefab;
 public AudioSource shotClip;
 public GameObject explosionPrefab;  		//death explosions
@@ -65,6 +68,7 @@ private int playerLayersMask;
 private SpriteRenderer engineSprite;
 private Animator engineAnimator;
 private float lastShot;
+private float lastShotCage;
 private float dampenedHitCoef; 			//how badly is the bullet damage dampened from the hit
 private bool isDead;					//if dead then wont fight
 public void Awake() {
@@ -88,6 +92,7 @@ public void Awake() {
 	engineAnimator.SetTrigger("isEngaged");
 
 	lastShot = Time.time;
+	lastShotCage = Time.time;
 	dampenedHitCoef = 1 - piercingArmorCoef;
 
 	isDead = false;
@@ -150,6 +155,14 @@ public void Awake() {
 		if (currentState == STATE_ATTACKING && specialReady) {
 			if (Random.value < 0.5f) {
 				currentState = STATE_ATTACKING_SPECIAL;
+			}
+		}
+
+		//decide to stop attacking if player health is low
+		if (currentState == STATE_ATTACKING || currentState == STATE_ATTACKING_SPECIAL) {
+			if (playerHealth < allowedPlayerHealth) {
+				Debug.Log("Time to capture the player!");
+				currentState = STATE_CAPTURING;
 			}
 		}
 
@@ -238,6 +251,11 @@ public void Awake() {
 				Debug.Log("Time for the shotgun deluxe!");
 				TryShootSpecial();
 			}
+
+			if (currentState == STATE_CAPTURING) {
+				Debug.Log("Trying capture!"); 
+				TryShootCage();
+			}
 		}
 		//always check new forward and continue random rotation
 		prevFwd = currFwd;
@@ -251,7 +269,7 @@ public void Awake() {
 	private void TryShoot() {
 		//bugger seems to really shoot up the place
 		if (Random.value > 0.9f) {
-			if (Time.time > recharge + lastShot) {
+			if (Time.time > bulletRecharge + lastShot) {
 				var position = ((transform.up * transform.localScale.magnitude) + transform.localPosition);
 				var bullet = Instantiate (bulletPrefab, position, Quaternion.identity) as GameObject;
 				bullet.GetComponent<BulletController>().setShooter(gameObject);
@@ -266,12 +284,23 @@ public void Awake() {
 		shotgun.ShootSpecial();
 	}
 
+	private void TryShootCage() {
+		if (Time.time > cageRecharge + lastShotCage) {
+			//TODO: create the trap cage
+			lastShotCage = Time.time;
+		}
+	}
+
 	public void TakeBulletDamage(float rawDamage) {
         // Reduce the player's health by amount.
 		health -= (rawDamage * dampenedHitCoef);
 
 		health = Mathf.Clamp (health, 0, maxHealth);
 
+
+		if (health <= 0.0f) {
+			PerformShipDeath();
+		}
 		// Update what the health bar looks like.
 		// UpdateHealthBar();
     }

@@ -78,19 +78,11 @@ public class BulletController : MonoBehaviour {
 					break;
 				case "Ship" : 
 					var shipLifeController = other.gameObject.GetComponent<ShipHealthController>();
-					if (shipLifeController.health > 0.0f) {
-						shipLifeController.TakeBulletDamage(bulletDamage);
-					} else {
-						shipLifeController.PerformShipDeath();
-					}
+					shipLifeController.TakeBulletDamage(bulletDamage);
 					break;
 				case "Police" :
 					var policeLifeController = other.gameObject.GetComponent<EnemyAIController>();
-					if (policeLifeController.health > 0.0f) {
-						policeLifeController.TakeBulletDamage(bulletDamage);
-					} else {
-						policeLifeController.PerformShipDeath();
-					}
+					policeLifeController.TakeBulletDamage(bulletDamage);
 					break;
 				default:
 					break;
