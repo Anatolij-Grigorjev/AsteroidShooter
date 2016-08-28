@@ -93,13 +93,6 @@ public class DialogueFlowController : MonoBehaviour {
         yield return 0;
     }
 
-    void EnableShipScripts() {
-        var ship = GameController.Instance.PlayerShip;
-        ship.GetComponent<ShipController>().enabled = true;
-        ship.GetComponent<ShipShootingController>().enabled = true;
-        Camera.main.GetComponent<CameraController>().enabled = true;
-    }
-
 	
 	// Update is called once per frame
 	void Update () {
