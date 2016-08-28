@@ -40,9 +40,11 @@ public GameObject engine;
 public float bulletRecharge;
 public float cageRecharge;
 public GameObject bulletPrefab;
+public GameObject cagePrefab;
 public AudioSource shotClip;
 public GameObject explosionPrefab;  		//death explosions
 public GameObject lastExplosionPrefab;		//death explosions
+private CageBulletController currentCageController;			//check if cage did its job
 private int currentState; 
 private int prevState;
 //2 stages to the state machine here:
@@ -166,6 +168,10 @@ public void Awake() {
 			}
 		}
 
+		if (currentCageController != null && currentCageController.caughtPrey) {
+			currentState = STATE_IDLE;
+		}
+
 		//panic, act haphazardly (random state regardless of context)
 		if (health < healthStableMin) {
 			if (Random.value < 0.5f) {
@@ -285,8 +291,18 @@ public void Awake() {
 	}
 
 	private void TryShootCage() {
+		if (currentCageController != null) {
+			if (currentCageController.caughtPrey) {
+				return;
+			}
+		}
 		if (Time.time > cageRecharge + lastShotCage) {
 			//TODO: create the trap cage
+			var position = ((transform.up * transform.localScale.magnitude) + transform.localPosition);
+			var cageGO = Instantiate(cagePrefab, position, Quaternion.identity) as GameObject;
+			currentCageController = cageGO.GetComponent<CageBulletController>();
+			currentCageController.Target = playerTransform.gameObject;
+			shotClip.Play();
 			lastShotCage = Time.time;
 		}
 	}

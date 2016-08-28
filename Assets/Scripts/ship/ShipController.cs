@@ -211,5 +211,11 @@ public class ShipController : MonoBehaviour {
         foreach (ShipEngineController sec in new ShipEngineController[] {engineBack, engineLeft, engineRight}) {
             sec.ProcessThrust (0);
         }
+        if (isTurboMode) {
+            isTurboMode = false;
+            shipThrustingAnimator.SetTrigger("Thruster");
+        }
+        shipBody.angularDrag = 15.0f;
+        shipBody.drag = 15.0f;
     }
 }
