@@ -103,11 +103,7 @@ public class ShipController : MonoBehaviour {
             engineLeft.ProcessThrust (0.5f);
             engineRight.ProcessThrust (0.5f);
             engineBack.ProcessThrust (0.0f);
-            if (engineSmoke.isPlaying) {
-                engineSmoke.Stop ();
-                var em = engineSmoke.emission;
-                em.enabled = false;
-            }
+            
             if (!shipBreakingAnimator.enabled && shipBody.velocity.magnitude > minSideburnsVelocity) {
                 shipBreakingAnimator.enabled = true;
                 shipBreakingGraphics.enabled = true;
@@ -130,6 +126,14 @@ public class ShipController : MonoBehaviour {
             Time.deltaTime * (shipIsThrusting? (activeRotationSpeed * activeMultiplier): (rotationSpeed * activeMultiplier)));
 
 	}
+
+    void StopEngineSmoke() {
+        if (engineSmoke.isPlaying) {
+            engineSmoke.Stop ();
+            var em = engineSmoke.emission;
+            em.enabled = false;
+        }
+    }
 
     void ProcessTurbo (bool pressedTurbo) {
         //only process stuff if animation is in a calm state
@@ -215,6 +219,7 @@ public class ShipController : MonoBehaviour {
             isTurboMode = false;
             shipThrustingAnimator.SetTrigger("Thruster");
         }
+        StopEngineSmoke();
         shipBody.angularDrag = 15.0f;
         shipBody.drag = 15.0f;
     }

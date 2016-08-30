@@ -29,8 +29,8 @@ public class DialogueFlowController : MonoBehaviour {
     private int currentSymbol = 0;
     //is current line fully written
     private bool lineDone = false;
-
-    private bool dialogueOver = false;
+    [HideInInspector]
+    public bool dialogueOver = false;
 
     //typing delay between symbols, in seconds
     public double typeDelay = 0.1;
@@ -41,21 +41,23 @@ public class DialogueFlowController : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
+        ResetForScript(String.IsNullOrEmpty(scriptName)? GameController.Instance.NextScript : scriptName);
+	}
+
+    public void ResetForScript(String scriptName) {
+        this.scriptName = scriptName;
         scriptLoaded = false;
         lines = new List<DialogueLine> ();
         lineText.text = "";
         avatarName.text = "";
         delayRecharge = typeDelay;
-        if (String.IsNullOrEmpty(scriptName)) {
-            scriptName = GameController.Instance.NextScript;
-        }
         lineAnimations = GameController.Instance.produceAnimationsForScript (scriptName);
-        StartCoroutine(
-            ReadScript (scriptName)
-//            ;
-        );
-
-	}
+        StartCoroutine(ReadScript (scriptName));
+        lineDone = false;
+        dialogueOver = false;
+        currentLine = 0;
+        currentSymbol = 0;
+    }
 
     IEnumerator ReadScript (string scriptName) {
         string line;
@@ -134,10 +136,7 @@ public class DialogueFlowController : MonoBehaviour {
                         lineText.text = "";
                     }
                 } else {
-                    var animator = GetComponent<Animator>();
-                    if (animator != null) {
-                        animator.SetTrigger("FadeOut");
-                    }
+                    
                     if (shipAnimatinoController != null) {
                         if (!shipAnimatinoController.GetBool ("dialogueOver")) {
                             shipAnimatinoController.SetBool ("dialogueOver", true);
