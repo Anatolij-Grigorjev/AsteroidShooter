@@ -1,0 +1,7 @@
+0
+police;POLICE MAN;Sir, please do not make the situation any more difficult than it has to be.
+father;SIR;Let me go! My daughter... Patty doesnt deserve to suffer over your pointless asteroid protection laws!
+police;POLICE MAN;Sir, lets fly you over to the nearest civilian registration offices and sort this out.
+father;SIR;Come quitely?! With you?!..
+police;POLICE MAN;Yes, sir. Please stop resisting and I might just forget the multiple counts of assault on an officer in the line of duty I have just endured.
+father;SIR;Well, I certainly didn't want any trouble...

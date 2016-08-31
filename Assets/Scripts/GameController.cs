@@ -32,6 +32,16 @@ public class GameController : Singleton<GameController> {
         }
     }
 
+    public GameObject SceneManager {
+        get {
+            if (currentSceneManager == null) {
+                currentSceneManager = GameObject.FindGameObjectWithTag("SceneManager");
+            }
+
+            return currentSceneManager;
+        }
+    }
+
 
     public Sprite GetAvatar(String key) {
         var sprite = avatarsMap [key];
@@ -114,8 +124,7 @@ public class GameController : Singleton<GameController> {
     private List<String> scriptsPaths = new List<String>() {
         "intro_scene",
         "post_level_1",
-        "post_level_2",
-        "dogfight_intro"
+        "post_level_2"
     };
     private List<String> levelNames = new List<string>() {
         "Level1",
@@ -133,6 +142,7 @@ public class GameController : Singleton<GameController> {
     private int currentSceneIndex = 0;
     private int currentLevelIndex = 0;
     private GameObject playerShip;
+    private GameObject currentSceneManager;
     private QuipController shipQuipper;
 
     [HideInInspector]

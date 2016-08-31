@@ -56,6 +56,19 @@ public class CageBulletController : MonoBehaviour {
 		}
 	}
 
+	public void AlertPlayerCatch(float seconds) {
+		StartCoroutine(WaitAndAlert(seconds));
+	}
+
+	private IEnumerator WaitAndAlert(float seconds) {
+		yield return new WaitForSeconds(seconds);
+		var sceneManager = GameController.Instance.SceneManager; 
+		if (sceneManager != null) {
+			var sceneController = sceneManager.GetComponent<DogfightSceneController>();
+			sceneController.SetScriptIndex(DogfightSceneController.POLICE_WIN_SCRIPT_INDEX);
+		}
+	}
+
 	private IEnumerator FadeAway() {
 		yield return new WaitForSeconds(cageTTL);
 		if (!caughtPrey) {
