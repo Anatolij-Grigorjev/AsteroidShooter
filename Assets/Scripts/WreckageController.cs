@@ -28,8 +28,9 @@ public class WreckageController : MonoBehaviour {
     }
 
     IEnumerator GoNextPhase () {
+        Debug.Log("About to load scene at index: " + GameController.Instance.SceneIndex);
         yield return new WaitForSeconds (0.2f);
         LoadingScreen.SetActive (true);
-        SceneManager.LoadScene (GameSceneIndexes.GAME_SCENE);
+        SceneManager.LoadScene (GameController.Instance.SceneIndex);
     }
 }

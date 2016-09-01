@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine.UI;
+using AssemblyCSharp;
 
 public class DialogueFlowController : MonoBehaviour {
 
@@ -70,7 +71,7 @@ public class DialogueFlowController : MonoBehaviour {
             GameController.Instance.nextSceneIndex = int.Parse(indexLine);
         } catch (Exception e) {
             Debug.LogError(e);
-            GameController.Instance.nextSceneIndex = 0;
+            GameController.Instance.nextSceneIndex = GameSceneIndexes.MENU_INTRO_SCENE;
         }
 
         for (int i = 1; i < textLines.Length; i++) {

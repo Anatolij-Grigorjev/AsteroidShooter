@@ -273,15 +273,12 @@ public void Awake() {
 	}
 
 	private void TryShoot() {
-		//bugger seems to really shoot up the place
-		if (Random.value > 0.9f) {
-			if (Time.time > bulletRecharge + lastShot) {
-				var position = ((transform.up * transform.localScale.magnitude) + transform.localPosition);
-				var bullet = Instantiate (bulletPrefab, position, Quaternion.identity) as GameObject;
-				bullet.GetComponent<BulletController>().setShooter(gameObject);
-				shotClip.Play ();
-				lastShot = Time.time;
-			}
+		if (Time.time > bulletRecharge + lastShot) {
+			var position = ((transform.up * transform.localScale.magnitude) + transform.localPosition);
+			var bullet = Instantiate (bulletPrefab, position, Quaternion.identity) as GameObject;
+			bullet.GetComponent<BulletController>().setShooter(gameObject);
+			shotClip.Play ();
+			lastShot = Time.time;
 		}
 	}
 

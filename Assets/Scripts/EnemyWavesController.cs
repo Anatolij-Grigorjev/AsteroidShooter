@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using AssemblyCSharp;
 
 public class EnemyWavesController : MonoBehaviour {
 
@@ -16,6 +17,7 @@ public class EnemyWavesController : MonoBehaviour {
     private int waveIndex;
 
 	void Awake () {
+        GameController.Instance.SceneIndex = GameSceneIndexes.GAME_SCENE;
         finalWave = false;
         waveIndex = 0;
         StartWaves ();

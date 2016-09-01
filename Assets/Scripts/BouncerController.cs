@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using SimpleJSON;
+using AssemblyCSharp;
 
 public class BouncerController : MonoBehaviour {
 
@@ -18,6 +19,7 @@ public class BouncerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
+		
 		backgroundBounds = GetComponent<SpriteRenderer> ();
 		teleportSound = GetComponentInChildren<AudioSource> ();
 		//how far into the stage is the object bounced (offset from borders not to catch an infinite teleport loop)

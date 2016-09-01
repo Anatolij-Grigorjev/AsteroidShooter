@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Collections;
+using AssemblyCSharp;
 
 public class DogfightSceneController : MonoBehaviour {
 
@@ -21,6 +22,7 @@ public class DogfightSceneController : MonoBehaviour {
 	void Awake () {
 		//begin by disabling everything
 		ToggleSceneActors(false);
+		GameController.Instance.SceneIndex = GameSceneIndexes.DOGFIGHT_SCENE;
 		currentScriptIndex = INTRO_SCRIPT_INDEX;
 		dialogueFlowController = GetComponent<DialogueFlowController>();
 		dialogueFlowController.ResetForScript(sceneScriptNames[currentScriptIndex]);

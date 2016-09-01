@@ -2,13 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using AssemblyCSharp;
 using SimpleJSON;
 
 public class GameController : Singleton<GameController> {
 
 	protected GameController() {}
-
-    [HideInInspector]
     public GameObject PlayerShip {
         get {
             if (playerShip == null) {
@@ -17,7 +16,6 @@ public class GameController : Singleton<GameController> {
             return playerShip;
         }
     }
-    [HideInInspector]
     public QuipController ShipQuipper {
         get {
             if (shipQuipper == null) {
@@ -31,7 +29,14 @@ public class GameController : Singleton<GameController> {
             return shipQuipper;
         }
     }
-
+    public int SceneIndex {
+        get {
+            return currentSceneIndex;
+        }
+        set {
+            currentSceneIndex = value;
+        }
+    }
     public GameObject SceneManager {
         get {
             if (currentSceneManager == null) {
@@ -55,10 +60,10 @@ public class GameController : Singleton<GameController> {
 
     public string NextScript {
         get {
-            var result = scriptsPaths [currentSceneIndex];
-            currentSceneIndex++;
-            if (currentSceneIndex >= scriptsPaths.Count) {
-                currentSceneIndex = 0;
+            var result = scriptsPaths [currentDialogueScriptIndex];
+            currentDialogueScriptIndex++;
+            if (currentDialogueScriptIndex >= scriptsPaths.Count) {
+                currentDialogueScriptIndex = 0;
             }
 
             return result;
@@ -130,7 +135,6 @@ public class GameController : Singleton<GameController> {
         "Level1",
         "Level2"
     };
-    [HideInInspector]
     public List<String> avatarNames = new List<string>() {
         "daughter",
         "father",
@@ -139,8 +143,9 @@ public class GameController : Singleton<GameController> {
 
    
     private Dictionary<String, Sprite> avatarsMap;
-    private int currentSceneIndex = 0;
+    private int currentDialogueScriptIndex = 0;
     private int currentLevelIndex = 0;
+    private int currentSceneIndex = GameSceneIndexes.MENU_INTRO_SCENE;
     private GameObject playerShip;
     private GameObject currentSceneManager;
     private QuipController shipQuipper;
