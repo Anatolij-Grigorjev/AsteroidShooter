@@ -156,6 +156,8 @@ public class GameController : Singleton<GameController> {
     public int nextSceneIndex;
     [HideInInspector]
     public List<JSONNode> currentLevelWaves;
+
+    public string gameFinishScript; //correct script file for game finsh
     private bool restartState = true;
 
 	// Use this for initialization
