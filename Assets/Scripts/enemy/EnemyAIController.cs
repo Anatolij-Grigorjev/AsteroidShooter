@@ -359,6 +359,11 @@ public void Awake() {
         //finish off with big last boom
         var lastBoom = Instantiate (lastExplosionPrefab, transform.position, Quaternion.identity) as GameObject;
 		lastBoom.GetComponent<ShipRombusBoomController>().ShooterTag = gameObject.tag;
+		var sceneManager = GameController.Instance.SceneManager; 
+		if (sceneManager != null) {
+			var sceneController = sceneManager.GetComponent<DogfightSceneController>();
+			sceneController.SetScriptIndex(DogfightSceneController.SHIP_WIN_SCRIPT_INDEX);
+		}
 		Destroy(gameObject, 0.5f);
     }
 }

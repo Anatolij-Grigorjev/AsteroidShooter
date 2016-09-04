@@ -9,6 +9,7 @@ namespace AssemblyCSharp {
         public const int GAME_OVER_SCENE = 4;
         public const int DOGFIGHT_SCENE = 5;
         public const int CREDITS_SCENE = 6;
+        public const int GAME_FINISH_SCENE = 7;
     }
 }
 

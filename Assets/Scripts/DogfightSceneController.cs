@@ -15,10 +15,10 @@ public class DogfightSceneController : MonoBehaviour {
 	public const int INTRO_SCRIPT_INDEX = 0; //scene start script location in script names
 	public const int POLICE_WIN_SCRIPT_INDEX = 1; //script for police apprehending Turnip
 	public const int SHIP_WIN_SCRIPT_INDEX = 2; //script for Turnip slipping away from police
-	private const int POLICE_WIN_SCENE_INDEX = 0;
 	private DialogueFlowController dialogueFlowController;
 	// Use this for initialization
 	private int currentScriptIndex;
+	private bool sceneEnding; 		//indicator to start police brutality coroutine
 	void Awake () {
 		//begin by disabling everything
 		ToggleSceneActors(false);
@@ -26,6 +26,7 @@ public class DogfightSceneController : MonoBehaviour {
 		currentScriptIndex = INTRO_SCRIPT_INDEX;
 		dialogueFlowController = GetComponent<DialogueFlowController>();
 		dialogueFlowController.ResetForScript(sceneScriptNames[currentScriptIndex]);
+		sceneEnding = false;
 		loadingScreen.SetActive(false);
 		dialogueBorders.SetActive(true);
 	}
@@ -52,7 +53,7 @@ public class DogfightSceneController : MonoBehaviour {
 				}
 			}
 		}
-		if (currentScriptIndex == POLICE_WIN_SCRIPT_INDEX) {
+		if (currentScriptIndex == POLICE_WIN_SCRIPT_INDEX || currentScriptIndex == SHIP_WIN_SCRIPT_INDEX) {
 			//chatter stopped, time to wrap up the scene
 			if (dialogueFlowController.dialogueOver) {
 				//seems its time to end the scene
@@ -85,7 +86,7 @@ public class DogfightSceneController : MonoBehaviour {
 		// var nextState = dialogueAnimator.GetNextAnimatorStateInfo(0);
 		yield return new WaitForSeconds(1.0f);//nextState.length);
 		loadingScreen.SetActive(true);
-		SceneManager.LoadScene(POLICE_WIN_SCENE_INDEX);
+		SceneManager.LoadScene(GameSceneIndexes.GAME_FINISH_SCENE);
 	}
 	
 }
