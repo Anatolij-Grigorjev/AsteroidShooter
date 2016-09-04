@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using AssemblyCSharp;
 using System;
 
 public class GameFinishController : MonoBehaviour {
@@ -83,7 +85,7 @@ public class GameFinishController : MonoBehaviour {
                         finishSceneText.text = "";
                     }
                 } else {
-                    //TODO eventually move on to credits game scene
+                    SceneManager.LoadScene(GameSceneIndexes.CREDITS_SCENE);
                 }
             }
         }
