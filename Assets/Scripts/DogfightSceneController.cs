@@ -68,6 +68,17 @@ public class DogfightSceneController : MonoBehaviour {
 			dialogueFlowController.ResetForScript(sceneScriptNames[currentScriptIndex]);
 			ToggleSceneActors(false);
 
+			//set the game controller finish game script name
+
+			switch(newIndex) {
+				case POLICE_WIN_SCRIPT_INDEX:
+					GameController.Instance.gameFinishScript = "game_end_prison_script";
+					break;
+				case SHIP_WIN_SCRIPT_INDEX:
+					GameController.Instance.gameFinishScript = "game_end_ship_win_script";
+					break;
+			}
+
 			dialogueBorders.SetActive(true);
 		}
 	}

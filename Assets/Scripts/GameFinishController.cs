@@ -7,13 +7,11 @@ using AssemblyCSharp;
 using System;
 
 public class GameFinishController : MonoBehaviour {
-
-
 	public Image finishSceneImages;
 	public Text finishSceneText; 
 	public String scriptName;
     public double typeDelay = 0.1; //typing delay between symbols, in seconds
-	private List<String> lines;
+	private List<Tuple<String, Boolean>> lines; //lines some of which are picture names (true if they are)
 	private bool scriptLoaded;
     private int currentLine = 0; //index of text element currently being written to box
     private int currentSymbol = 0; //current symbol to type out in current line
@@ -24,8 +22,8 @@ public class GameFinishController : MonoBehaviour {
     private double delayRecharge;
 	// Use this for initialization
 	void Awake () {
-		// scriptName = GameController.Instance.gameFinishScript;
-		lines = new List<String>();
+		scriptName = GameController.Instance.gameFinishScript;
+		lines = new List<Tuple<String, Boolean>>();
 		scriptLoaded = false;
 		finishSceneText.text = "";
 		StartCoroutine(ReadGameFinishScript(scriptName));
@@ -35,17 +33,13 @@ public class GameFinishController : MonoBehaviour {
 		var textAsset = Resources.Load(String.Format("Text/GameEnd/{0}", scriptName), typeof(TextAsset)) as TextAsset;
         string[] textLines = textAsset.text.Split(new char[] {'\n'});
 
-		string imageName = textLines[0].Trim();
-		Debug.Log("Loading image: " + imageName);
-		var resource = Resources.Load (String.Format("Images/GameEnd/{0}", imageName), typeof(Sprite)) as Sprite;
-		Debug.Log("Sprite: " + resource);
-		finishSceneImages.sprite = resource;
-
-		for (int i = 1; i < textLines.Length; i++) {
-			lines.Add(textLines[i]);	
+		for (int i = 0; i < textLines.Length; i++) {
+			var split = textLines[i].Split(new char[] {';'});
+			var useIndex = split.Length > 1? 1 : 0;
+			lines.Add(new Tuple<String, Boolean>(split[useIndex].Trim(), useIndex < 1));	
 		}
 		scriptLoaded = true;
-
+		
 		yield return 0;
 	}
 	
@@ -58,24 +52,38 @@ public class GameFinishController : MonoBehaviour {
 
 		//some amount of line left to write
         if (!lineDone) {
-            //if user pressed advance button - finish line, prepare for next one
-            if (Input.GetButtonUp ("Main Cannon")) {
-                lineDone = true;
-				finishSceneText.text = lines[currentLine];
-            } else {
-                delayRecharge -= Time.deltaTime;
+			//dealing with image
+			if (lines[currentLine].second) {
+				//just insert image and move on
 
-                if (delayRecharge < 0) {
-                    finishSceneText.text += lines [currentLine][currentSymbol];
-                    currentSymbol++;
-                    delayRecharge = typeDelay;
-                    lineDone = currentSymbol >= lines [currentLine].Length;
-                }
-            }
+				var resource = Resources.Load (
+					String.Format("Images/GameEnd/{0}", lines[currentLine].first)
+					, typeof(Sprite)) as Sprite;
+
+				finishSceneImages.sprite = resource;
+				lineDone = true;
+				// currentLine++;
+			} else {
+				//dealing with text line
+				//if user pressed advance button - finish line, prepare for next one
+				if (Input.GetButtonUp ("Main Cannon")) {
+					lineDone = true;
+					finishSceneText.text = lines[currentLine].first;
+				} else {
+					delayRecharge -= Time.deltaTime;
+
+					if (delayRecharge < 0) {
+						finishSceneText.text += lines [currentLine].first[currentSymbol];
+						currentSymbol++;
+						delayRecharge = typeDelay;
+						lineDone = currentSymbol >= lines [currentLine].first.Length;
+					}
+				}
+			}
 
         } else {
-            //wait for user to press key and move on to next line
-            if (Input.GetButtonUp ("Main Cannon")) {
+            //wait for user to press key and move on to next line (or move on anyway if its an image)
+            if (Input.GetButtonUp ("Main Cannon") || (currentLine < lines.Count && lines[currentLine].second)) {
                 if (!textOver) {
                     currentLine++;
                     textOver = currentLine >= lines.Count;
