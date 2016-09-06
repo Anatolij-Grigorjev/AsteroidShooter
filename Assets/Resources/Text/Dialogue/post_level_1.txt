@@ -1,6 +1,6 @@
 3
 father;Father;Father's Log, entry 986...
-father;Father;Sadly, my first mineral mining hunt proved ineffective.
+father;Father;Sadly, my first mineral scavanger hunt proved ineffective.
 father;Father;It seems, that while my hopes remain high, Patty's cure lies even higher...
 father;Father;I have to keep looking! Surely I have the fuel to check out the neighbouring sector!
 father;Father;My intel tells me of rare mineral asteroid sightings in the area. No time to waist!
