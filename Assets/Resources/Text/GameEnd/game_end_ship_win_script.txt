@@ -1,10 +1,10 @@
 ship-win-end-boom
 ;Illuminated by the glow of the exploding police ship, J.Turnip decided to flee the scene and lay low.
-//POLICE RUSHING PIC
+ship-win-end-police
 ;The police were sent into a bit of an uproar trying to find the cop-killer culprit.
-//ABANDONED SHIP PIC
-;The mine demolition vessel originally operated by turnip was found abandoned in the very next sector, the last place anybody had seen the suspect.
-//WANTED POSTER?
+ship-win-end-ship-wreck
+;The mine demolition vessel originally operated by Turnip was found abandoned in the very next sector, the last place anybody had seen the suspect.
+ship-win-end-wanted
 ;Jared Turnip, aka father of Patty Wallflower was never found.
-;Some say he did finally discover that cure of his someplace far away and eventually came back for this mysterious Patty he spoke of.
+;Some say he did finally discover that cure of his, someplace far away, and eventually came back for this mysterious Patty he spoke of.
 ;Then again, some people say anything...

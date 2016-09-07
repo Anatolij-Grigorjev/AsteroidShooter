@@ -15,6 +15,8 @@ public class DogfightSceneController : MonoBehaviour {
 	public const int INTRO_SCRIPT_INDEX = 0; //scene start script location in script names
 	public const int POLICE_WIN_SCRIPT_INDEX = 1; //script for police apprehending Turnip
 	public const int SHIP_WIN_SCRIPT_INDEX = 2; //script for Turnip slipping away from police
+
+
 	private DialogueFlowController dialogueFlowController;
 	// Use this for initialization
 	private int currentScriptIndex;
@@ -36,6 +38,7 @@ public class DogfightSceneController : MonoBehaviour {
 		playerShip.GetComponent<ShipShootingController>().enabled = enable;
 		policeShip.GetComponent<EnemyAIController>().enabled = enable;
 		mainCamera.GetComponent<CameraController>().enabled = enable;
+	
 	}
 	
 	// Update is called once per frame
