@@ -13,7 +13,7 @@ public class AsteroidController : MonoBehaviour {
 
 
 	private Rigidbody2D rb2d;
-	private AudioSource deathExplosionSound;
+	// private AudioSource deathExplosionSound;
 
     //this asteroid is part of the intro sequence, so some logic doesnt apply
     public bool isIntro = false;
@@ -21,7 +21,7 @@ public class AsteroidController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rb2d = GetComponent<Rigidbody2D> ();
-		deathExplosionSound = GetComponent<AudioSource> ();
+		// deathExplosionSound = GetComponent<AudioSource> ();
 		//add some velocity in a random direction
 		bool minusX = Random.value < 0.5;
 		bool minusY = Random.value < 0.5;
@@ -42,21 +42,21 @@ public class AsteroidController : MonoBehaviour {
 	}
 
 	//die, explode and spawn ministeroids
-	public IEnumerator Die() {
+	public void Die() {
         
-		if (deathExplosionSound.isPlaying) {
-			yield return new WaitUntil (() => !deathExplosionSound.isPlaying);
-		}
+		// if (deathExplosionSound.isPlaying) {
+		// 	yield return new WaitUntil (() => !deathExplosionSound.isPlaying);
+		// }
 
 		if (!isDead) {
 			//play sound, spawn boom
-			deathExplosionSound.Play ();
+			// deathExplosionSound.Play ();
 			Instantiate (explosionPrefab, transform.position, transform.rotation);
             GetComponent<SpriteRenderer> ().enabled = false;
 			isDead = true;
 			nameText.text += " (Desceased)";
 		}
-		yield return new WaitUntil (() => !deathExplosionSound.isPlaying);
+		// yield return new WaitUntil (() => !deathExplosionSound.isPlaying);
         GameController.Instance.currentEnemies.Remove (gameObject);
 		Destroy (gameObject);
 	}

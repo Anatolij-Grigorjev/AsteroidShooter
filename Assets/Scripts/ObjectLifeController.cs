@@ -130,7 +130,7 @@ public class ObjectLifeController : MonoBehaviour {
 		foreach (SpriteRenderer s in spr) {
 			s.enabled = false;
 		}
-		StartCoroutine_Auto(parentController.Die ());
+		parentController.Die ();
 	}
 
 	public void UpdateHealthBar ()

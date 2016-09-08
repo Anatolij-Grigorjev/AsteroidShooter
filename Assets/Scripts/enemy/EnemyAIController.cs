@@ -359,10 +359,13 @@ public void Awake() {
         //finish off with big last boom
         var lastBoom = Instantiate (lastExplosionPrefab, transform.position, Quaternion.identity) as GameObject;
 		lastBoom.GetComponent<ShipRombusBoomController>().ShooterTag = gameObject.tag;
+		//with the enemy dead we cant harm the player and make them redo the stage
+		lastBoom.GetComponent<ShipRombusBoomController>().explosionDamage = 0.0f;
 		var sceneManager = GameController.Instance.SceneManager; 
 		if (sceneManager != null) {
 			var sceneController = sceneManager.GetComponent<DogfightSceneController>();
 			sceneController.SetScriptIndex(DogfightSceneController.SHIP_WIN_SCRIPT_INDEX);
+			GameController.Instance.PlayerShip.GetComponent<ShipController>().KillEngines();
 		}
 		Destroy(gameObject, 0.5f);
     }

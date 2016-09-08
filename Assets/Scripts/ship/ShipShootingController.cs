@@ -112,7 +112,8 @@ public class ShipShootingController : MonoBehaviour {
 			currRombusCount--;
 			rombusCornerCount.text = "X " + currRombusCount;
 
-			Instantiate (rombusBulletPrefab, transform.position, Quaternion.identity);
+			var rombusGO = Instantiate (rombusBulletPrefab, transform.position, Quaternion.identity) as GameObject;
+			rombusGO.GetComponent<ShipRombusController>().setShooter(gameObject);
 			rombusRecovered = false;
 		}
 	}

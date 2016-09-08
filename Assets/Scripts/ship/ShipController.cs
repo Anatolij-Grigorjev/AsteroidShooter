@@ -137,6 +137,10 @@ public class ShipController : MonoBehaviour {
 
     void ProcessTurbo (bool pressedTurbo) {
         //only process stuff if animation is in a calm state
+        var state = shipThrustingAnimator.GetCurrentAnimatorStateInfo(0);
+        if (state.IsName("EngagingThrusters") || state.IsName("HidingThrusters")) {
+            return;
+        }
         if (pressedTurbo != prevTurboPressed) {
             shipThrustingAnimator.SetTrigger ("Thruster");
         }

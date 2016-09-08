@@ -157,7 +157,7 @@ public class AsteroidHealth : MonoBehaviour {
 		foreach (SpriteRenderer s in spr) {
 			s.enabled = false;
 		}
-		StartCoroutine_Auto(mainBodyController.Die ());
+		mainBodyController.Die ();
 	}
 
     public void UpdateHealthLook ()
