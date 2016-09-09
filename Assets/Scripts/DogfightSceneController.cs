@@ -20,7 +20,6 @@ public class DogfightSceneController : MonoBehaviour {
 	private DialogueFlowController dialogueFlowController;
 	// Use this for initialization
 	private int currentScriptIndex;
-	private bool sceneEnding; 		//indicator to start police brutality coroutine
 	void Awake () {
 		//begin by disabling everything
 		ToggleSceneActors(false);
@@ -28,7 +27,7 @@ public class DogfightSceneController : MonoBehaviour {
 		currentScriptIndex = INTRO_SCRIPT_INDEX;
 		dialogueFlowController = GetComponent<DialogueFlowController>();
 		dialogueFlowController.ResetForScript(sceneScriptNames[currentScriptIndex]);
-		sceneEnding = false;
+
 		loadingScreen.SetActive(false);
 		dialogueBorders.SetActive(true);
 	}

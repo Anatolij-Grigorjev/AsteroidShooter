@@ -12,14 +12,12 @@ private const int STATE_IDLE = 0;
 private const int STATE_CHASING = 1;
 //Enemy in attack range, fuckin up player
 private const int STATE_ATTACKING = 2;
-//Enemy in special attack range, do special
-private const int STATE_ATTACKING_SPECIAL = 3;
 //Defending aginst player attacks and trying to get closer
-private const int STATE_DEFENSIVE = 4;
+private const int STATE_DEFENSIVE = 3;
 //Attempting player capture using the crime net
-private const int STATE_CAPTURING = 5;
+private const int STATE_CAPTURING = 4;
 //largest continuous state number to ensure smooth random state
-private const int STATE_RND = 6;
+private const int STATE_RND = 5;
 //------------------------------------------
 
 public float playerChaseDistance;
@@ -47,19 +45,11 @@ public GameObject lastExplosionPrefab;		//death explosions
 private CageBulletController currentCageController;			//check if cage did its job
 private int currentState; 
 private int prevState;
-//2 stages to the state machine here:
-//1. Aggressive attack to bring down health
-//2. Defensive approach to cage the player
-private int stateMachineStage;
-
 //internal state change vars
 private float playerDistance;
 private bool playerAttacking;
 private float playerHealth;
-private bool specialReady;
-private ShotgunController shotgun;
 private Rigidbody2D rigidBody;
-private Collider2D collider;
 //angle changes recorded to check if enemy still turning 
 private Vector3 currFwd;
 private Vector3 prevFwd;
@@ -76,9 +66,6 @@ private bool isDead;					//if dead then wont fight
 public void Awake() {
 
 	rigidBody = GetComponent<Rigidbody2D>();
-	collider = GetComponent<Collider2D>();
-	shotgun = GetComponent<ShotgunController>();
-	stateMachineStage = 1;
 
 	prevState = STATE_IDLE;
 	currentState = STATE_IDLE;
@@ -117,7 +104,6 @@ public void Awake() {
 		playerDistance = Vector3.Distance(transform.position, playerTransform.position);
 		playerAttacking = playerTransform.gameObject.GetComponent<ShipShootingController>().isAttacking;
 		playerHealth = playerTransform.gameObject.GetComponent<ShipHealthController>().health;
-		specialReady = GetComponent<ShotgunController>().isReady;
 		//and previous state prevState
 
 		
@@ -132,9 +118,7 @@ public void Awake() {
 	private void ResolveNewState() {
 
 		//initial distance based decisions
-		if (playerDistance < playerSpecialDistance) {
-			currentState = STATE_ATTACKING_SPECIAL;
-		} else if (playerDistance < playerAttackDistance) {
+		if (playerDistance < playerAttackDistance) {
 			currentState = STATE_ATTACKING;
 		} else if (playerDistance < playerChaseDistance) {
 			currentState = STATE_CHASING;
@@ -143,25 +127,13 @@ public void Awake() {
 		}
 
 		//correct initial decisions based on situational context
-		if (playerAttacking && playerDistance < playerChaseDistance
-			&& currentState != STATE_ATTACKING_SPECIAL) {
+		if (playerAttacking && playerDistance < playerChaseDistance) {
 			//defend if not doing special and player attacking
 			currentState = STATE_DEFENSIVE;
 		} 
-		//resort to regular attack until special ready
-		if (currentState == STATE_ATTACKING_SPECIAL && !specialReady) {
-			currentState = STATE_ATTACKING;
-		}
-
-		//randomly decide to use special sometimes
-		if (currentState == STATE_ATTACKING && specialReady) {
-			if (Random.value < 0.5f) {
-				currentState = STATE_ATTACKING_SPECIAL;
-			}
-		}
 
 		//decide to stop attacking if player health is low
-		if (currentState == STATE_ATTACKING || currentState == STATE_ATTACKING_SPECIAL) {
+		if (currentState == STATE_ATTACKING) {
 			if (playerHealth < allowedPlayerHealth) {
 				Debug.Log("Time to capture the player!");
 				currentState = STATE_CAPTURING;
@@ -253,11 +225,6 @@ public void Awake() {
 				}
 			}
 
-			if (currentState == STATE_ATTACKING_SPECIAL) {
-				Debug.Log("Time for the shotgun deluxe!");
-				TryShootSpecial();
-			}
-
 			if (currentState == STATE_CAPTURING) {
 				Debug.Log("Trying capture!"); 
 				TryShootCage();
@@ -280,11 +247,6 @@ public void Awake() {
 			shotClip.Play ();
 			lastShot = Time.time;
 		}
-	}
-
-	private void TryShootSpecial() {
-		//internally handles recharge n stuff, this is the visible trigger
-		shotgun.ShootSpecial();
 	}
 
 	private void TryShootCage() {

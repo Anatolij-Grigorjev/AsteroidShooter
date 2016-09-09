@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
 
 public class ShipController : MonoBehaviour {
@@ -138,10 +139,22 @@ public class ShipController : MonoBehaviour {
     void ProcessTurbo (bool pressedTurbo) {
         //only process stuff if animation is in a calm state
         var state = shipThrustingAnimator.GetCurrentAnimatorStateInfo(0);
+        // if (state.IsName("EngagingThrusters") || state.IsName("HidingThrusters")) {
+        //     Debug.Log("[TURBO] At " + DateTime.Now.Ticks 
+        //         + " turbo pressed=" + pressedTurbo 
+        //         + " prevTurbo=" + prevTurboPressed
+        //     );
+        // }
         if (state.IsName("EngagingThrusters") || state.IsName("HidingThrusters")) {
+            shipThrustingAnimator.ResetTrigger("Thruster"); //cancel previous animation commands
             return;
         }
         if (pressedTurbo != prevTurboPressed) {
+            shipThrustingAnimator.ResetTrigger("Thruster"); //cancel previous animation commands
+            Debug.Log("[TURBO] At " + DateTime.Now.Ticks 
+                + ": setting trigger! turbo=" + pressedTurbo
+                + " prevTurbo=" + prevTurboPressed
+            );
             shipThrustingAnimator.SetTrigger ("Thruster");
         }
         isTurboMode = pressedTurbo;
