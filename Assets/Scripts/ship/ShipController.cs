@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class ShipController : MonoBehaviour {
 
-
 	public float thrustSpeed;
     public float sideThrustSpeed;
 	public float smokeStartThreshold;
@@ -41,10 +40,12 @@ public class ShipController : MonoBehaviour {
     //currently active multiplier
     private float activeMultiplier;
 
+    private bool isMorphing = false;
+
     private float breakingDelay; //how gradually does breaking happen overtime
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		shipBody = GetComponent<Rigidbody2D> ();
 //		engineSmoke = GetComponentInChildren<ParticleSystem> ();
 		shipImage = GetComponent<SpriteRenderer> ();
@@ -65,8 +66,10 @@ public class ShipController : MonoBehaviour {
 
 //        float horizontalAxis = Input.GetAxis ("Horizontal");
         float verticalAxis = Input.GetAxis ("Vertical");
-        bool pressedTurbo = Input.GetButton ("Booster");
-        ProcessTurbo (pressedTurbo);
+        if (!isMorphing) {
+            bool pressedTurbo = Input.GetButton ("Booster");
+            ProcessTurbo (pressedTurbo);
+        }
 
         ProcessBreaking ();
         if (!isBreaking) {
@@ -128,6 +131,10 @@ public class ShipController : MonoBehaviour {
 
 	}
 
+    void SetMorphing(int morph) {
+        isMorphing = morph > 0? true : false;
+    }
+
     void StopEngineSmoke() {
         if (engineSmoke.isPlaying) {
             engineSmoke.Stop ();
@@ -145,10 +152,14 @@ public class ShipController : MonoBehaviour {
         //         + " prevTurbo=" + prevTurboPressed
         //     );
         // }
-        if (state.IsName("EngagingThrusters") || state.IsName("HidingThrusters")) {
-            shipThrustingAnimator.ResetTrigger("Thruster"); //cancel previous animation commands
+        //check if the current state is currently being played  
+        if (
+            (state.IsName("EngagingThrusters") || state.IsName("HidingThrusters")) 
+                && state.length > state.normalizedTime
+        ) {
             return;
         }
+        //TODO: solve double shift turbo animation problem before shipping
         if (pressedTurbo != prevTurboPressed) {
             shipThrustingAnimator.ResetTrigger("Thruster"); //cancel previous animation commands
             Debug.Log("[TURBO] At " + DateTime.Now.Ticks 
