@@ -9,9 +9,10 @@ public class WreckageController : MonoBehaviour {
 
     private Animator wreakAnimator;
     public GameObject LoadingScreen;
-
+    private GameOverSceneController gameOverSceneController;
 	void Awake () {
         wreakAnimator = GetComponent<Animator> ();
+        gameOverSceneController = GameController.Instance.SceneManager.GetComponent<GameOverSceneController>();
 	}
 	
 	// Update is called once per frame
@@ -25,6 +26,24 @@ public class WreckageController : MonoBehaviour {
 
     public void SetupRestartLevel() {
         GameController.Instance.Restart = true;
+    }
+
+    public void ToggleAudioSource(int source) {
+        
+        switch(source) {
+            case 0:
+                gameOverSceneController.shipAssembleSound.enabled = !gameOverSceneController.shipAssembleSound.enabled;
+                break;
+            case 1:
+                gameOverSceneController.shipEngineStartSound.enabled = !gameOverSceneController.shipEngineStartSound.enabled;
+                break;
+            case 2:
+                gameOverSceneController.shipEngineGoSound.enabled = !gameOverSceneController.shipEngineGoSound.enabled;
+                break;
+            default:
+                gameOverSceneController.backgroundMusicSound.enabled = !gameOverSceneController.backgroundMusicSound.enabled;
+                break;
+        }
     }
 
     IEnumerator GoNextPhase () {

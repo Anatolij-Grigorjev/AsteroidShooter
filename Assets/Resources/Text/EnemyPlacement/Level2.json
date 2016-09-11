@@ -2,7 +2,7 @@
     {
         "name": "Sector 2",
         "quip": {
-        	"text" : "There's more of them!",
+        	"text" : "Another few! Chance some minerals?..",
         },
         "placements": [
             {
@@ -26,7 +26,7 @@
         "name": "Suddently...",
         "final": true,
         "quip" : {
-        	"text" : "These must be the ones..."
+        	"text" : "These HAVE to be it!"
         },
         "placements": [
             {

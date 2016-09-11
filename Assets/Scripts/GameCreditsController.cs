@@ -46,7 +46,7 @@ public class GameCreditsController : MonoBehaviour {
 		}
 		var currentCredit = peopleText.text;
 		var btnPress = Input.anyKey;
-		if (Time.time > latestCreditStart + (currentCredit.Length / 5)) {
+		if (Time.time > latestCreditStart + Mathf.Clamp(currentCredit.Length / 5, 1.5f, 9.5f)) {
 			currentCreditIndex++;
 			if (currentCreditIndex >= titleAndFolksList.Count) {
 				btnPress = true;

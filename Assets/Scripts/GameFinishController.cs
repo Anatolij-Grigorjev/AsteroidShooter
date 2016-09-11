@@ -26,6 +26,8 @@ public class GameFinishController : MonoBehaviour {
 		lines = new List<Tuple<String, Boolean>>();
 		scriptLoaded = false;
 		finishSceneText.text = "";
+		//make sure the game happens from start to finish properly the second time around
+		GameController.Instance.Restart = true;
 		StartCoroutine(ReadGameFinishScript(scriptName));
 	}
 

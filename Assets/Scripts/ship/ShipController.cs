@@ -162,10 +162,10 @@ public class ShipController : MonoBehaviour {
         //TODO: solve double shift turbo animation problem before shipping
         if (pressedTurbo != prevTurboPressed) {
             shipThrustingAnimator.ResetTrigger("Thruster"); //cancel previous animation commands
-            Debug.Log("[TURBO] At " + DateTime.Now.Ticks 
-                + ": setting trigger! turbo=" + pressedTurbo
-                + " prevTurbo=" + prevTurboPressed
-            );
+            // Debug.Log("[TURBO] At " + DateTime.Now.Ticks 
+            //     + ": setting trigger! turbo=" + pressedTurbo
+            //     + " prevTurbo=" + prevTurboPressed
+            // );
             shipThrustingAnimator.SetTrigger ("Thruster");
         }
         isTurboMode = pressedTurbo;

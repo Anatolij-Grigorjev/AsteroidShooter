@@ -1,8 +1,8 @@
 0
 police;POLICE MAN;Sir, this is a secure area, housing asteroids of historical significance. You are not allowed to perform demolition here.
 father;Father;What?! There is nothing historically significant about asteroids! These rocks are worthless!
-police;POLICE MAN;Nevertheless, sir, the law states you are not allowed scavenging in this area, please proceed elsewhere.
-father;Father;But my sick Patty!.. These blasted rocks hold minerals that might aid in her fight with the virus! I read about the trials they do with these things... Does the life of a child mean nothing to you?!...
+police;POLICE MAN;I don't make the rules, sir. The law states you are not allowed scavenging in this area, please proceed elsewhere.
+father;Father;But my sick Patty!.. These blasted rocks hide minerals that might aid in her fight with the virus! I read about these things... Does the life of a child mean nothing to you?!...
 police;POLICE MAN;What child?.. Sir, a civilian database scan tells us that you have never had any children...
 father;Father?;My daughter, Patty Wallflower! How is this possible! My flesh and blood!
 police;POLICE MAN;Sir, I do not have a record of anybody named Patty Wallflower living anywhere near your home sector. According to our records, you are Jared Turnip, no known priors or family... Your uncle owns the small rock demolition business in your home sector and the SIN number on your vessel matches one of those registered to his company. This making sense so far, Mr. Turnip?

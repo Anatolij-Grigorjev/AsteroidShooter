@@ -177,6 +177,12 @@ public class GameController : Singleton<GameController> {
         }
         Debug.Log ("Cooked up " + avatarsMap.Count + " avatars!");
     }
+
+    void Update() {
+        if (Input.GetButton("Cancel")) {
+            Application.Quit();
+        }
+    }
         
         
         

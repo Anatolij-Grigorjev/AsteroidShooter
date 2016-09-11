@@ -1,4 +1,4 @@
 0
 father;J.TURNIP;Ha! Not so tough anymore, are you, officer!?
-father;MURDERER;Nothing will stop me from getting Patty the treatment she needs and deserves!
+father;MURDERER;Nothing will stop me from getting Patty the treatment she needs!
 father;FUGITIVE;I can't waste any more time, this needs to be handled ASAP! Then again, the police are sure to make this more difficult than it has to be now... I have to hide...
