@@ -2,7 +2,7 @@
     {
         "name": "Sector 2",
         "quip": {
-        	"text" : "Another few! Chance some minerals?..",
+        	"text" : "Another few!\nChance some minerals?..",
         },
         "placements": [
             {
